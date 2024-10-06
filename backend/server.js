@@ -5,6 +5,7 @@ import cookieparser from 'cookie-parser'
 import DbCon from './utlis/db.js'
 import AuthRoutes from './routes/Auth.js'
 import AdminRoutes from './routes/AdminRoutes.js'
+import ExpenseRoutes from './routes/expenseRoutes.js'
 dotenv.config()
 const PORT=process.env.PORT || 3000
 const app=express()
@@ -20,6 +21,7 @@ app.use(cors({
 
 app.use('/api/auth',AuthRoutes)
 app.use('/api/admin',AdminRoutes)
+app.use('/api/expense' , ExpenseRoutes)
 
 app.get('/',(req,res)=>{
     res.send('test')

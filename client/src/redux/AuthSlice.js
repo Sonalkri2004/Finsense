@@ -3,18 +3,13 @@ import { get } from '../services/ApiEndpoint';
 
 
 export const updateUser=createAsyncThunk('updateuser',async()=>{
-     try {
+ 
         const request=await get('/api/auth/CheckUser')
         const response=request.data
 
         return response;
-     } catch (error) {
-          throw error
-     }
+   
 })
-
-
-
  const initialState={
     loading:null,
     error:null,

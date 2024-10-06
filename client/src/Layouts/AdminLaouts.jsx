@@ -7,6 +7,7 @@ export default function AdminLaouts() {
     // console.log(user)
 
     useEffect(()=>{
+        console.log("checker console in admin")
            if (!user || user.role !=="admin") {
                navigate('/login')
            }
