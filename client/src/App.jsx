@@ -12,6 +12,8 @@ import PbulicLayout from './Layouts/PublicLayouts'
 import PublicLayouts from './Layouts/PublicLayouts'
 import { useDispatch,useSelector } from 'react-redux'
 import { updateUser } from './redux/AuthSlice'
+import CreateExpense from './component/createExpense'
+
 
 
 export default function App() {
@@ -27,7 +29,7 @@ const disptch=useDispatch()
           <BrowserRouter>
           <Toaster/>
             <Routes>
-              
+               <Route path='/acc' element={<CreateExpense/>}/>
               <Route path='/' element={<UserLayout/>} >
               <Route index element={<Home/>}/>
 
