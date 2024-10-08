@@ -1,9 +1,8 @@
-import React from 'react'
 
-function Accountant() {
+export default function Accountant() {
   return (
-    <div>Accountant</div>
+    <div>
+      Accountant
+    </div>
   )
 }
-
-export default Accountant

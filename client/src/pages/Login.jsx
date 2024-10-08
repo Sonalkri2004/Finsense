@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { post } from "../services/ApiEndpoint";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUser } from "../redux/AuthSlice";
 export default function Login() {
-  const user = useSelector((state) => state.Auth);
+  const user = useSelector((state) => state.AuthSlice?.user);
   console.log(user);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -20,17 +20,7 @@ export default function Login() {
       const reponse = request.data;
 
       if (request.status == 200) {
-        if (reponse.user.role == "admin") {
-          navigate("/admin");
-        } else if (reponse.user.role === "accountant") {
-          navigate("/accountant"); // Redirect logged-in non-admin users to the general home page
-        } else if (reponse.user.role === "bursar") {
-          navigate("/bursar"); // Redirect logged-in non-admin users to the general home page
-        } else if (reponse.user.role === "principal") {
-          navigate("/principal");
-        } else if (reponse.user.role == "user") {
-          navigate("/");
-        }
+        navigate('/')
         toast.success(reponse.message);
         dispatch(SetUser(reponse.user));
       }

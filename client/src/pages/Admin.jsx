@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { deleteUser, get } from '../services/ApiEndpoint';
+import { useEffect, useState } from 'react';
+import { deleteUser, get, post } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Logout } from '../redux/AuthSlice';
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
-  const [reload, setReload] = useState(false); // New state to track reloads
+  const [reload, setReload] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Fetch users when the component mounts and when 'reload' changes
   useEffect(() => {
     const GetUsers = async () => {
       try {
@@ -38,8 +42,25 @@ export default function Admin() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const request = await post('/api/auth/logout')
+      if (request.status == 200) {
+        dispatch(Logout())
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
+      <button onClick={handleLogout}
+        style={{ width: '10rem' }}>
+        Logout
+      </button>
+
       <div className='admin-container'>
         <h2>Manage Users</h2>
         <table>
