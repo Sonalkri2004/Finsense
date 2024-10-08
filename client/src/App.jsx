@@ -11,12 +11,13 @@ import Accountant from "./pages/Accountant";
 import Bursar from "./pages/Bursar";
 import Principal from "./pages/Principal";
 import OverviewPage from "./pages/Reports";
-import ProductsPage from "./pages/PendingPage";
-import UsersPage from "./pages/RejectedPage";
-import SalesPage from "./pages/ExpensesPage";
-import OrdersPage from "./pages/IncomesPage";
-import AnalyticsPage from "./pages/TransactionsPage";
+import PendingPage from "./pages/PendingPage";
+import RejectedPage from "./pages/RejectedPage";
+import ExpensesPage from "./pages/ExpensesPage";
+import IncomesPage from "./pages/IncomesPage";
+import TransactionsPage from "./pages/TransactionsPage";
 import SettingsPage from "./pages/SettingsPage";
+import Forgotpass from "./pages/Forgotpass";
 
 export default function App() {
   return (
@@ -32,19 +33,21 @@ export default function App() {
           <Sidebar />
           <Toaster />
           <Routes>
-            <Route path="/acc" element={<Accountant />} />
+          
             <Route path="/bursar" element={<Bursar />} />
             <Route path="/principal" element={<Principal />} />
             <Route path="/Report" element={<OverviewPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/users" element={<UsersPage />} />
-            <Route path="/sales" element={<SalesPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/pending" element={<PendingPage />} />
+            <Route path="/rejected" element={<RejectedPage />} />
+            <Route path="/expense" element={<ExpensesPage />} />
+            <Route path="/income" element={<IncomesPage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/" element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+              <Route path="forgotpass" element={<Forgotpass />} />
+
             </Route>
 
             <Route path="/" element={<ProtectedLayout />}>

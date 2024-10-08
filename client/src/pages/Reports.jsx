@@ -7,6 +7,7 @@ import SalesOverviewChart from "../components/overview/SalesOverviewChart";
 import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
 // import SalesChannelChart from "../components/overview/SalesChannelChart";
 import RevenueChart from "../components/analytics/RevenueChart";
+import AIPoweredInsights from "../components/analytics/AIPoweredInsights";
 
 
 const OverviewPage = () => {
@@ -38,7 +39,7 @@ const OverviewPage = () => {
 				<div className='grid grid-cols-1 mt-4'>
 				<RevenueChart />
 				</div>
-				
+				<AIPoweredInsights />
 			</main>
 
 			

@@ -43,6 +43,9 @@ export default function Register() {
       <p className=" text-center text-sm text-gray-400 mt-6 animate__animated animate__fadeInUp">
         Already have an account? <Link to={'/login'} className="text-blue-400 hover:underline">Login here</Link>
       </p>
+      <p className="text-center text-sm text-gray-400 mt-6 animate__animated animate__fadeInUp">
+        Not remembered <Link to={"/forgotpass"} className="text-blue-400 hover:underline">Forgot Password?</Link>
+      </p>
     </form>
   </div>
 </div>

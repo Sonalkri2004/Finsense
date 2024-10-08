@@ -10,11 +10,11 @@ const SIDEBAR_ITEMS = [
 		color: "#6366f1",
 		href: "/report",
 	},
-	{ name: "Pending", icon: Users, color: "#8B5CF6", href: "/products" },
-	{ name: "Rejected", icon: ShoppingBag , color: "#EC4899", href: "/users" },
-	{ name: "Expenses", icon: ShoppingCart, color: "#10B981", href: "/sales" },
-	{ name: "Incomes", icon: DollarSign, color: "#F59E0B", href: "/orders" },
-	{ name: "Transactions", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
+	{ name: "Pending", icon: Users, color: "#8B5CF6", href: "/pending" },
+	{ name: "Rejected", icon: ShoppingBag , color: "#EC4899", href: "/rejected" },
+	{ name: "Expenses", icon: ShoppingCart, color: "#10B981", href: "/expense" },
+	{ name: "Incomes", icon: DollarSign, color: "#F59E0B", href: "/income" },
+	{ name: "Transactions", icon: TrendingUp, color: "#3B82F6", href: "/transactions" },
 	{ name: "Settings", icon: Settings, color: "#6EE7B7", href: "/settings" },
 ];
 
