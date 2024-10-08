@@ -29,16 +29,18 @@ export default function Home() {
   return (
     <>
 
-      <div className='home-container'>
-        <div className='user-card'>
-          <h2> Welcome,{user && user.name}</h2>
-          <button className='logout-btn' onClick={handleLogout}>Logout</button>
-          {user && user.role == 'admin' ? <button className='admin-btn' onClick={gotoAdmin}>Go To admin</button> : ''}
-          {user && user.role == 'principal' ? <button className='admin-btn' onClick={gotoPrincipal}>Go To Principal</button> : ''}
-
-        </div>
-      </div>
-
+      <div className=" min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 animate__animated animate__fadeIn">
+  <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-md animate__animated animate__bounceIn">
+    <h2 className="text-3xl font-bold text-white mb-6 text-center">Welcome, {user && user.name}</h2>
+    <button className="w-full py-3 mt-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 animate__animated animate__pulse" onClick={handleLogout}>Logout</button>
+    {user && user.role === 'admin' && (
+      <button className="w-full py-3 mt-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 animate__animated animate__pulse" onClick={gotoAdmin}>Go To admin</button>
+    )}
+    {user && user.role === 'principal' && (
+      <button className="w-full py-3 mt-4 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 animate__animated animate__pulse" onClick={gotoPrincipal}>Go To Principal</button>
+    )}
+  </div>
+</div>
 
 
     </>
