@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { get } from "../services/ApiEndpoint"
 import { useDispatch } from "react-redux"
 import { SetUser } from "../redux/AuthSlice"
+import Sidebar from "../components/common/Sidebar"
 
 export default function ProtectedLayout() {
 
@@ -26,6 +27,10 @@ export default function ProtectedLayout() {
     }, []);
 
     return (
-        <Outlet />
+        <>
+         <Sidebar />
+         <Outlet />
+        </>
+       
     )
 }

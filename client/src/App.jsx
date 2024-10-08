@@ -30,27 +30,24 @@ export default function App() {
         </div> */}
 
         <BrowserRouter>
-          <Sidebar />
           <Toaster />
           <Routes>
-          
-            <Route path="/bursar" element={<Bursar />} />
-            <Route path="/principal" element={<Principal />} />
-            <Route path="/Report" element={<OverviewPage />} />
-            <Route path="/pending" element={<PendingPage />} />
-            <Route path="/rejected" element={<RejectedPage />} />
-            <Route path="/expense" element={<ExpensesPage />} />
-            <Route path="/income" element={<IncomesPage />} />
-            <Route path="/transactions" element={<TransactionsPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/" element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="forgotpass" element={<Forgotpass />} />
-
             </Route>
 
             <Route path="/" element={<ProtectedLayout />}>
+              <Route path="/bursar" element={<Bursar />} />
+              <Route path="/principal" element={<Principal />} />
+              <Route path="/Report" element={<OverviewPage />} />
+              <Route path="/pending" element={<PendingPage />} />
+              <Route path="/rejected" element={<RejectedPage />} />
+              <Route path="/expense" element={<ExpensesPage />} />
+              <Route path="/income" element={<IncomesPage />} />
+              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route index element={<MainLayout />} />
             </Route>
           </Routes>
