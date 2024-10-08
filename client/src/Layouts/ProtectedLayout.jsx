@@ -15,7 +15,6 @@ export default function ProtectedLayout() {
             try {
                 const request = await get('/api/auth/CheckUser');
                 if (request.data) {
-                    console.log(request.data);
                     dispatch(SetUser(request.data));
                 } else {
                     navigate('/login')
