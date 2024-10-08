@@ -80,5 +80,119 @@ const Login=async(req,res)=>{
      }
 
 
+     //verification
+     export const verifyEmail = async (req, res) => {
+        try {
+          const { userName, emailToken } = req.body;
+          const user = await UserModel.findOne(userName);
+          console.log(user);
+      
+          if (!user) {
+            return res.status(404).json({ error: "No user found 120" });
+          }
+      
+          try {
+            const decoded = jwt.verify(emailToken, process.env.JWT_SECRET_KEY);
+            console.log(decoded);
+      
+            await UserModel.updateOne(
+              { userName: req.body.userName },
+              { $set: { confirmedEmail: true } }
+            );
+      
+            console.log("User found and email confirmed");
+            return res.json({ status: "okay" });
+          } catch (err) {
+            console.error("Invalid email token", err);
+            return res.status(400).json({ error: "Invalid email token" });
+          }
+        } catch (err) {
+          console.error("Error finding user", err);
+          return res
+            .status(500)
+            .json({ error: "Internal server error", message: err.message });
+        }
+      };
+      
+      export const updatePassword = async (req, res) => {
+        try {
+          const { email } = req.body;
+          console.log("172 = ", req.body);
+          
+          const user = await UserModel.findOne({ email });
+          
+          if (!user) return res.status(404).json({ message: "User not found" });
+          
+          const emailToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+            expiresIn: "1h",
+          });
+          
+          user.updatePasswordToken = emailToken; // Update the user instance
+          user.updatePasswordExpires = Date.now() + 3600000; // 1 hour from now
+          await user.save(); // Save the changes
+      
+          try {
+            await sendResetEmail(email, emailToken);
+          } catch (emailError) {
+            return res.status(500).json({
+              error: "Error sending verification email",
+              message: emailError.message,
+            });
+          }
+      
+          res.status(200).json({ message: "Password reset email sent successfully" });
+        } catch (error) {
+          console.log("error message", error.message);
+          return res.status(500).json({ message: 'Internal server error' });
+        }
+      };
+      
+      export const resetPassword = async (req, res) => {
+        try {
+          const { token } = req.params;
+          const { newPassword, confirmNewPassword } = req.body;
+      
+          console.log("200");
+          console.log("password = ", req.body);
+      
+          if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({ error: "Passwords do not match" });
+          }
+      
+          // Decode the token to get the user ID
+          const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY); // Use your secret key
+      
+          const user = await UserModel.findOne({
+            _id: decoded.id,
+            updatePasswordToken: token,
+            updatePasswordExpires: { $gt: Date.now() }
+          });
+      
+          console.log("user = ", user);
+      
+          if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+          }
+      
+          const salt = await bcryptjs.genSalt(10); // Add salt for hashing
+          user.password = await bcryptjs.hash(newPassword, salt);
+      
+          // Clear the password reset token and expiration
+          user.updatePasswordToken = undefined;
+          user.updatePasswordExpires = undefined;
+      
+          await user.save();
+      
+          console.log("userPassword = ", user.password);
+      
+          res.status(200).json({ message: 'Password successfully reset' });
+        } catch (error) {
+          console.error(error); // Log the error for debugging
+          res.status(500).json({ message: 'Internal server error' });
+        }
+      };
+      
+
+
 
 export {register,Login,Logout,CheckUser}

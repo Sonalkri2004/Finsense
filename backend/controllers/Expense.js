@@ -104,3 +104,42 @@ export const getExpense = async (req, res) => {
     });
   } catch (error) {}
 };
+
+
+// filters 
+export const filterExpensesByDate = async (req, res) => {
+  try {
+    const { createdAt } = req.query; 
+    console.log('Query createdAt:', createdAt); // Log the query parameter
+
+    if (!createdAt) {
+      return res.status(400).json({ message: 'Please provide a valid date in the format YYYY-MM-DD.' });
+    }
+
+    const providedDate = new Date(createdAt);
+
+    if (isNaN(providedDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date format. Please use YYYY-MM-DD.' });
+    }
+
+    const startOfDay = new Date(providedDate.setHours(0, 0, 0, 0)); 
+    const endOfDay = new Date(providedDate.setHours(23, 59, 59, 999)); 
+
+    console.log('Start of Day:', startOfDay); // Log startOfDay
+    console.log('End of Day:', endOfDay);     // Log endOfDay
+
+    const expenses = await ExpenseModel.find({
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error('Error fetching expenses by date:', error);
+    res.status(500).json({ message: 'Server error. Could not fetch expenses.' });
+  }
+};
+
+
