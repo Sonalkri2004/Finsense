@@ -12,7 +12,7 @@ const incomeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-      
+
         trim: true,
         default: 'completed'
     },
@@ -30,9 +30,7 @@ const incomeSchema = new mongoose.Schema({
         unique: true,
         trim: true
     }
-},{timestamps:true});
+}, { timestamps: true });
 
 
-const Income = mongoose.model('Transaction', incomeSchema);
-
-module.exports = Income ;
+export const Income = mongoose.model('Transaction', incomeSchema);

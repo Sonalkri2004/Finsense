@@ -102,32 +102,42 @@ export const getExpense = async (req, res) => {
       message: "expense get succesfulley",
       Expenses: getExpense,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log("error in getting Expense ", error.message);
+  }
 };
 
-
-// filters 
-export const filterExpensesByDate = async (req, res) => {
+export const filterExpensesByDateRange = async (req, res) => {
   try {
-    const { createdAt } = req.query; 
-    console.log('Query createdAt:', createdAt); // Log the query parameter
+    const { startDate, endDate } = req.body; 
+    console.log('Body startDate:', startDate); // Log the body parameter
+    console.log('Body endDate:', endDate);     // Log the body parameter
 
-    if (!createdAt) {
-      return res.status(400).json({ message: 'Please provide a valid date in the format YYYY-MM-DD.' });
+    if (!startDate || !endDate) {
+      return res.status(400).json({ message: 'Please provide both startDate and endDate in the format YYYY-MM-DD.' });
     }
 
-    const providedDate = new Date(createdAt);
+    const providedStartDate = new Date(startDate);
+    const providedEndDate = new Date(endDate);
 
-    if (isNaN(providedDate.getTime())) {
+    // Check if dates are valid
+    if (isNaN(providedStartDate.getTime()) || isNaN(providedEndDate.getTime())) {
       return res.status(400).json({ message: 'Invalid date format. Please use YYYY-MM-DD.' });
     }
 
-    const startOfDay = new Date(providedDate.setHours(0, 0, 0, 0)); 
-    const endOfDay = new Date(providedDate.setHours(23, 59, 59, 999)); 
+    // Ensure the start date is before or equal to the end date
+    if (providedStartDate > providedEndDate) {
+      return res.status(400).json({ message: 'startDate must be before or equal to endDate.' });
+    }
+
+    // Set the start of the startDate and the end of the endDate
+    const startOfDay = new Date(providedStartDate.setHours(0, 0, 0, 0)); 
+    const endOfDay = new Date(providedEndDate.setHours(23, 59, 59, 999)); 
 
     console.log('Start of Day:', startOfDay); // Log startOfDay
     console.log('End of Day:', endOfDay);     // Log endOfDay
 
+    // Find all expenses within the specified date range
     const expenses = await ExpenseModel.find({
       createdAt: {
         $gte: startOfDay,
@@ -137,9 +147,7 @@ export const filterExpensesByDate = async (req, res) => {
 
     res.status(200).json(expenses);
   } catch (error) {
-    console.error('Error fetching expenses by date:', error);
+    console.error('Error fetching expenses by date range:', error);
     res.status(500).json({ message: 'Server error. Could not fetch expenses.' });
   }
 };
-
-
