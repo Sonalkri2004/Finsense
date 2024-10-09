@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 export default function CreateIncome() {
   const [formData, setFormData] = useState({
     bankName: "",
@@ -8,6 +9,7 @@ export default function CreateIncome() {
     total: "",
     TxnId: "",
   });
+  const user = useSelector(state => state.AuthSlice?.user)
 
   const [responseMessage, setResponseMessage] = useState(null);
 
@@ -17,8 +19,34 @@ export default function CreateIncome() {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
-   
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+
+    try {
+      if (
+        formData.bankName.trim() &&
+        formData.subHead.trim() &&
+        formData.amount.trim() &&
+        formData.total.trim() &&
+        formData.status.trim() &&
+        formData.TxnId.trim()
+      ) {
+        const response = await axios.post(
+          `http://localhost:4000/api/expense/income/${user?._id}`,
+          formData,
+          {
+            withCredentials: true
+          }
+        );
+
+        console.log(response)
+
+        setResponseMessage(response.data.message);
+      }
+    } catch (error) {
+      setResponseMessage(error.response?.data?.message || "Error occurred"); // Show error message
+    }
   };
 
   return (
