@@ -16,6 +16,11 @@ import IncomesPage from "./pages/IncomesPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import SettingsPage from "./pages/SettingsPage";
 import Forgotpass from "./pages/Forgotpass";
+import {
+  ResetPassword,
+  UpdatePassword,
+  VerifyEmail,
+} from "./components/auth/frontend_verification_reset";
 
 export default function App() {
   return (
@@ -34,6 +39,12 @@ export default function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="forgotpass" element={<Forgotpass />} />
+              <Route path="verifyEmail" element={<VerifyEmail />} />
+              <Route path="updatePassword" element={<UpdatePassword />} />
+              <Route
+                path="resetPassword/:token"
+                element={<ResetPassword />}
+              />
             </Route>
 
             <Route path="/" element={<ProtectedLayout />}>
