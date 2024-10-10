@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye, DownloadCloud, FileDown, Check, X } from "lucide-react";
+import { Trash2, Edit3 } from "lucide-react";
 import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
 import TransactionModal from "./TransactionModal";
 import ConfirmationPopup from "./ConfirmationPopup";
 
-const PendingTable = () => {
+const RejectedTable = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8); // Set the number of items per page
@@ -26,7 +26,8 @@ const PendingTable = () => {
     setSelectedTransaction(null);
   };
 
-  const openConfirmationPopup = (action) => {
+  const openConfirmationPopup = (action, transaction) => {
+    setSelectedTransaction(transaction);
     setConfirmationAction(action);
     setConfirmationIsOpen(true);
   };
@@ -34,12 +35,25 @@ const PendingTable = () => {
   const closeConfirmationPopup = () => {
     setConfirmationIsOpen(false);
     setConfirmationAction(null);
+    setSelectedTransaction(null);
   };
 
   const handleConfirmation = () => {
-    // Handle verification or rejection here
+    if (confirmationAction === 'delete') {
+      // Handle deletion logic here
+    } else if (confirmationAction === 'done') {
+      handleSaveTransaction(selectedTransaction);
+    }
     closeConfirmationPopup();
-    closeModal();
+  };
+
+  const handleSaveTransaction = (updatedTransaction) => {
+    // Update the transaction in the state or send the update to the server
+    setFilteredTransactions((prevTransactions) =>
+      prevTransactions.map((transaction) =>
+        transaction._id === updatedTransaction.txnId ? updatedTransaction : transaction
+      )
+    );
   };
 
   useEffect(() => {
@@ -89,14 +103,14 @@ const PendingTable = () => {
 
   return (
     <motion.div
-      className="relative bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
     >
       <div className="flex flex-col justify-between items-start mb-6 gap-2">
         <h2 className="text-xl font-semibold text-gray-100">
-          Pending Transactions
+          Rejected Transactions
         </h2>
       </div>
 
@@ -120,7 +134,10 @@ const PendingTable = () => {
                 Status
               </th>
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
-                View
+                Edit
+              </th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Delete
               </th>
             </tr>
           </thead>
@@ -163,10 +180,14 @@ const PendingTable = () => {
                     {transaction?.status}
                   </span>
                 </td>
-
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
                   <button onClick={() => openModal(transaction)} className="text-indigo-400 hover:text-indigo-300 mr-2">
-                    <Eye size={18} />
+                    <Edit3 size={18} />
+                  </button>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
+                  <button onClick={() => openConfirmationPopup('delete', transaction)} className="text-red-400 hover:text-red-300 mr-2">
+                    <Trash2 size={18} />
                   </button>
                 </td>
               </motion.tr>
@@ -200,7 +221,8 @@ const PendingTable = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         transaction={selectedTransaction}
-        openConfirmationPopup={openConfirmationPopup}
+        isEditable={true}
+        handleSaveTransaction={(updatedTransaction) => openConfirmationPopup('done', updatedTransaction)}
       />
       <ConfirmationPopup
         isOpen={confirmationIsOpen}
@@ -211,4 +233,4 @@ const PendingTable = () => {
   );
 };
 
-export default PendingTable;
+export default RejectedTable;
