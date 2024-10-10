@@ -6,7 +6,7 @@ import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
 import PayVoucher from "../analytics/PayVoucher";
 import html2pdf from "html2pdf.js";
-
+import * as XLSX from 'xlsx'; // Import XLSX for Excel creation
 
 const TransactionsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +17,9 @@ const TransactionsTable = () => {
     startDate: "",
     endDate: ""
   });
+  const [selectedSubHead, setSelectedSubHead] = useState(""); // State for selected subHead
+  const [selectedStatus, setSelectedStatus] = useState(""); // State for selected status
+  const [selectedTransactions, setSelectedTransactions] = useState([]); // Track selected transactions
   const payVoucherRef = useRef();
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
@@ -34,11 +37,21 @@ const TransactionsTable = () => {
     }
   };
 
+  // Handle filter including selected subHead and status
   const handleFilter = async () => {
     try {
+      const filters = { ...filterDate }; // Base filter with date range
+
+      if (selectedSubHead) {
+        filters.subHead = selectedSubHead; // Add subHead if selected
+      }
+      if (selectedStatus) {
+        filters.status = selectedStatus; // Add status if selected
+      }
+
       const response = await axios.post(
         `http://localhost:4000/api/expense/filterDate`,
-        filterDate,
+        filters,
         {
           withCredentials: true,
         }
@@ -102,6 +115,23 @@ const TransactionsTable = () => {
     setTimeout(() => handlePrint(), 0);
   };
 
+  // Handle checkbox change for selecting transactions
+  const handleCheckboxChange = (transaction) => {
+    if (selectedTransactions.includes(transaction)) {
+      setSelectedTransactions(selectedTransactions.filter(item => item !== transaction));
+    } else {
+      setSelectedTransactions([...selectedTransactions, transaction]);
+    }
+  };
+
+  // Export selected transactions to Excel
+  const handleDownloadExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(selectedTransactions);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+    XLSX.writeFile(workbook, "selected_transactions.xlsx");
+  };
+
   return (
     <motion.div
       className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
@@ -115,6 +145,7 @@ const TransactionsTable = () => {
         </h2>
         <div className="w-full flex gap-4 justify-between items-center">
           <div className="flex gap-4">
+            {/* Date Filter */}
             <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
               <p>From</p>
               <input
@@ -136,6 +167,47 @@ const TransactionsTable = () => {
                 onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
               />
             </label>
+
+            {/* SubHead Dropdown */}
+            <label htmlFor="subHead" className="flex flex-col gap-2 items-start">
+              <p>SubHead</p>
+              <select
+                name="subHead"
+                id="subHead"
+                className="bg-gray-700 text-white rounded-lg px-4 py-2"
+                value={selectedSubHead}
+                onChange={(e) => setSelectedSubHead(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="bca">BCA</option>
+                <option value="bba">BBA</option>
+                <option value="omsp">OMSP</option>
+                <option value="exam">Exam</option>
+                <option value="sw">SW</option>
+                <option value="gen">GEN</option>
+                <option value="nss">NSS</option>
+                <option value="ncc">NCC</option>
+              </select>
+            </label>
+
+            {/* Status Dropdown */}
+            <label htmlFor="status" className="flex flex-col gap-2 items-start">
+              <p>Status</p>
+              <select
+                name="status"
+                id="status"
+                className="bg-gray-700 text-white rounded-lg px-4 py-2"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="pending">pending</option>
+                <option value="verified">Verified</option>
+                <option value="approved">Approved</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </label>
           </div>
 
           <button onClick={handleFilter} className="px-4 py-2 text-white bg-blue-600 rounded">
@@ -148,6 +220,9 @@ const TransactionsTable = () => {
         <table className="min-w-full divide-y divide-gray-700">
           <thead>
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Select
+              </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Txn ID
               </th>
@@ -181,6 +256,13 @@ const TransactionsTable = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-100">
+                  <input
+                    type="checkbox"
+                    checked={selectedTransactions.includes(transaction)}
+                    onChange={() => handleCheckboxChange(transaction)}
+                  />
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
                   {transaction?._id.slice(0, 10)}
                 </td>
@@ -206,7 +288,7 @@ const TransactionsTable = () => {
                             : transaction.status === "rejected"
                               ? "bg-red-100 text-red-800"
                               : "bg-gray-100 text-gray-800" // Default case if status does not match
-                      }`}
+                    }`}
                   >
                     {transaction?.status}
                   </span>
@@ -248,6 +330,17 @@ const TransactionsTable = () => {
           disabled={currentPage === totalPages}
         >
           Next
+        </button>
+      </div>
+
+      {/* Download Excel Button */}
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={handleDownloadExcel}
+          className="px-4 py-2 text-white bg-green-600 rounded"
+          disabled={selectedTransactions.length === 0} // Disable if no transactions are selected
+        >
+          Download Excel
         </button>
       </div>
 
