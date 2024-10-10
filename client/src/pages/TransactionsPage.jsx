@@ -8,7 +8,7 @@ import UserRetention from "../components/analytics/UserRetention";
 import CustomerSegmentation from "../components/analytics/CustomerSegmentation";
 import AIPoweredInsights from "../components/analytics/AIPoweredInsights";
 import PayVoucher from "../components/analytics/PayVoucher";
-import OrdersTable from "../components/orders/OrdersTable";
+import OrdersTable from "../components/orders/TransactionsTable";
 
 const AnalyticsPage = () => {
 	return (

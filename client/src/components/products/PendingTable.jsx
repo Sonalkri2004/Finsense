@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye } from "lucide-react";
+import { Search, Eye, DownloadCloud, FileDown } from "lucide-react";
 import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
+import PayVoucher from "../analytics/PayVoucher";
+import html2pdf from "html2pdf.js";
 
-const OrdersTable = () => {
+
+const PendingTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,50 +16,61 @@ const OrdersTable = () => {
   const [filterDate, setFilterDate] = useState({
     startDate: "",
     endDate: ""
-  })
+  });
+  const payVoucherRef = useRef();
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  // const handleSearch = (e) => {
-  //   const term = e.target.value.toLowerCase();
-  //   setSearchTerm(term);
-  //   const filtered = filteredTransactions.filter(
-  //     (transaction) =>
-  //       transaction._id.toLowerCase().includes(term) ||
-  //       transaction.customer.toLowerCase().includes(term)
-  //   );
-  //   setFilteredTransactions(filtered);
-  //   setCurrentPage(1); // Reset to first page on search
-  // };
+  const handlePrint = () => {
+    if (payVoucherRef.current) {
+      const options = {
+        margin: 0.2,
+        filename: 'pay_voucher.pdf',
+        image: { type: 'jpeg', quality: 0.68 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().from(payVoucherRef.current).set(options).save();
+    }
+  };
 
   const handleFilter = async () => {
-    console.log(filterDate)
-    const response = await axios.post(
-      `http://localhost:4000/api/expense/filterDate`,
-      filterDate,
-      {
-        withCredentials: true,
-      }
-    );
-
-    if (response.data) {
-      setFilteredTransactions(response.data);
-      console.log(response.data);
-    }
-  }
-
-  useEffect(() => {
-    (async () => {
-      const response = await axios.get(
-        `http://localhost:4000/api/expense/getExpense`,
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/expense/filterDate`,
+        filterDate,
         {
           withCredentials: true,
         }
       );
 
       if (response.data) {
-        setFilteredTransactions(response.data?.Expenses);
-        console.log(response.data);
+        setFilteredTransactions(response.data);
       }
-    })();
+    } catch (error) {
+      console.error("Error filtering transactions", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/expense/getExpense`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response.data) {
+          setFilteredTransactions(response.data?.Expenses);
+        }
+      } catch (error) {
+        console.error("Error fetching expenses", error);
+      }
+    };
+
+    fetchExpenses();
   }, []);
 
   // Calculate current transactions for the current page
@@ -81,6 +95,11 @@ const OrdersTable = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
+  };
+
+  const handleDownloadVoucher = (transaction) => {
+    setSelectedTransaction(transaction);
+    setTimeout(() => handlePrint(), 0);
   };
 
   return (
@@ -117,19 +136,6 @@ const OrdersTable = () => {
                 onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
               />
             </label>
-
-            {/* <label className="relative" htmlFor="search">
-            <input
-              type="text"
-              name="search"
-              id="search"
-              placeholder="Search Transaction..."
-              className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchTerm}
-              onChange={handleSearch}
-              />
-              <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
-              </label> */}
           </div>
 
           <button onClick={handleFilter} className="px-4 py-2 text-white bg-blue-600 rounded">
@@ -206,9 +212,14 @@ const OrdersTable = () => {
                   </span>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
+                  <button onClick={() => handleDownloadVoucher(transaction)} className="text-indigo-400 hover:text-indigo-300 mr-2">
+                    <DownloadCloud size={18} />
+                  </button>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
                   <button className="text-indigo-400 hover:text-indigo-300 mr-2">
-                    <Eye size={18} />
+                    <FileDown size={18} />
                   </button>
                 </td>
               </motion.tr>
@@ -239,8 +250,12 @@ const OrdersTable = () => {
           Next
         </button>
       </div>
+
+      <div className="hidden">
+        {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
+      </div>
     </motion.div>
   );
 };
 
-export default OrdersTable;
+export default PendingTable;

@@ -1,65 +1,64 @@
 import React from 'react';
+import convertISOToDate from "../../utils/formatDate";
 
-const PayVoucher = () => {
+const PayVoucher = React.forwardRef(({ transaction }, ref) => {
+  PayVoucher.displayName = 'PayVoucher';
   return (
-    <div className="flex bg-yellow-50 text-black flex-col h-screen">
-      <div className="w-full max-w-2xl mx-auto border border-black p-4 h-full flex flex-col justify-between">
+    <div ref={ref} className="flex bg-white text-black flex-col h-[120vh]">
+      <div className="w-full max-w-2xl mx-auto  p-4 h-full flex flex-col justify-between">
         <div className="text-center text-sm font-bold uppercase">
           Sunderwati Mahila Mahavidyalaya, Bhagalpur
           <div className="text-xs">(T.M. Bhagalpur University, Bhagalpur)</div>
-          <div className="font-bold text-sm border-b border-black pb-1">Pay Voucher</div>
+          <div className="font-bold text-sm border-b border-black pb-2">Pay Voucher</div>
         </div>
 
         <div className="flex-grow my-4">
           <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
             <div className="flex">
               <span className="font-semibold">Voucher No.:</span>
-              <span className="ml-1">____</span>
+              <span className="ml-1">{transaction?._id.slice(0, 10) || '____'}</span>
             </div>
             <div className="flex">
               <span className="font-semibold">A/C No.:</span>
-              <span className="ml-1">______________</span>
+              <span className="ml-1">{transaction?.bankName || '______________'}</span>
             </div>
             <div className="flex">
               <span className="font-semibold">Head:</span>
-              <span className="ml-1">______________</span>
+              <span className="ml-1">{transaction?.subHead || '______________'}</span>
             </div>
           </div>
 
-          <table className="w-full border border-black mb-4 text-xs">
+          <table className="w-full h-[60vh]  border border-black mb-4 text-xs">
             <thead>
               <tr className="border-b border-black">
-                <th className="border-r border-black p-1">Date</th>
-                <th className="border-r border-black p-1">Particulars</th>
-                <th className="p-1">Amount (Rs.)</th>
+                <th className="border-r  border-black p-2">Date</th>
+                <th className="border-r border-black p-2">Particulars</th>
+                <th className="p-2">Amount (Rs.)</th>
               </tr>
             </thead>
             <tbody>
-              {[...Array(8)].map((_, index) => (
-                <tr key={index} className="border-b border-black">
-                  <td className="border-r border-black p-1 h-8">&nbsp;</td>
-                  <td className="border-r border-black p-1">&nbsp;</td>
-                  <td className="p-1">&nbsp;</td>
-                </tr>
-              ))}
+              <tr className="border-b  border-black">
+                <td className="border-r align-top text-center border-black p-1 pt-5  h-8">{convertISOToDate(transaction?.updatedAt) || '____'}</td>
+                <td className="border-r align-top  text-center border-black p-1  pt-5 ">{transaction?.purpose || '______________'}</td>
+                <td className="p-1  align-top  text-center  pt-5 ">₹ {parseInt(transaction?.amount).toFixed(2) || '____'}</td>
+              </tr>
+              
             </tbody>
           </table>
 
           <div className="flex justify-between items-center mb-3 text-xs">
             <span className="font-semibold">G. Total</span>
-            <span>_____________</span>
+          
           </div>
 
           <div className="flex justify-between mb-4 text-xs">
             <div>
-              <span>( Rs. </span>
-              <span>__________________________</span>
-              <span> )</span>
+            <span>₹ {parseInt(transaction?.total).toFixed(2) || '_____________'}</span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-3 mt-10 mb-0 gap-2 text-xs">
           <div className="text-center">
             Accountant
             <div className="mt-4">Skillancer Pvt. Ltd.</div>
@@ -75,6 +74,5 @@ const PayVoucher = () => {
       </div>
     </div>
   );
-};
-
+});
 export default PayVoucher;
