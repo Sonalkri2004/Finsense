@@ -32,7 +32,7 @@ export default function Forgotpass() {
   return (
     <>
      <div className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 animate__animated animate__fadeIn">
-  <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-md animate__animated animate__bounceIn">
+  <div className="w-full max-w-md p-8 bg-gray-600 rounded-lg shadow-md animate__animated animate__bounceIn">
     <h2 className="text-3xl font-bold text-white mb-6 text-center">Login</h2>
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="animate__animated animate__fadeInUp">
@@ -40,7 +40,7 @@ export default function Forgotpass() {
         <input
           type="email"
           id="email"
-          className="w-full px-4 py-2 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 bg-gray-800 text-gray-300  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
@@ -49,11 +49,11 @@ export default function Forgotpass() {
         <input
           type="password"
           id="password"
-          className="w-full px-4 py-2 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 bg-gray-800 text-gray-300  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit" className="w-full py-3 mt-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 animate__animated animate__pulse">
+      <button type="submit" className="w-full py-3 mt-4 bg-blue-800 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 animate__animated animate__pulse">
        Submit
       </button>
       <p className="text-center text-sm text-gray-400 mt-6 animate__animated animate__fadeInUp">
