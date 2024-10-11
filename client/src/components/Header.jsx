@@ -57,7 +57,7 @@ const Header = () => {
     >
       <div className="flex items-center px-5 py-4 lg:px-7.5 xl:px-10 max-lg:py-4 justify-between">
         <a className="w-[12rem] xl:mr-8 flex" href="#hero">
-          <img src={brainwave} width={30} height={20} alt="FinSense" />   <h1 className="justify-center items-center text-xl">FinSense AI</h1>
+          <img src={brainwave} width={30} height={20} alt="FinSense" />  <h1 className="justify-center ml-4 items-center text-xl">FinSense</h1>
         </a>
 
         <div className="block lg:hidden">

@@ -16,8 +16,8 @@ const Services = () => {
     <Section id="how-to-use">
       <div className="container">
         <Heading
-          title="Generative AI made for creators."
-          text="Brainwave unlocks the potential of AI-powered applications"
+          title="Finance Management System Made for Businesses and Individuals"
+          text="Our platform unlocks the potential of secure and efficient financial management."
         />
 
         <div className="relative">
@@ -26,16 +26,16 @@ const Services = () => {
               <img
                 className="w-full h-full object-cover md:object-right"
                 width={800}
-                alt="Smartest AI"
+                alt="Smartest Finance Tracking"
                 height={730}
                 src={service1}
               />
             </div>
 
-            <div className="relative z-1 max-w-[17rem] ml-auto">
-              <h4 className="h4 mb-4">Smartest AI</h4>
+            <div className="relative z-1 max-w-[20rem] ml-auto">
+              <h4 className="h4 mb-4">Smartest Finance Tracking</h4>
               <p className="body-2 mb-[3rem] text-n-3">
-                Brainwave unlocks the potential of AI-powered applications
+              Our system offers the smartest financial tracking to help you stay on top of your income and expenses.
               </p>
               <ul className="body-2">
                 {brainwaveServices.map((item, index) => (
@@ -53,7 +53,7 @@ const Services = () => {
             <Generating className="absolute left-4 right-4 bottom-4 border-n-1/10 border lg:left-1/2 lg-right-auto lg:bottom-8 lg:-translate-x-1/2" />
           </div>
 
-          <div className="relative z-1 grid gap-5 lg:grid-cols-2">
+          {/* <div className="relative z-1 grid gap-5 lg:grid-cols-2">
             <div className="relative min-h-[39rem] border border-n-1/10 rounded-3xl overflow-hidden">
               <div className="absolute inset-0">
                 <img
@@ -121,7 +121,7 @@ const Services = () => {
                 <VideoBar />
               </div>
             </div>
-          </div>
+          </div> */}
 
           <Gradient />
         </div>
