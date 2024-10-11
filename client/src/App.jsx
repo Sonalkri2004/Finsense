@@ -22,52 +22,41 @@ import {
   VerifyEmail,
 } from "./components/auth/frontend_verification_reset";
 import HomePage from "./pages/HomePage";
-import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 export default function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Toaster />
-        <Routes>
-          <Route path="home" element={<HomePage />} /> {/*Temporary route */}
-        </Routes>
-      </BrowserRouter>
-      <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
-        <BrowserRouter>
-          <Toaster />
-          <Routes>
-            <Route path="/" element={<AuthLayout />}>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="forgotpass" element={<Forgotpass />} />
-              <Route path="verifyEmail" element={<VerifyEmail />} />
-              <Route path="updatePassword" element={<UpdatePassword />} />
-              <Route
-                path="resetPassword/:token"
-                element={<ResetPassword />}
-              />
-            </Route>
+    <BrowserRouter>
+      <Toaster />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
 
-            <Route path="/" element={<ProtectedLayout />}>
-              <Route index element={<Home />} />
+        <Route path="/" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="forgotpass" element={<Forgotpass />} />
+          <Route path="verifyEmail" element={<VerifyEmail />} />
+          <Route path="updatePassword" element={<UpdatePassword />} />
+          <Route
+            path="resetPassword/:token"
+            element={<ResetPassword />}
+          />
+        </Route>
 
-              <Route element={<MainLayout />}>
-                <Route path="/bursar" element={<Bursar />} />
-                <Route path="/principal" element={<Principal />} />
-                <Route path="/Report" element={<OverviewPage />} />
-                <Route path="/pending" element={<PendingPage />} />
-                <Route path="/rejected" element={<RejectedPage />} />
-                <Route path="/expense" element={<ExpensesPage />} />
-                <Route path="/income" element={<IncomesPage />} />
-                <Route path="/transactions" element={<TransactionsPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/admin" element={<Admin />} />
-              </Route>
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </>
-  );
+        <Route element={<ProtectedLayout />}>
+          <Route element={<MainLayout />}>
+            <Route path="/bursar" element={<Bursar />} />
+            <Route path="/principal" element={<Principal />} />
+            <Route path="/Report" element={<OverviewPage />} />
+            <Route path="/pending" element={<PendingPage />} />
+            <Route path="/rejected" element={<RejectedPage />} />
+            <Route path="/expense" element={<ExpensesPage />} />
+            <Route path="/income" element={<IncomesPage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
 }

@@ -21,11 +21,20 @@ export default function AuthLayout() {
     })();
   }, [])
 
-
-  if (userData && userData?.role != 'user') {
-    navigate('/')
+  if (!userData) {
+    return (
+      <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
+        <Outlet />
+      </div>
+    )
+  }
+  if (userData && userData?.role == 'user') {
+    navigate('/');
+  }
+  else if (userData && userData?.role == 'admin') {
+    navigate('/admin');
   }
   else {
-    return <Outlet />
+    navigate('/report')
   }
 }
