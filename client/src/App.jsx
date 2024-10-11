@@ -21,6 +21,7 @@ import {
   UpdatePassword,
   VerifyEmail,
 } from "./components/auth/frontend_verification_reset";
+import HomePage from "./pages/HomePage";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
         <BrowserRouter>
           <Toaster />
           <Routes>
+         <Route path="home" element={<HomePage />} />   {/*Temporary route */}
             <Route path="/" element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
@@ -48,6 +50,7 @@ export default function App() {
             </Route>
 
             <Route path="/" element={<ProtectedLayout />}>
+            
               <Route path="/bursar" element={<Bursar />} />
               <Route path="/principal" element={<Principal />} />
               <Route path="/Report" element={<OverviewPage />} />

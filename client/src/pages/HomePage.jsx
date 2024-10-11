@@ -1,10 +1,10 @@
 
 
-function Home() {
+function HomePage() {
   return (
     
-    <div  className=' inset-0 backdrop-blur-0'>Home</div>
+    <div  className=' inset-0 backdrop-blur-0'>Home for Users</div>
   )
 }
 
-export default Home
+export default HomePage
