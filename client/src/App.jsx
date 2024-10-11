@@ -26,8 +26,13 @@ import HomePage from "./pages/HomePage";
 export default function App() {
   return (
     <>
-      {/* <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden"> */}
-      <div>
+      <BrowserRouter>
+        <Toaster />
+        <Routes>
+          <Route path="home" element={<HomePage />} /> {/*Temporary route */}
+        </Routes>
+      </BrowserRouter>
+      <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
         {/* BG */}
         {/* <div className="fixed inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
@@ -37,21 +42,15 @@ export default function App() {
         <BrowserRouter>
           <Toaster />
           <Routes>
-         <Route path="home" element={<HomePage />} />   {/*Temporary route */}
             <Route path="/" element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="forgotpass" element={<Forgotpass />} />
               <Route path="verifyEmail" element={<VerifyEmail />} />
               <Route path="updatePassword" element={<UpdatePassword />} />
-              <Route
-                path="resetPassword/:token"
-                element={<ResetPassword />}
-              />
+              <Route path="resetPassword/:token" element={<ResetPassword />} />
             </Route>
-
             <Route path="/" element={<ProtectedLayout />}>
-            
               <Route path="/bursar" element={<Bursar />} />
               <Route path="/principal" element={<Principal />} />
               <Route path="/Report" element={<OverviewPage />} />
