@@ -78,9 +78,9 @@ export const notificationImages = [notification4, notification3, notification2];
 export const companyLogos = [yourlogo, yourlogo, yourlogo, yourlogo, yourlogo];
 
 export const brainwaveServices = [
-  "Photo generating",
-  "Photo enhance",
-  "Seamless Integration",
+  "Expense Tracking",
+  "Income Management",
+  "Transaction Insights",
 ];
 
 export const brainwaveServicesIcons = [
@@ -128,21 +128,21 @@ export const roadmap = [
 ];
 
 export const collabText =
-  "With smart automation and top-notch security, it's the perfect solution for teams looking to work smarter.";
+  "With real-time insights and comprehensive security, it's the ideal solution for individuals and businesses looking to manage their finances efficiently.";
 
 export const collabContent = [
   {
     id: "0",
-    title: "Seamless Integration",
+    title: "Seamless Transaction Management",
     text: collabText,
   },
   {
     id: "1",
-    title: "Smart Automation",
+    title: "Smart Financial Tracking",
   },
   {
     id: "2",
-    title: "Top-notch Security",
+    title: "Top-tier Security for Your Data",
   },
 ];
 
@@ -207,53 +207,61 @@ export const collabApps = [
 
 export const pricing = [
   {
-    id: "0",
-    title: "Basic",
-    description: "AI chatbot, personalized recommendations",
-    price: "0",
-    features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
-    ],
-  },
-  {
-    id: "1",
-    title: "Premium",
-    description: "Advanced AI chatbot, priority support, analytics dashboard",
-    price: "9.99",
-    features: [
-      "An advanced AI chatbot that can understand complex queries",
-      "An analytics dashboard to track your conversations",
-      "Priority support to solve issues quickly",
-    ],
-  },
-  {
-    id: "2",
-    title: "Enterprise",
-    description: "Custom AI chatbot, advanced analytics, dedicated account",
-    price: null,
-    features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
-    ],
-  },
+      id: "0",
+      title: "Starter Plan",
+      description: "Basic financial management for individuals with secure transactions and insights.",
+      price: "9.99",
+      features: [
+        "Manage up to 50 transactions per month",
+        "Secure access and data encryption",
+        "Downloadable transaction receipts",
+        "View monthly insights",
+        "Basic transaction history",
+      ],
+    },
+    {
+      id: "1",
+      title: "Professional Plan",
+      description: "Advanced financial tools for businesses with detailed insights and priority support.",
+      price: "19.99",
+      features: [
+        "Manage up to 500 transactions per month",
+        "Secure access and advanced data encryption",
+        "Unlimited downloadable receipts",
+        "Detailed financial insights and analytics",
+        "Full transaction history with search and filters",
+       
+      ],
+    },
+    {
+      id: "2",
+      title: "Enterprise Plan",
+      description: "Comprehensive financial management for large teams with custom reports and multi-user access.",
+      price: null,
+      features: [
+        "Unlimited transactions",
+        "End-to-end encrypted secure data storage",
+        "Custom financial reports and analytics",
+        "Advanced budget planning tools",
+        "Multi-user access with permission controls",
+        "Dedicated account manager and 24/7 support",
+      ],
+    },
 ];
 
 export const benefits = [
   {
     id: "0",
-    title: "Ask anything",
-    text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+    title: "Secure Transaction Management:",
+    text: "All your financial data is encrypted, ensuring safe and secure transactions.",
     backgroundUrl: "./src/assets/benefits/card-1.svg",
     iconUrl: benefitIcon1,
     imageUrl: benefitImage2,
   },
   {
     id: "1",
-    title: "Improve everyday",
-    text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+    title: "Transaction Dashboard:",
+    text: "A comprehensive view of your income, expenses, and overall financial health.",
     backgroundUrl: "./src/assets/benefits/card-2.svg",
     iconUrl: benefitIcon2,
     imageUrl: benefitImage2,
@@ -261,16 +269,16 @@ export const benefits = [
   },
   {
     id: "2",
-    title: "Connect everywhere",
-    text: "Connect with the AI chatbot from anywhere, on any device, making it more accessible and convenient.",
+    title: "Transaction History:",
+    text: "Access to past transactions, categorized and sorted for easy review.",
     backgroundUrl: "./src/assets/benefits/card-3.svg",
     iconUrl: benefitIcon3,
     imageUrl: benefitImage2,
   },
   {
     id: "3",
-    title: "Fast responding",
-    text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+    title: "Add Expenses and Income: ",
+    text: "Quickly log expenses and income with minimal effort.",
     backgroundUrl: "./src/assets/benefits/card-4.svg",
     iconUrl: benefitIcon4,
     imageUrl: benefitImage2,
@@ -278,16 +286,16 @@ export const benefits = [
   },
   {
     id: "4",
-    title: "Ask anything",
-    text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+    title: "Downloadable Receipts:",
+    text: "Get downloadable receipts for each transaction to stay organized.",
     backgroundUrl: "./src/assets/benefits/card-5.svg",
     iconUrl: benefitIcon1,
     imageUrl: benefitImage2,
   },
   {
     id: "5",
-    title: "Improve everyday",
-    text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+    title: "Insights and Analytics:",
+    text: "Gain valuable insights into your spending habits and financial trends.",
     backgroundUrl: "./src/assets/benefits/card-6.svg",
     iconUrl: benefitIcon2,
     imageUrl: benefitImage2,

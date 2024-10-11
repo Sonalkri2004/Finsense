@@ -28,8 +28,8 @@ const Pricing = () => {
         </div>
 
         <Heading
-          tag="Get started with Brainwave"
-          title="Pay once, use forever"
+          tag="Flexible Plans That Fit Your Needs"
+          title="Find the perfect plan for efficient finance management"
         />
 
         <div className="relative">
@@ -38,14 +38,14 @@ const Pricing = () => {
           <RightLine />
         </div>
 
-        <div className="flex justify-center mt-10">
+        {/* <div className="flex justify-center mt-10">
           <a
             className="text-xs font-code font-bold tracking-wider uppercase border-b"
             href="/pricing"
           >
             See the full details
           </a>
-        </div>
+        </div> */}
       </div>
     </Section>
   );
