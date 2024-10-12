@@ -19,4 +19,5 @@ export const createIncome = async (req, res) => {
     } catch (error) {
         console.log("error in creating income transaction ", error.message);
     }
+    
 }
