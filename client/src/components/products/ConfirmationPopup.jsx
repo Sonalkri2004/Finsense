@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 // ConfirmationPopup Component
-import React from "react";
 import Modal from "react-modal";
 import "animate.css";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const confirmationModalStyles = {
   content: {
@@ -27,7 +29,23 @@ const confirmationModalStyles = {
   },
 };
 
-const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm }) => {
+const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, confirmationAction }) => {
+
+  const handleReject = async () => {
+
+    const response = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
+      status: confirmationAction,
+      expenseId: transaction?._id || ''
+    })
+
+    if (response.data) {
+      toast.success('Transaction status updated!!');
+    } else {
+      toast.error('Transaction status not updated!!')
+    }
+    onConfirm();
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -39,7 +57,7 @@ const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm }) => {
       <h2 className="text-white text-xl font-semibold mb-4">Are you sure?</h2>
       <div className="flex justify-center gap-4">
         <button
-          onClick={onConfirm}
+          onClick={handleReject}
           className="px-8 py-2 bg-green-600 hover:bg-green-500 text-white rounded-full transition duration-200"
         >
           Yes

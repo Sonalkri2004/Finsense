@@ -1,38 +1,39 @@
 import { ExpenseModel, CommentModel } from "../models/expense.js";
 import UserModel from "../models/user.js";
-import mongoose from "mongoose";
 
 export const createExpense = async (req, res) => {
   try {
-    const { id: userId } = req.params;
-    
-    const { bankName, subHead, purpose, amount, total, status,TxnId } = req.body;
-    
-    const user = await UserModel.findOne({ _id: userId });
-    //  if(user.role !== 'accountant')
-    //  {
-    //     return res.status(500).json({
-    //         message:'user is not accountant'
-    //     })
-    //  }
-    console.log(user);
-    const newExpense = new ExpenseModel({
-      bankName,
-      subHead,
-      purpose,
-      amount,
-      total,
-      status,
-      userId,
-      TxnId
-    });
+    const { bankName, subHead, purpose, amount, total, status, TxnId, expenseId } = req.body;
 
-    await newExpense.save();
+    let expense;
+
+    if (!TxnId?.trim()) {
+      expense = new ExpenseModel({
+        bankName,
+        subHead,
+        purpose,
+        amount,
+        total,
+        status,
+        userId: req.user._id
+      });
+
+      await expense.save();
+    }
+    else {
+      expense = await ExpenseModel.findById(expenseId);
+
+      if (expense) {
+        expense.TxnId = TxnId || '';
+        await expense.save();
+      }
+    }
 
     return res.status(201).json({
       message: "Expense created successfully",
-      expense: newExpense,
+      expense,
     });
+
   } catch (error) {
     return res.status(500).json({
       message: "Error creating expense",
@@ -43,31 +44,28 @@ export const createExpense = async (req, res) => {
 
 export const createComment = async (req, res) => {
   try {
-    const { id: expenseId } = req.params;
-    const { commentText } = req.body;
+    const { expenseId, commentText } = req.body;
+
     const expense = await ExpenseModel.findById(expenseId);
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
     }
-    const userId = req.user._id;
-    console.log("userId = " , userId)
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const userRole = user.role;
-    const userName = user.name;
-    console.log(userRole)
-    const newComment = {
+
+    const user = req.user;
+
+    const newComment = await CommentModel.create({
       commentText,
-      userRole,
-      userId,
-      userName,
-      createdAt: Date.now(),
-    };
+      userId: user._id,
+      userName: user.name,
+      userRole: user.role,
+    })
+    
     expense.comments.push(newComment);
 
+    console.log(expense)
+
     await expense.save();
+
     res.status(200).json({
       message: "Comment created successfully",
       comment: newComment,
@@ -81,13 +79,13 @@ export const createComment = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
   try {
-    const { id: expenseId } = req.params;
-    const { status } = req.body;
+    const { status, expenseId } = req.body;
+
     const updatedStatus = await ExpenseModel.updateOne(
       { _id: expenseId },
       { $set: { status: status } }
     );
-    console.log("update status", updatedStatus);
+
     res.status(200).json({
       message: "status updated uccesfully",
       user: updatedStatus,
@@ -102,39 +100,37 @@ export const getExpense = async (req, res) => {
     const userId = req.user._id;
     let getExpense
     const user = await UserModel.findById(userId);
-    const userRole  = user.role ;
+    const userRole = user.role;
     console.log(userRole);
-     
+
     // setting conditions
-    if(userRole === 'accountant')
-    {
-       getExpense = await ExpenseModel.find({'$or':[{status:'pending'},{status:'completed'}]});
+    if (userRole === 'accountant') {
+      getExpense = await ExpenseModel.find({ status: 'approved' }).populate('comments', 'userName userRole commentText createdAt');
     }
-    else if(userRole == 'bursar')
-    {
-      getExpense = await ExpenseModel.find({status:'pending'});
+    else if (userRole == 'bursar') {
+      getExpense = await ExpenseModel.find({ status: 'pending' }).populate('comments', 'userName userRole commentText createdAt');
     }
-    else if(userRole == 'principal')
-      {
-        getExpense = await ExpenseModel.find({status:'verified'});
-      }
-      else if(userRole == 'admin')
-        {
-          getExpense = await ExpenseModel.find();
-        }
-        else {
-     
-          return res.status(403).json({
-            message: "you are unauthorized to access data",
-          });
-        }
+    else if (userRole == 'principal') {
+      getExpense = await ExpenseModel.find({ status: 'verified' }).populate('comments', 'userName userRole commentText createdAt');
+    }
+    else if (userRole == 'admin') {
+      getExpense = await ExpenseModel.find().populate('comments', 'userName userRole commentText createdAt');
+    }
+    else {
+      return res.status(403).json({
+        message: "you are unauthorized to access data",
+      });
+    }
+
+    console.log(getExpense)
 
     res.status(200).json({
       message: "expense get succesfulley",
-      Id : userId,
-      role : userRole,
+      Id: userId,
+      role: userRole,
       Expenses: getExpense,
     });
+
   } catch (error) {
     console.log("error in getting Expense ", error.message);
   }
@@ -204,27 +200,26 @@ export const filterExpensesByDateRange = async (req, res) => {
 
 
 // api to update expense 
-export const updateExpense =async(req,res)=>{
+export const updateExpense = async (req, res) => {
   try {
     const updateFields = req.body;
-    const {id : expenseId} = req.params;
+    const { id: expenseId } = req.params;
     const userId = req.user._id
-    
-    const user  = await UserModel.findById(userId);
-    if(user.role !== 'accountant')
-    {
-        return res.status(403).json({
-          message:'you are not authorized to edit expense'
-        })
+
+    const user = await UserModel.findById(userId);
+    if (user.role !== 'accountant') {
+      return res.status(403).json({
+        message: 'you are not authorized to edit expense'
+      })
 
     }
 
     const updatedExpense = await ExpenseModel.findByIdAndUpdate(expenseId,
-      {$set:updateFields},
-      {new:true , runValidators:true}
+      { $set: updateFields },
+      { new: true, runValidators: true }
     );
     const Expense = await ExpenseModel.findById(expenseId);
-    
+
 
     console.log(' Expense', Expense)
     res.status(200).json({
