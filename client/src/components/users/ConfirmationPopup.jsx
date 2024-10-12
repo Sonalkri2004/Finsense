@@ -40,13 +40,13 @@ const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm }) => {
       <div className="flex justify-center gap-4">
         <button
           onClick={onConfirm}
-          className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition duration-200"
+          className="px-8 py-2 bg-green-600 hover:bg-green-500 text-white rounded-full transition duration-200"
         >
           Yes
         </button>
         <button
           onClick={onRequestClose}
-          className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition duration-200"
+          className="px-8 py-2 bg-red-600 hover:bg-red-500 text-white rounded-full transition duration-200"
         >
           No
         </button>

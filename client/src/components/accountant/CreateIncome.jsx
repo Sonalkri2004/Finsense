@@ -130,7 +130,7 @@ export default function CreateIncome() {
               type="submit"
               className="w-full py-4 mt-6 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out animate__animated animate__pulse"
             >
-              Create
+              Create Income
             </button>
           </div>
         </form>

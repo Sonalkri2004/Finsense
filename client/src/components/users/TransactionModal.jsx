@@ -1,8 +1,9 @@
-// TransactionModal Component
+// Modernized and Editable TransactionModal Component with Close Button
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { Check, X, MessageSquare } from "lucide-react";
 import "animate.css";
+import convertISOToDate from "../../utils/formatDate";
 
 const customModalStyles = {
   content: {
@@ -11,13 +12,14 @@ const customModalStyles = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '90%',
+    maxWidth: '700px',
     maxHeight: '85vh',
     overflow: 'auto',
-    backgroundColor: '#1e1e2f',
+    backgroundColor: '#1a1b1f',
     borderRadius: '20px',
     border: 'none',
     padding: '30px',
-    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.5)',
+    boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.6)',
     zIndex: 1000,
   },
   overlay: {
@@ -26,7 +28,7 @@ const customModalStyles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     zIndex: 999,
   },
 };
@@ -82,9 +84,17 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, isEditable, han
       className="animate__animated animate__fadeIn animate__faster"
     >
       {transaction && (
-        <div className="text-white">
+        <div className="text-white relative">
+          {/* Close Button */}
+          <button
+            onClick={onRequestClose}
+            className="absolute top-4 right-4 text-white bg-gray-800 rounded-full p-2 hover:bg-gray-700 transition duration-200"
+          >
+            <X size={24} />
+          </button>
+
           <h2 className="text-3xl font-bold mb-6 text-center">{isEditable ? 'Edit Transaction' : 'Transaction Details'}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             <div>
               <label className="block text-sm font-medium mb-2">Transaction ID</label>
               <input
@@ -144,7 +154,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, isEditable, han
             </div>
             <div>
               <h3 className="text-2xl font-semibold mb-4">Comments</h3>
-              <div className="bg-gray-700 p-4 rounded-lg space-y-4 max-h-64 overflow-y-auto">
+              <div className="bg-gray-800 p-4 rounded-lg shadow-md space-y-4 max-h-64 overflow-y-auto">
                 {comments.map((comment, index) => (
                   <p key={index} className="text-sm"><strong>{comment.role}:</strong> {comment.text}</p>
                 ))}
@@ -173,13 +183,13 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, isEditable, han
             <div className="flex justify-center gap-6">
               <button
                 onClick={handleDone}
-                className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg gap-2 shadow-lg hover:shadow-xl transition duration-200"
-              >
+                className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
+                >
                 <Check size={20} /> Done
               </button>
               <button
                 onClick={onRequestClose}
-                className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg gap-2 shadow-lg hover:shadow-xl transition duration-200"
+                className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
               >
                 <X size={20} /> Cancel
               </button>
