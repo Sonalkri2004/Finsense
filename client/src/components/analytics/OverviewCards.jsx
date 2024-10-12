@@ -1,11 +1,51 @@
 import { motion } from "framer-motion";
-import { DollarSign, Users, ShoppingBag, Eye, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { IndianRupee, ArrowLeftRight, Clock } from "lucide-react";
 
 const overviewData = [
-	{ name: "Revenue", value: "$1,234,567", change: 12.5, icon: DollarSign },
-	{ name: "Users", value: "45,678", change: 8.3, icon: Users },
-	{ name: "Orders", value: "9,876", change: -3.2, icon: ShoppingBag },
-	{ name: "Page Views", value: "1,234,567", change: 15.7, icon: Eye },
+	{
+		name: "Monthly Income",
+		value: "$1,234,567",
+		change: 12.5,
+		icon: (
+			<div
+				className={`p-3 rounded-full bg-opacity-20 bg-green-500`}>
+				<IndianRupee className="text-green-500" />
+			</div>
+		)
+	},
+	{
+		name: "Monthly Expense",
+		value: "45,678",
+		change: 8.3,
+		icon: (
+			<div
+				className={`p-3 rounded-full bg-opacity-20 bg-red-500`}>
+				<IndianRupee className="text-red-500" />
+			</div>
+		)
+	},
+	{
+		name: "Total Transactions",
+		value: "9,876",
+		change: -3.2,
+		icon: (
+			<div
+				className={`p-3 rounded-full bg-opacity-20 bg-green-500`}>
+				<ArrowLeftRight className="text-green-500" />
+			</div>
+		)
+	},
+	{
+		name: "Pending Transaction",
+		value: "1,234,567",
+		change: 15.7,
+		icon: (
+			<div
+				className={`p-3 rounded-full bg-opacity-20 bg-yellow-500`}>
+				<Clock className="text-yellow-500" />
+			</div>
+		)
+	},
 ];
 
 const OverviewCards = () => {
@@ -14,9 +54,7 @@ const OverviewCards = () => {
 			{overviewData.map((item, index) => (
 				<motion.div
 					key={item.name}
-					className='bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg
-            rounded-xl p-6 border border-gray-700
-          '
+					className='bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700'
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ delay: index * 0.1 }}
@@ -27,22 +65,7 @@ const OverviewCards = () => {
 							<p className='mt-1 text-xl font-semibold text-gray-100'>{item.value}</p>
 						</div>
 
-						<div
-							className={`
-              p-3 rounded-full bg-opacity-20 ${item.change >= 0 ? "bg-green-500" : "bg-red-500"}
-              `}
-						>
-							<item.icon className={`size-6  ${item.change >= 0 ? "text-green-500" : "text-red-500"}`} />
-						</div>
-					</div>
-					<div
-						className={`
-              mt-4 flex items-center ${item.change >= 0 ? "text-green-500" : "text-red-500"}
-            `}
-					>
-						{item.change >= 0 ? <ArrowUpRight size='20' /> : <ArrowDownRight size='20' />}
-						<span className='ml-1 text-sm font-medium'>{Math.abs(item.change)}%</span>
-						<span className='ml-2 text-sm text-gray-400'>vs last period</span>
+						{item.icon}
 					</div>
 				</motion.div>
 			))}

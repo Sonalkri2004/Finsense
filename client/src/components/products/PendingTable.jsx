@@ -206,6 +206,8 @@ const PendingTable = () => {
         isOpen={confirmationIsOpen}
         onRequestClose={closeConfirmationPopup}
         onConfirm={handleConfirmation}
+        transaction={selectedTransaction}
+        confirmationAction={confirmationAction}
       />
     </motion.div>
   );

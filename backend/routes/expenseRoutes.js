@@ -3,10 +3,9 @@ import { createExpense, createComment, updateStatus, getExpense,filterExpensesBy
 import { IsUser } from '../middleware/verifyToken.js'
 const ExpenseRoutes = express.Router();
 
-
-ExpenseRoutes.post('/createExpense/:id', IsUser, createExpense);
-ExpenseRoutes.post('/createComment/:id', IsUser, createComment);
-ExpenseRoutes.patch('/updateStatus/:id', IsUser, updateStatus);
+ExpenseRoutes.post('/createExpense', IsUser, createExpense);
+ExpenseRoutes.post('/createComment', IsUser, createComment);
+ExpenseRoutes.patch('/updateStatus', IsUser, updateStatus);
 ExpenseRoutes.get('/getExpense', IsUser, getExpense);
 ExpenseRoutes.post('/filterDate', IsUser, filterExpensesByDateRange);
 ExpenseRoutes.post('/updateExpense/:id', IsUser, updateExpense);

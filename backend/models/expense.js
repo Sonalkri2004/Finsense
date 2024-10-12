@@ -6,12 +6,12 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    userRole: { 
+    userRole: {
         type: String,
         required: true,
         enum: ['admin', 'user', 'accountant', 'bursar', 'principal'] // Match with user roles
     },
-    userName:{
+    userName: {
         type: String,
         required: true,
     },
@@ -19,19 +19,15 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users', // Reference the User model
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
-},{timestamps:true});
+}, { timestamps: true });
 
 // Expense Schema with additional status field and comments
 const expenseSchema = new mongoose.Schema({
     bankName: {
         type: String,
         required: true,
-        default:'Corpus Fund'
+        default: 'Corpus Fund'
     },
     subHead: {
         type: String,
@@ -44,7 +40,7 @@ const expenseSchema = new mongoose.Schema({
     TxnId: {
         type: String,
         required: false,
-        default:null
+        default: null
     },
     amount: {
         type: String,
@@ -57,7 +53,7 @@ const expenseSchema = new mongoose.Schema({
     // New Status field with ENUM values
     status: {
         type: String,
-        enum: ['pending', 'verified', 'approved', 'completed','rejected'],
+        enum: ['pending', 'verified', 'approved', 'completed', 'rejected'],
         default: 'pending' // Default value is pending
     },
     verifiedDate: {
@@ -78,11 +74,9 @@ const expenseSchema = new mongoose.Schema({
         required: true
     },
     comments: [{
-        type: commentSchema,
-        required: false 
-        
+        type: commentSchema
     }]
-},{timestamps:true});
+}, { timestamps: true });
 
 // Models
 export const ExpenseModel = mongoose.model('expenses', expenseSchema);
