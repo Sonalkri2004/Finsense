@@ -50,12 +50,14 @@ export const createComment = async (req, res) => {
       return res.status(404).json({ message: "Expense not found" });
     }
     const userId = req.user._id;
+    console.log("userId = " , userId)
     const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     const userRole = user.role;
     const userName = user.name;
+    console.log(userRole)
     const newComment = {
       commentText,
       userRole,
@@ -97,9 +99,40 @@ export const updateStatus = async (req, res) => {
 
 export const getExpense = async (req, res) => {
   try {
-    const getExpense = await ExpenseModel.find();
+    const userId = req.user._id;
+    let getExpense
+    const user = await UserModel.findById(userId);
+    const userRole  = user.role ;
+    console.log(userRole);
+     
+    // setting conditions
+    if(userRole === 'accountant')
+    {
+       getExpense = await ExpenseModel.find({'$or':[{status:'pending'},{status:'completed'}]});
+    }
+    else if(userRole == 'bursar')
+    {
+      getExpense = await ExpenseModel.find({status:'pending'});
+    }
+    else if(userRole == 'principal')
+      {
+        getExpense = await ExpenseModel.find({status:'verified'});
+      }
+      else if(userRole == 'admin')
+        {
+          getExpense = await ExpenseModel.find();
+        }
+        else {
+     
+          return res.status(403).json({
+            message: "you are unauthorized to access data",
+          });
+        }
+
     res.status(200).json({
       message: "expense get succesfulley",
+      Id : userId,
+      role : userRole,
       Expenses: getExpense,
     });
   } catch (error) {
@@ -165,5 +198,44 @@ export const filterExpensesByDateRange = async (req, res) => {
   } catch (error) {
     console.error('Error fetching expenses by filters:', error);
     res.status(500).json({ message: 'Server error. Could not fetch expenses.' });
+  }
+};
+
+
+
+// api to update expense 
+export const updateExpense =async(req,res)=>{
+  try {
+    const updateFields = req.body;
+    const {id : expenseId} = req.params;
+    const userId = req.user._id
+    
+    const user  = await UserModel.findById(userId);
+    if(user.role !== 'accountant')
+    {
+        return res.status(403).json({
+          message:'you are not authorized to edit expense'
+        })
+
+    }
+
+    const updatedExpense = await ExpenseModel.findByIdAndUpdate(expenseId,
+      {$set:updateFields},
+      {new:true , runValidators:true}
+    );
+    const Expense = await ExpenseModel.findById(expenseId);
+    
+
+    console.log(' Expense', Expense)
+    res.status(200).json({
+      message: "Expense updated successfully",
+      expense: updatedExpense
+    });
+  } catch (error) {
+    console.log("Error updating expense: ", error.message);
+    res.status(500).json({
+      message: "Error updating expense",
+      error: error.message
+    });
   }
 };
