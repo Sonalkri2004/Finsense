@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Logout } from '../redux/AuthSlice';
+import { DeleteIcon, Edit2, Edit3, LogOut, LucideLogOut, SwitchCamera, Trash2 } from 'lucide-react';
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
@@ -56,23 +57,24 @@ export default function Admin() {
 
   return (
     <>
-     <div className="min-h-screen w-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 animate__animated animate__fadeIn">
+     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0E0C15] via-[#0E0C15] to-[#0E0C15] p-8 animate__animated animate__fadeIn">
   <div className="flex justify-between items-center mb-8">
     <h2 className="text-3xl font-bold text-white">Manage Users</h2>
     <button
       onClick={handleLogout}
-      className="py-2 px-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 animate__animated animate__pulse"
-      style={{ width: '10rem' }}
+      className="py-2 px-2 w-10 h-10 bg-red-600 text-white text-center font-semibold rounded-full flex hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 animate__animated animate__pulse"
+      // style={{ width: '2rem' }}
     >
-      Logout
+         <LucideLogOut/>
     </button>
   </div>
   <div className="bg-gray-800 p-6 rounded-lg shadow-md animate__animated animate__bounceIn">
-    <table className="min-w-full table-auto bg-gray-700 text-white rounded-lg">
+    <table className="min-w-full table-auto bg-gray-900 text-white rounded-lg">
       <thead>
         <tr className="text-left border-b border-gray-600">
           <th className="py-2 px-4">Name</th>
           <th className="py-2 px-4">Email</th>
+          <th className="py-2 px-4">Edit Role</th>
           <th className="py-2 px-4">Action</th>
         </tr>
       </thead>
@@ -84,9 +86,17 @@ export default function Admin() {
             <td className="py-2 px-4">
               <button
                 onClick={() => handleDelete(elem._id)}
-                className="py-1 px-3 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 animate__animated animate__pulse"
+                className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 animate__animated animate__pulse"
               >
-                Delete
+              <Edit2/>
+              </button>
+            </td>
+            <td className="py-2 px-4">
+              <button
+                onClick={() => handleDelete(elem._id)}
+                className="py-2 px-4 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 animate__animated animate__pulse"
+              >
+              <Trash2/>
               </button>
             </td>
           </tr>
