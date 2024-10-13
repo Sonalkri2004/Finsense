@@ -62,8 +62,8 @@ export default function Admin() {
     <h2 className="text-3xl font-bold text-white">Manage Users</h2>
     <button
       onClick={handleLogout}
-      className="py-2 px-1 bg-red-600 text-white text-center font-semibold rounded-full flex hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 animate__animated animate__pulse"
-      style={{ width: '2rem' }}
+      className="py-2 px-2 w-10 h-10 bg-red-600 text-white text-center font-semibold rounded-full flex hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 animate__animated animate__pulse"
+      // style={{ width: '2rem' }}
     >
          <LucideLogOut/>
     </button>
