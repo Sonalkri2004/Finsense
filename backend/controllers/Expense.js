@@ -251,13 +251,16 @@ export const getTotalExpenseAmount = async (req, res) => {
     const totalExpence = await ExpenseModel.countDocuments()
     const totalIncome  = await Income.countDocuments()
     const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
-
+    
 
 
 
     res.status(200).json({
       message: "Total amount calculated successfully",
-      totalAmount: totalAmount[0].totalAmount
+      totalAmount: totalAmount,
+      totalExpence: totalExpence,
+      totalIncome:totalIncome,
+      totalPendingExpenses: totalPendingExpenses
     });
   } catch (error) {
     console.log("Error calculating total amount: ", error.message);
