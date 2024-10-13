@@ -1,5 +1,6 @@
 import { ExpenseModel, CommentModel } from "../models/expense.js";
 import UserModel from "../models/user.js";
+import { Income } from '../models/Income.js';
 
 export const createExpense = async (req, res) => {
   try {
@@ -230,6 +231,38 @@ export const updateExpense = async (req, res) => {
     console.log("Error updating expense: ", error.message);
     res.status(500).json({
       message: "Error updating expense",
+      error: error.message
+    });
+  }
+};
+
+export const getTotalExpenseAmount = async (req, res) => {
+  try {
+    // Aggregate total of all amounts
+    const totalAmount = await ExpenseModel.aggregate([
+      {
+        $group: {
+          _id: null, // We don't want to group by any specific field, so use null
+          totalAmount: { $sum: "$amount" } // Sum the 'amount' field for all documents
+        }
+      }
+    ]);
+
+    const totalExpence = await ExpenseModel.countDocuments()
+    const totalIncome  = await Income.countDocuments()
+    const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
+
+
+
+
+    res.status(200).json({
+      message: "Total amount calculated successfully",
+      totalAmount: totalAmount[0].totalAmount
+    });
+  } catch (error) {
+    console.log("Error calculating total amount: ", error.message);
+    res.status(500).json({
+      message: "Error calculating total amount",
       error: error.message
     });
   }
