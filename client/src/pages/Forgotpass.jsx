@@ -31,8 +31,8 @@ export default function Forgotpass() {
   };
   return (
     <>
-     <div className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 animate__animated animate__fadeIn">
-  <div className="w-full max-w-md p-8 bg-gray-600 rounded-lg shadow-md animate__animated animate__bounceIn">
+     <div className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-[#0E0C15] via-[#0E0C15] to-[#0E0C15] animate__animated animate__fadeIn">
+  <div className="w-full max-w-md p-8 bg-gray-900 rounded-lg shadow-md animate__animated animate__bounceIn">
     <h2 className="text-3xl font-bold text-white mb-6 text-center">Login</h2>
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="animate__animated animate__fadeInUp">
