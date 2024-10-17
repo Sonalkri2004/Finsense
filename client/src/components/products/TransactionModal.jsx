@@ -69,7 +69,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
       className="animate__animated animate__fadeIn animate__faster"
     >
       {transaction && (
-        <div className="text-white relative">
+        <div className="text-white  relative">
           {/* Close Button */}
           <button
             onClick={onRequestClose}
