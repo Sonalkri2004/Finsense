@@ -7,6 +7,7 @@ export const createExpense = async (req, res) => {
   try {
     const { bankName, subHead, purpose, amount, total, status, TxnId, expenseId } = req.body;
      count ++;
+     console.log(count)
      const currentDate = new Date();
      const date = currentDate.toLocaleDateString('en-CA');
     const voucherNo = `${date}/${count}`;
@@ -52,6 +53,7 @@ export const createExpense = async (req, res) => {
 export const createComment = async (req, res) => {
   try {
     const { expenseId, commentText } = req.body;
+    console.log("55" , commentText)
 
     const expense = await ExpenseModel.findById(expenseId);
     if (!expense) {
