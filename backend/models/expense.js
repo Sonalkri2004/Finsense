@@ -73,6 +73,10 @@ const expenseSchema = new mongoose.Schema({
         ref: 'users', // Reference the User model
         required: true
     },
+    voucherNo:{
+        type:String,
+        require:true
+    },
     comments: [{
         type: commentSchema
     }]
