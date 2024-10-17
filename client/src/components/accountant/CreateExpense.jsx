@@ -54,7 +54,7 @@ export default function CreateExpense() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 animate__animated animate__fadeIn">
-      <div className="w-full max-w-4xl p-10 bg-gray-800 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out animate__animated animate__bounceIn">
+      <div className="w-full max-w-4xl p-10 bg-[#1A1B1F] rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out animate__animated animate__bounceIn">
         <h1 className="text-4xl font-extrabold text-white mb-8 text-center">Create Expense Transaction</h1>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1">
@@ -65,7 +65,7 @@ export default function CreateExpense() {
               value={formData.bankName}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
@@ -76,7 +76,7 @@ export default function CreateExpense() {
               value={formData.subHead}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
@@ -87,7 +87,7 @@ export default function CreateExpense() {
               value={formData.purpose}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
@@ -98,7 +98,7 @@ export default function CreateExpense() {
               value={formData.amount}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
@@ -109,7 +109,7 @@ export default function CreateExpense() {
               value={formData.total}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
@@ -120,7 +120,7 @@ export default function CreateExpense() {
               value={formData.status}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-2">
@@ -131,7 +131,7 @@ export default function CreateExpense() {
               value={formData.TxnId}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-2">

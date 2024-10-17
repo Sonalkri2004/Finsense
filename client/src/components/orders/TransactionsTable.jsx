@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye, DownloadCloud, FileDown } from "lucide-react";
+import { Search, Eye, DownloadCloud, FileDown, BookDown } from "lucide-react";
 import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
 import PayVoucher from "../analytics/PayVoucher";
@@ -338,10 +338,10 @@ const TransactionsTable = () => {
       <div className="flex justify-end mt-4">
         <button
           onClick={handleDownloadExcel}
-          className="px-4 py-2 text-white bg-green-600 rounded"
+          className="px-6 py-2 text-white bg-green-700 rounded"
           disabled={selectedTransactions.length === 0} // Disable if no transactions are selected
         >
-          Download Excel
+         <BookDown/>
         </button>
       </div>
 
