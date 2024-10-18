@@ -16,7 +16,7 @@ export const createExpense = async (req, res) => {
     // Get the current date and generate a voucher number
     const currentDate = new Date();
     const date = currentDate.toLocaleDateString('en-CA');
-    
+
     const voucherNo = `${date}/${count}`;
     console.log("Generated Voucher No:", voucherNo);
 
@@ -225,7 +225,24 @@ export const filterExpensesByDateRange = async (req, res) => {
   }
 };
 
+//api to get rejected api
+export const getAllRejectedExpenses = async (req, res) => {
+  try {
+    // Get all expenses with 'rejected' status
+    const rejectedExpenses = await ExpenseModel.find({ status: 'rejected' });
 
+    res.status(200).json({
+      message: "Rejected expenses retrieved successfully",
+      rejectedExpenses: rejectedExpenses
+    });
+  } catch (error) {
+    console.log("Error retrieving rejected expenses: ", error.message);
+    res.status(500).json({
+      message: "Error retrieving rejected expenses",
+      error: error.message
+    });
+  }
+};
 
 // api to update expense 
 export const updateExpense = async (req, res) => {
