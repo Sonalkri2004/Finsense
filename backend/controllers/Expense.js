@@ -8,8 +8,6 @@ export const createExpense = async (req, res) => {
   try {
     // Destructure the request body
     const { bankName, subHead, purpose, amount, total, status, TxnId, expenseId } = req.body;
-<<<<<<< HEAD
-=======
 
     // Increment the count
     count++;
@@ -18,20 +16,14 @@ export const createExpense = async (req, res) => {
     // Get the current date and generate a voucher number
     const currentDate = new Date();
     const date = currentDate.toLocaleDateString('en-CA');
+    
     const voucherNo = `${date}/${count}`;
     console.log("Generated Voucher No:", voucherNo);
 
->>>>>>> d0b7a7a (voucherId  added)
     let expense;
 
     // If no TxnId is provided, create a new expense
     if (!TxnId?.trim()) {
-      count++;
-      console.log(count)
-      const currentDate = new Date();
-      const date = currentDate.toLocaleDateString('en-CA');
-      const voucherNo = `SMC/${date}/${count}`;
-
       expense = new ExpenseModel({
         bankName,
         subHead,
@@ -44,14 +36,8 @@ export const createExpense = async (req, res) => {
       });
 
       await expense.save();
-<<<<<<< HEAD
-      console.log("New expense",expense)
-    }
-    else {
-=======
     } else if (expenseId) {
       // Update the existing expense if expenseId and TxnId are provided
->>>>>>> d0b7a7a (voucherId  added)
       expense = await ExpenseModel.findById(expenseId);
 
       if (expense) {
@@ -86,7 +72,7 @@ export const createExpense = async (req, res) => {
 export const createComment = async (req, res) => {
   try {
     const { expenseId, commentText } = req.body;
-    console.log("55", commentText)
+    console.log("55" , commentText)
 
     const expense = await ExpenseModel.findById(expenseId);
     if (!expense) {
@@ -101,7 +87,7 @@ export const createComment = async (req, res) => {
       userName: user.name,
       userRole: user.role,
     })
-
+    
     expense.comments.push(newComment);
 
     console.log(expense)
@@ -132,7 +118,6 @@ export const updateStatus = async (req, res) => {
       message: "status updated uccesfully",
       user: updatedStatus,
     });
-
   } catch (error) {
     console.log("error in updateStatus ", error.message);
   }
@@ -148,19 +133,13 @@ export const getExpense = async (req, res) => {
 
     // setting conditions
     if (userRole === 'accountant') {
-      getExpense = await ExpenseModel.find({
-        $or: [{ status: 'approved' }, { status: 'rejected' }]
-      }).populate('comments', 'userName userRole commentText createdAt');
+      getExpense = await ExpenseModel.find({ status: 'approved' }).populate('comments', 'userName userRole commentText createdAt');
     }
     else if (userRole == 'bursar') {
-      getExpense = await ExpenseModel.find({
-        $or: [{ status: 'pending' }, { status: 'rejected' }]
-      }).populate('comments', 'userName userRole commentText createdAt');
+      getExpense = await ExpenseModel.find({ status: 'pending' }).populate('comments', 'userName userRole commentText createdAt');
     }
     else if (userRole == 'principal') {
-      getExpense = await ExpenseModel.find({
-        $or: [{ status: 'verified' }, { status: 'rejected' }]
-      }).populate('comments', 'userName userRole commentText createdAt');
+      getExpense = await ExpenseModel.find({ status: 'verified' }).populate('comments', 'userName userRole commentText createdAt');
     }
     else if (userRole == 'admin') {
       getExpense = await ExpenseModel.find().populate('comments', 'userName userRole commentText createdAt');
@@ -297,13 +276,13 @@ export const getTotalExpenseAmount = async (req, res) => {
     ]);
 
     const totalExpence = await ExpenseModel.countDocuments()
-    const totalIncome = await Income.countDocuments()
+    const totalIncome  = await Income.countDocuments()
     const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
     res.status(200).json({
       message: "Total amount calculated successfully",
       totalAmount: totalAmount,
       totalExpence: totalExpence,
-      totalIncome: totalIncome,
+      totalIncome:totalIncome,
       totalPendingExpenses: totalPendingExpenses
     });
   } catch (error) {
@@ -324,7 +303,7 @@ export const getTotalExpenseAmount = async (req, res) => {
         const totalApprovedExpenses = await ExpenseModel.countDocuments({ status: 'approved' });
         const totalRejectedExpenses = await ExpenseModel.countDocuments({ status: 'rejected' });
         const totalVerifiedExpenses = await ExpenseModel.countDocuments({ status: 'verified' });
-         console.log("305",totalApprovedExpenses , totalCompletedExpenses , totalPendingExpenses)
+         
         res.status(200).json({
           message: "Total expenses status count calculated successfully",
           totalPendingExpenses: totalPendingExpenses,
