@@ -68,15 +68,16 @@ const RejectedTable = () => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/expense/getExpense`,
+          `http://localhost:4000/api/expense/getRejected`,
           {
             withCredentials: true,
           }
-        );
+        ); 
+        console.log("76" , response.data)
 
         if (response.data) {
-          const filteredTransactions = response.data?.Expenses.filter(transaction => transaction.status != "approved")
-          setFilteredTransactions(filteredTransactions);
+        
+          setFilteredTransactions(response.data?.rejectedExpenses);
         }
       } catch (error) {
         console.error("Error fetching expenses", error);

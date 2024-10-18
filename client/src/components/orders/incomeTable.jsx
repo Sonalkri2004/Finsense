@@ -10,7 +10,7 @@ import NoteSheet from "../analytics/NoteSheet";
 import html2pdf from "html2pdf.js";
 import * as XLSX from 'xlsx'; // Import XLSX for Excel creation
 
-const TransactionsTable = () => {
+const IncomeTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,11 +23,10 @@ const TransactionsTable = () => {
   const [selectedSubHead, setSelectedSubHead] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTransactions, setSelectedTransactions] = useState([]);
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [showIncome, setShowIncome] = useState(false); // Toggle between Expense and Income
-
   const payVoucherRef = useRef();
   const noteSheetRef = useRef();
+
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   const handlePrint = () => {
     if (payVoucherRef.current) {
@@ -42,7 +41,6 @@ const TransactionsTable = () => {
       html2pdf().from(payVoucherRef.current).set(options).save();
     }
   };
-
   const handlePrintt = () => {
     if (noteSheetRef.current) {
       const options = {
@@ -56,7 +54,6 @@ const TransactionsTable = () => {
       html2pdf().from(noteSheetRef.current).set(options).save();
     }
   };
-
   const handleFilter = async () => {
     try {
       const filters = { ...filterDate };
@@ -68,7 +65,7 @@ const TransactionsTable = () => {
         filters.status = selectedStatus;
       }
 
-      console.log("filters", filters);
+      console.log("filters",filters)
 
       const response = await axios.post(
         `http://localhost:4000/api/expense/filterDate`,
@@ -90,12 +87,12 @@ const TransactionsTable = () => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/expense/getExpense`,
+          `http://localhost:4000/api/income/getIncome`,
           {
             withCredentials: true,
           }
         );
-
+        console.log("95" , response.data)
         if (response.data) {
           setFilteredTransactions(response.data?.Expenses);
         }
@@ -104,33 +101,8 @@ const TransactionsTable = () => {
       }
     };
 
-    if (!showIncome) {
-      fetchExpenses();
-    }
-  }, [showIncome]);
-
-  useEffect(() => {
-    const fetchIncome = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:4000/api/income/getIncome`,
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("95", response.data);
-        if (response.data) {
-          setFilteredTransactions(response.data?.data);
-        }
-      } catch (error) {
-        console.error("Error fetching income", error);
-      }
-    };
-
-    if (showIncome) {
-      fetchIncome();
-    }
-  }, [showIncome]);
+    fetchExpenses();
+  }, []);
 
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
@@ -159,7 +131,6 @@ const TransactionsTable = () => {
     setSelectedTransaction(transaction);
     setTimeout(() => handlePrint(), 0);
   };
-
   const handleDownloadNotesheet = (transaction) => {
     setSelectedTransaction(transaction);
     setTimeout(() => handlePrintt(), 0);
@@ -189,94 +160,81 @@ const TransactionsTable = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
     >
-      <div className="flex justify-between items-center mb-6 gap-2 w-full">
+      <div className="flex flex-col justify-between items-start mb-6 gap-2">
         <h2 className="text-xl font-semibold text-gray-100">
           Transaction History
         </h2>
-        <div className="flex items-center">
-          <label className="relative inline-block w-14 h-8">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={showIncome}
-              onChange={() => setShowIncome((prev) => !prev)}
-            />
-            <div className="w-full h-full bg-gray-300 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600 transition-colors duration-300"></div>
-            <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full peer-checked:translate-x-6 transition-transform duration-300"></div>
-          </label>
+        <div className="w-full flex gap-4 justify-between items-center">
+          <div className="flex gap-4">
+            {/* Date Filter */}
+            <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
+              <p>From</p>
+              <input
+                type="date"
+                name="filterDate"
+                id="filterDate"
+                className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFilterDate({ ...filterDate, startDate: e.target.value })}
+              />
+            </label>
+
+            <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
+              <p>To</p>
+              <input
+                type="date"
+                name="filterDate"
+                id="filterDate"
+                className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
+              />
+            </label>
+
+            {/* SubHead Dropdown */}
+            <label htmlFor="subHead" className="flex flex-col gap-2 items-start">
+              <p>SubHead</p>
+              <select
+                name="subHead"
+                id="subHead"
+                className="bg-gray-700 text-white rounded-lg px-4 py-2"
+                value={selectedSubHead}
+                onChange={(e) => setSelectedSubHead(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="BCA">BCA</option>
+                <option value="BBA">BBA</option>
+                <option value="OMSP">OMSP</option>
+                <option value="Exam">Exam</option>
+                <option value="SW">SW</option>
+                <option value="GEN">GEN</option>
+                <option value="NSS">NSS</option>
+                <option value="NCC">NCC</option>
+              </select>
+            </label>
+
+            {/* Status Dropdown */}
+            <label htmlFor="status" className="flex flex-col gap-2 items-start">
+              <p>Status</p>
+              <select
+                name="status"
+                id="status"
+                className="bg-gray-700 text-white rounded-lg px-4 py-2"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="pending">pending</option>
+                <option value="verified">Verified</option>
+                <option value="approved">Approved</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </label>
+          </div>
+
+          <button onClick={handleFilter} className="px-4 py-2 text-white bg-blue-600 rounded">
+            Filter
+          </button>
         </div>
-      </div>
-
-      <div className="w-full flex gap-4 justify-between items-center">
-        <div className="flex gap-4">
-          {/* Date Filter */}
-          <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
-            <p>From</p>
-            <input
-              type="date"
-              name="filterDate"
-              id="filterDate"
-              className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setFilterDate({ ...filterDate, startDate: e.target.value })}
-            />
-          </label>
-
-          <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
-            <p>To</p>
-            <input
-              type="date"
-              name="filterDate"
-              id="filterDate"
-              className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
-            />
-          </label>
-
-          {/* SubHead Dropdown */}
-          <label htmlFor="subHead" className="flex flex-col gap-2 items-start">
-            <p>SubHead</p>
-            <select
-              name="subHead"
-              id="subHead"
-              className="bg-gray-700 text-white rounded-lg px-4 py-2"
-              value={selectedSubHead}
-              onChange={(e) => setSelectedSubHead(e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="BCA">BCA</option>
-              <option value="BBA">BBA</option>
-              <option value="OMSP">OMSP</option>
-              <option value="Exam">Exam</option>
-              <option value="SW">SW</option>
-              <option value="GEN">GEN</option>
-              <option value="NSS">NSS</option>
-              <option value="NCC">NCC</option>
-            </select>
-          </label>
-
-          {/* Status Dropdown */}
-          <label htmlFor="status" className="flex flex-col gap-2 items-start">
-            <p>Status</p>
-            <select
-              name="status"
-              id="status"
-              className="bg-gray-700 text-white rounded-lg px-4 py-2"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="pending">pending</option>
-              <option value="verified">Verified</option>
-              <option value="approved">Approved</option>
-              <option value="completed">Completed</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </label>
-        </div>
-
-        <button onClick={handleFilter} className="px-4 py-2 text-white bg-blue-600 rounded">
-          Filter
-        </button>
       </div>
 
       <div className="overflow-x-auto">
@@ -403,16 +361,16 @@ const TransactionsTable = () => {
           className="px-6 py-2 text-white bg-green-700 rounded"
           disabled={selectedTransactions.length === 0} // Disable if no transactions are selected
         >
-          <BookDown />
+         <BookDown/>
         </button>
       </div>
 
       <div className="hidden">
-        {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
+      {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
         {selectedTransaction && <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />}
       </div>
     </motion.div>
   );
 };
 
-export default TransactionsTable;
+export default IncomeTable;
