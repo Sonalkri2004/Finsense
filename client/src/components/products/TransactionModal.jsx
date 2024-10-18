@@ -7,8 +7,6 @@ import "animate.css";
 import { toast } from "react-hot-toast"
 import convertISOToDate from "../../utils/formatDate";
 import { useSelector } from "react-redux"
-import axios from "axios";
-import { useState } from "react";
 
 const customModalStyles = {
   content: {
@@ -38,27 +36,9 @@ const customModalStyles = {
   },
 };
 
-const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmationPopup }) => {
+const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmationPopup, transactionId, setTransactionId, setCommentForm, commentForm }) => {
 
-  const [commentForm, setCommentForm] = useState({
-    expenseId: '',
-    commentText: '',
-  })
-  const [transactionId, setTransactionId] = useState('')
   const userDetails = useSelector(state => state.AuthSlice?.user);
-
-  console.log(transaction)
-
-  const handleCreateComment = async (e) => {
-    if (!commentForm.commentText.trim()) return;
-    const response = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true })
-
-    console.log("created comment")
-
-    if (response.data) {
-      setCommentForm({ ...commentForm, commentText: '' })
-    }
-  };
 
   return (
     <Modal
@@ -116,12 +96,6 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
                   className="flex-grow px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Write a comment..."
                 />
-                <button
-                  onClick={handleCreateComment}
-                  className="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition duration-200"
-                >
-                  <MessageSquare size={20} />
-                </button>
               </div>
               {
                 (userDetails.role == 'accountant' && transaction?.status == 'approved') && (
@@ -175,7 +149,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
                         )
                   }
                   <button
-                    onClick={() => openConfirmationPopup('reject')}
+                    onClick={() => openConfirmationPopup('rejected')}
                     className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
                   >
                     <X size={20} /> Reject Transaction

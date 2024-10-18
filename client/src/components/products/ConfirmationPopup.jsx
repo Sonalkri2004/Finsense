@@ -29,16 +29,21 @@ const confirmationModalStyles = {
   },
 };
 
-const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, confirmationAction }) => {
+const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, confirmationAction, transactionId, commentForm }) => {
 
-  const handleReject = async () => {
+  const handleAction = async () => {
 
-    const response = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
+    const response1 = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
       status: confirmationAction,
       expenseId: transaction?._id || ''
-    })
+    }, { withCredentials: true })
 
-    if (response.data) {
+    const response2 = await axios.post('http://localhost:4000/api/expense/createExpense', { TxnId: transactionId, expenseId: transaction?._id }, { withCredentials: true });
+
+    if (!commentForm.commentText.trim()) return;
+    const response3 = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true })
+
+    if (response1.data && response2.data && response3.data) {
       toast.success('Transaction status updated!!');
     } else {
       toast.error('Transaction status not updated!!')
@@ -57,7 +62,7 @@ const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, con
       <h2 className="text-white text-xl font-semibold mb-4">Are you sure?</h2>
       <div className="flex justify-center gap-4">
         <button
-          onClick={handleReject}
+          onClick={handleAction}
           className="px-8 py-2 bg-green-600 hover:bg-green-500 text-white rounded-full transition duration-200"
         >
           Yes

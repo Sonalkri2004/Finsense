@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Pricing from "../components/Pricing";
-import Roadmap from "../components/Roadmap";
 import Services from "../components/Services";
 import './HomePage.css';
 import axios from "axios";
@@ -19,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get('http://localhost:4000/api/auth/CheckUser');
+      const response = await axios.get('http://localhost:4000/api/auth/CheckUser', { withCredentials: true });
       console.log(response)
       if (response.data) {
         dispatch(SetUser(response.data));

@@ -6,6 +6,7 @@ import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
 import TransactionModal from "./TransactionModal";
 import ConfirmationPopup from "./ConfirmationPopup";
+import { useNavigate } from "react-router-dom"
 
 const RejectedTable = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
@@ -15,6 +16,7 @@ const RejectedTable = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
   const [confirmationAction, setConfirmationAction] = useState(null);
+  const navigate = useNavigate();
 
   const openModal = (transaction) => {
     setSelectedTransaction(transaction);
@@ -38,9 +40,15 @@ const RejectedTable = () => {
     setSelectedTransaction(null);
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async () => {
     if (confirmationAction === 'delete') {
-      // Handle deletion logic here
+      const response = await axios.delete(`http://localhost:4000/api/expense/deleteExpense/${selectedTransaction?._id}`, { withCredentials: true })
+
+      if (response.data) {
+        console.log("OK", response.data);
+        navigate(0);
+      }
+
     } else if (confirmationAction === 'done') {
       handleSaveTransaction(selectedTransaction);
     }
@@ -67,7 +75,8 @@ const RejectedTable = () => {
         );
 
         if (response.data) {
-          setFilteredTransactions(response.data?.Expenses);
+          const filteredTransactions = response.data?.Expenses.filter(transaction => transaction.status != "approved")
+          setFilteredTransactions(filteredTransactions);
         }
       } catch (error) {
         console.error("Error fetching expenses", error);
