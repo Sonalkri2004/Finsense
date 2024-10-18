@@ -75,7 +75,7 @@ const expenseSchema = new mongoose.Schema({
     },
     voucherNo:{
         type:String,
-        require:true
+        required:true
     },
     comments: [{
         type: commentSchema

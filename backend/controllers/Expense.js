@@ -1,13 +1,30 @@
 import { ExpenseModel, CommentModel } from "../models/expense.js";
 import UserModel from "../models/user.js";
 import { Income } from '../models/Income.js';
-let count = 0;
+
+let count = 0; // Note: This should be managed in a persistent manner, see explanation below
 
 export const createExpense = async (req, res) => {
   try {
+    // Destructure the request body
     const { bankName, subHead, purpose, amount, total, status, TxnId, expenseId } = req.body;
+<<<<<<< HEAD
+=======
+
+    // Increment the count
+    count++;
+    console.log("Current Count:", count);
+
+    // Get the current date and generate a voucher number
+    const currentDate = new Date();
+    const date = currentDate.toLocaleDateString('en-CA');
+    const voucherNo = `${date}/${count}`;
+    console.log("Generated Voucher No:", voucherNo);
+
+>>>>>>> d0b7a7a (voucherId  added)
     let expense;
 
+    // If no TxnId is provided, create a new expense
     if (!TxnId?.trim()) {
       count++;
       console.log(count)
@@ -21,30 +38,44 @@ export const createExpense = async (req, res) => {
         purpose,
         amount,
         total,
-        status,
+        status: status || 'pending',
         userId: req.user._id,
-        voucherNo: voucherNo,
+        voucherNo,
       });
 
-
       await expense.save();
+<<<<<<< HEAD
       console.log("New expense",expense)
     }
     else {
+=======
+    } else if (expenseId) {
+      // Update the existing expense if expenseId and TxnId are provided
+>>>>>>> d0b7a7a (voucherId  added)
       expense = await ExpenseModel.findById(expenseId);
 
       if (expense) {
-        expense.TxnId = TxnId || '';
+        expense.TxnId = TxnId;
         await expense.save();
+      } else {
+        return res.status(404).json({
+          message: "Expense not found to update",
+        });
       }
+    } else {
+      return res.status(400).json({
+        message: "Invalid request. Provide either details for a new expense or both TxnId and expenseId to update an existing one.",
+      });
     }
 
+    // Return success response
     return res.status(201).json({
       message: "Expense created successfully",
       expense,
     });
 
   } catch (error) {
+    console.error("Error creating expense:", error.message);
     return res.status(500).json({
       message: "Error creating expense",
       error: error.message,
