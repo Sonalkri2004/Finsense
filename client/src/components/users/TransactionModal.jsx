@@ -1,9 +1,9 @@
+/* eslint-disable react/prop-types */
 // Modernized and Editable TransactionModal Component with Close Button
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { Check, X, MessageSquare } from "lucide-react";
 import "animate.css";
-import convertISOToDate from "../../utils/formatDate";
 
 const customModalStyles = {
   content: {
@@ -48,12 +48,12 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, isEditable, han
   useEffect(() => {
     if (transaction) {
       setFormData({
-        txnId: transaction._id || "",
-        subHead: transaction.subHead || "",
-        purpose: transaction.purpose || "",
-        amount: transaction.amount || "",
-        total: transaction.total || "",
-        status: transaction.status || "pending",
+        txnId: transaction?._id || "",
+        subHead: transaction?.subHead || "",
+        purpose: transaction?.purpose || "",
+        amount: transaction?.amount || "",
+        total: transaction?.total || "",
+        status: transaction?.status || "pending",
       });
     }
   }, [transaction]);
@@ -184,7 +184,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, isEditable, han
               <button
                 onClick={handleDone}
                 className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
-                >
+              >
                 <Check size={20} /> Done
               </button>
               <button

@@ -15,6 +15,15 @@ const PendingTable = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
   const [confirmationAction, setConfirmationAction] = useState(null);
+  const [transactionId, setTransactionId] = useState('');
+  const [commentForm, setCommentForm] = useState({
+    expenseId: '',
+    commentText: '',
+  })
+
+  useEffect(() => {
+    setCommentForm({ ...commentForm, expenseId: selectedTransaction?._id })
+  }, [selectedTransaction])
 
   const openModal = (transaction) => {
     setSelectedTransaction(transaction);
@@ -53,7 +62,9 @@ const PendingTable = () => {
         );
 
         if (response.data) {
-          setFilteredTransactions(response.data?.Expenses);
+          const filteredTransactions = response.data.Expenses.filter(transaction => transaction.status == "approved")
+          console.log("Filtered", filteredTransactions)
+          setFilteredTransactions(filteredTransactions);
         }
       } catch (error) {
         console.error("Error fetching expenses", error);
@@ -61,7 +72,7 @@ const PendingTable = () => {
     };
 
     fetchExpenses();
-  }, []);
+  }, [modalIsOpen]);
 
   // Calculate current transactions for the current page
   const indexOfLastTransaction = currentPage * itemsPerPage;
@@ -201,6 +212,10 @@ const PendingTable = () => {
         onRequestClose={closeModal}
         transaction={selectedTransaction}
         openConfirmationPopup={openConfirmationPopup}
+        setTransactionId={setTransactionId}
+        transactionId={transactionId}
+        commentForm={commentForm}
+        setCommentForm={setCommentForm}
       />
       <ConfirmationPopup
         isOpen={confirmationIsOpen}
@@ -208,6 +223,8 @@ const PendingTable = () => {
         onConfirm={handleConfirmation}
         transaction={selectedTransaction}
         confirmationAction={confirmationAction}
+        transactionId={transactionId}
+        commentForm={commentForm}
       />
     </motion.div>
   );

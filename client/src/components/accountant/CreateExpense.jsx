@@ -9,7 +9,6 @@ export default function CreateExpense() {
     amount: "",
     total: "",
     status: "",
-    TxnId: "",
   });
   const user = useSelector(state => state.AuthSlice?.user)
 
@@ -32,11 +31,10 @@ export default function CreateExpense() {
         formData.purpose.trim() &&
         formData.amount.trim() &&
         formData.total.trim() &&
-        formData.status.trim() &&
-        formData.TxnId.trim()
+        formData.status.trim()
       ) {
         const response = await axios.post(
-          `http://localhost:4000/api/expense/createExpense/${user?._id}`,
+          `http://localhost:4000/api/expense/createExpense`,
           formData,
           {
             withCredentials: true
@@ -118,17 +116,6 @@ export default function CreateExpense() {
               type="text"
               name="status"
               value={formData.status}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Transaction ID:</label>
-            <input
-              type="text"
-              name="TxnId"
-              value={formData.TxnId}
               onChange={handleChange}
               required
               className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
