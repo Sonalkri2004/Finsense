@@ -315,11 +315,48 @@ export const getTotalExpenseAmount = async (req, res) => {
   }
 };
 
+    // Count total expenses with different statuses
+    export const getTotalExpenseStatusCount = async (req, res) => {
+      try {
+        // Count total expenses with different statuses
+        const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
+        const totalCompletedExpenses = await ExpenseModel.countDocuments({ status: 'completed' });
+        const totalApprovedExpenses = await ExpenseModel.countDocuments({ status: 'approved' });
+        const totalRejectedExpenses = await ExpenseModel.countDocuments({ status: 'rejected' });
+        const totalVerifiedExpenses = await ExpenseModel.countDocuments({ status: 'verified' });
+         console.log("305",totalApprovedExpenses , totalCompletedExpenses , totalPendingExpenses)
+        res.status(200).json({
+          message: "Total expenses status count calculated successfully",
+          totalPendingExpenses: totalPendingExpenses,
+          totalCompletedExpenses: totalCompletedExpenses,
+          totalApprovedExpenses: totalApprovedExpenses,
+          totalRejectedExpenses: totalRejectedExpenses,
+          totalVerifiedExpenses: totalVerifiedExpenses
+        });
+      } catch (error) {
+        console.log("Error calculating expense status count: ", error.message);
+        res.status(500).json({
+          message: "Error calculating expense status count",
+          error: error.message
+        });
+      }
+    };
+    
+
 
 export const deleteExpense = async (req, res) => {
   try {
     const { id: expenseId } = req.params;
+    const userId = req.user._id
+
+    const user = await UserModel.findById(userId);
     console.log(`Deleting expense with ID: ${expenseId}`);  // Log the expense ID for debugging
+    if (user.role !== 'accountant') {
+      return res.status(403).json({
+        message: 'you are not authorized to edit expense'
+      })
+
+    }
 
     // Find and delete the expense by its ID
     const deletedExpense = await ExpenseModel.findByIdAndDelete(expenseId);
