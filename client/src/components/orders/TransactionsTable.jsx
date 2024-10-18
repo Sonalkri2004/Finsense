@@ -5,6 +5,8 @@ import { Search, Eye, DownloadCloud, FileDown, BookDown } from "lucide-react";
 import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
 import PayVoucher from "../analytics/PayVoucher";
+import NoteSheet from "../analytics/NoteSheet";
+
 import html2pdf from "html2pdf.js";
 import * as XLSX from 'xlsx'; // Import XLSX for Excel creation
 
@@ -22,6 +24,8 @@ const TransactionsTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const payVoucherRef = useRef();
+  const noteSheetRef = useRef();
+
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   const handlePrint = () => {
@@ -37,7 +41,19 @@ const TransactionsTable = () => {
       html2pdf().from(payVoucherRef.current).set(options).save();
     }
   };
+  const handlePrintt = () => {
+    if (noteSheetRef.current) {
+      const options = {
+        margin: 10,
+        filename: 'NoteSheet.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
 
+      html2pdf().from(noteSheetRef.current).set(options).save();
+    }
+  };
   const handleFilter = async () => {
     try {
       const filters = { ...filterDate };
@@ -114,6 +130,10 @@ const TransactionsTable = () => {
   const handleDownloadVoucher = (transaction) => {
     setSelectedTransaction(transaction);
     setTimeout(() => handlePrint(), 0);
+  };
+  const handleDownloadNotesheet = (transaction) => {
+    setSelectedTransaction(transaction);
+    setTimeout(() => handlePrintt(), 0);
   };
 
   // Handle checkbox change for selecting transactions
@@ -301,7 +321,7 @@ const TransactionsTable = () => {
                   </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
-                  <button className="text-indigo-400 hover:text-indigo-300 mr-2">
+                  <button onClick={() => handleDownloadNotesheet(transaction)} className="text-indigo-400 hover:text-indigo-300 mr-2">
                     <FileDown size={18} />
                   </button>
                 </td>
@@ -346,7 +366,8 @@ const TransactionsTable = () => {
       </div>
 
       <div className="hidden">
-        {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
+      {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
+        {selectedTransaction && <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />}
       </div>
     </motion.div>
   );
