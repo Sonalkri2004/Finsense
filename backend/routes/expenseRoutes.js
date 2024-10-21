@@ -8,7 +8,7 @@ ExpenseRoutes.post('/createComment', IsUser, createComment);
 ExpenseRoutes.patch('/updateStatus', IsUser, updateStatus);
 ExpenseRoutes.get('/getExpense', IsUser, getExpense);
 ExpenseRoutes.post('/filterDate', IsUser, filterExpensesByDateRange);
-ExpenseRoutes.post('/updateExpense/:id', IsUser, updateExpense);
+ExpenseRoutes.patch('/updateExpense/:id', IsUser, updateExpense);
 
 ExpenseRoutes.get('/getTotal', IsUser, getTotalExpenseAmount);
 ExpenseRoutes.get('/getTotalExpense', IsUser, getTotalExpenseStatusCount);
