@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 import { Trash2, Edit3 } from "lucide-react";
 import axios from "axios";
 import convertISOToDate from "../../utils/formatDate";
-import TransactionModal from "./TransactionModal";
+import RejectedModal from "./RejectedModal";
 import ConfirmationPopup from "./ConfirmationPopup";
 import { useNavigate } from "react-router-dom"
 
 const RejectedTable = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8); // Set the number of items per page
+  const [itemsPerPage] = useState(8);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
@@ -27,6 +27,14 @@ const RejectedTable = () => {
     setModalIsOpen(false);
     setSelectedTransaction(null);
   };
+  const updateTransaction = (updatedTransaction) => {
+    setFilteredTransactions((prevTransactions) =>
+      prevTransactions.map((transaction) =>
+        transaction._id === updatedTransaction._id ? updatedTransaction : transaction
+      )
+    );
+  };
+
 
   const openConfirmationPopup = (action, transaction) => {
     setSelectedTransaction(transaction);
@@ -72,11 +80,11 @@ const RejectedTable = () => {
           {
             withCredentials: true,
           }
-        ); 
-        console.log("76" , response.data)
+        );
+        console.log("76", response.data)
 
         if (response.data) {
-        
+
           setFilteredTransactions(response.data?.rejectedExpenses);
         }
       } catch (error) {
@@ -227,12 +235,11 @@ const RejectedTable = () => {
         </button>
       </div>
 
-      <TransactionModal
+      <RejectedModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         transaction={selectedTransaction}
-        isEditable={true}
-        handleSaveTransaction={(updatedTransaction) => openConfirmationPopup('done', updatedTransaction)}
+        updateTransaction={updateTransaction} // Pass this to update the table after editing
       />
       <ConfirmationPopup
         isOpen={confirmationIsOpen}

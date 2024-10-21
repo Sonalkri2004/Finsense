@@ -72,7 +72,7 @@ export const createExpense = async (req, res) => {
 export const createComment = async (req, res) => {
   try {
     const { expenseId, commentText } = req.body;
-    console.log("55" , commentText)
+    console.log(req.body)
 
     const expense = await ExpenseModel.findById(expenseId);
     if (!expense) {
