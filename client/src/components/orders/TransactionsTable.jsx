@@ -8,23 +8,26 @@ import PayVoucher from "../analytics/PayVoucher";
 import NoteSheet from "../analytics/NoteSheet";
 
 import html2pdf from "html2pdf.js";
-import * as XLSX from 'xlsx'; // Import XLSX for Excel creation
+import * as XLSX from "xlsx"; // Import XLSX for Excel creation
 
 const TransactionsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8); // Set the number of items per page
+  const [toggleValue, setToggleValue] = useState("expense");
   const [filterDate, setFilterDate] = useState({
     startDate: "",
     endDate: "",
-    subHead: ""
+    subHead: "",
+    billType:toggleValue
   });
   const [selectedSubHead, setSelectedSubHead] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showIncome, setShowIncome] = useState(false); // Toggle between Expense and Income
+  
 
   const payVoucherRef = useRef();
   const noteSheetRef = useRef();
@@ -33,10 +36,10 @@ const TransactionsTable = () => {
     if (payVoucherRef.current) {
       const options = {
         margin: 10,
-        filename: 'pay_voucher.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: "pay_voucher.pdf",
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
 
       html2pdf().from(payVoucherRef.current).set(options).save();
@@ -47,10 +50,10 @@ const TransactionsTable = () => {
     if (noteSheetRef.current) {
       const options = {
         margin: 10,
-        filename: 'NoteSheet.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: "NoteSheet.pdf",
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
 
       html2pdf().from(noteSheetRef.current).set(options).save();
@@ -89,15 +92,21 @@ const TransactionsTable = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/api/expense/getExpense`,
+        const response = await axios.post(
+          `http://localhost:4000/api/expense/getAllBill`,
+          { billType: toggleValue },
           {
             withCredentials: true,
           }
         );
-
-        if (response.data) {
-          setFilteredTransactions(response.data?.Expenses);
+        console.log("Response = ", response.data);
+        console.log("comments = ", response.data.bill[0].comments);
+        
+        // Ensure that the API response structure is correctly accessed
+        if (response.data && response.data.bill) {
+          setFilteredTransactions(response.data.bill); // Adjust if your API uses a different field name
+        } else {
+          console.error("No bills found in response");
         }
       } catch (error) {
         console.error("Error fetching expenses", error);
@@ -107,30 +116,30 @@ const TransactionsTable = () => {
     if (!showIncome) {
       fetchExpenses();
     }
-  }, [showIncome]);
+  }, [showIncome, toggleValue]);// Ensure setFilteredTransactions is included if it's a prop
 
-  useEffect(() => {
-    const fetchIncome = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:4000/api/income/getIncome`,
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("95", response.data);
-        if (response.data) {
-          setFilteredTransactions(response.data?.data);
-        }
-      } catch (error) {
-        console.error("Error fetching income", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchIncome = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:4000/api/income/getIncome`,
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       console.log("95", response.data);
+  //       if (response.data) {
+  //         setFilteredTransactions(response.data?.data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching income", error);
+  //     }
+  //   };
 
-    if (showIncome) {
-      fetchIncome();
-    }
-  }, [showIncome]);
+  //   if (showIncome) {
+  //     fetchIncome();
+  //   }
+  // }, [showIncome]);
 
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
@@ -168,7 +177,9 @@ const TransactionsTable = () => {
   // Handle checkbox change for selecting transactions
   const handleCheckboxChange = (transaction) => {
     if (selectedTransactions.includes(transaction)) {
-      setSelectedTransactions(selectedTransactions.filter(item => item !== transaction));
+      setSelectedTransactions(
+        selectedTransactions.filter((item) => item !== transaction)
+      );
     } else {
       setSelectedTransactions([...selectedTransactions, transaction]);
     }
@@ -198,8 +209,12 @@ const TransactionsTable = () => {
             <input
               type="checkbox"
               className="sr-only peer"
-              checked={showIncome}
-              onChange={() => setShowIncome((prev) => !prev)}
+              checked={toggleValue === "income"} // Check if toggleValue is 'income'
+              onChange={() =>
+                setToggleValue((prevValue) =>
+                  prevValue === "expense" ? "income" : "expense"
+                )
+              } // Toggle between 'expense' and 'income'
             />
             <div className="w-full h-full bg-gray-300 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600 transition-colors duration-300"></div>
             <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full peer-checked:translate-x-6 transition-transform duration-300"></div>
@@ -210,25 +225,35 @@ const TransactionsTable = () => {
       <div className="w-full flex gap-4 justify-between items-center">
         <div className="flex gap-4">
           {/* Date Filter */}
-          <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
+          <label
+            htmlFor="filterDate"
+            className="flex flex-col gap-2 items-start"
+          >
             <p>From</p>
             <input
               type="date"
               name="filterDate"
               id="filterDate"
               className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setFilterDate({ ...filterDate, startDate: e.target.value })}
+              onChange={(e) =>
+                setFilterDate({ ...filterDate, startDate: e.target.value })
+              }
             />
           </label>
 
-          <label htmlFor="filterDate" className="flex flex-col gap-2 items-start">
+          <label
+            htmlFor="filterDate"
+            className="flex flex-col gap-2 items-start"
+          >
             <p>To</p>
             <input
               type="date"
               name="filterDate"
               id="filterDate"
               className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
+              onChange={(e) =>
+                setFilterDate({ ...filterDate, endDate: e.target.value })
+              }
             />
           </label>
 
@@ -274,7 +299,10 @@ const TransactionsTable = () => {
           </label>
         </div>
 
-        <button onClick={handleFilter} className="px-4 py-2 text-white bg-blue-600 rounded">
+        <button
+          onClick={handleFilter}
+          className="px-4 py-2 text-white bg-blue-600 rounded"
+        >
           Filter
         </button>
       </div>
@@ -340,17 +368,18 @@ const TransactionsTable = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${transaction.status === "verified"
-                      ? "bg-green-100 text-green-800"
-                      : transaction.status === "pending"
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      transaction.status === "verified"
+                        ? "bg-green-100 text-green-800"
+                        : transaction.status === "pending"
                         ? "bg-yellow-100 text-yellow-800"
                         : transaction.status === "approved"
-                          ? "bg-blue-100 text-blue-800"
-                          : transaction.status === "completed"
-                            ? "bg-purple-100 text-purple-800"
-                            : transaction.status === "rejected"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-gray-100 text-gray-800" // Default case if status does not match
+                        ? "bg-blue-100 text-blue-800"
+                        : transaction.status === "completed"
+                        ? "bg-purple-100 text-purple-800"
+                        : transaction.status === "rejected"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800" // Default case if status does not match
                     }`}
                   >
                     {transaction?.status}
@@ -358,12 +387,18 @@ const TransactionsTable = () => {
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
-                  <button onClick={() => handleDownloadVoucher(transaction)} className="text-indigo-400 hover:text-indigo-300 mr-2">
+                  <button
+                    onClick={() => handleDownloadVoucher(transaction)}
+                    className="text-indigo-400 hover:text-indigo-300 mr-2"
+                  >
                     <DownloadCloud size={18} />
                   </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
-                  <button onClick={() => handleDownloadNotesheet(transaction)} className="text-indigo-400 hover:text-indigo-300 mr-2">
+                  <button
+                    onClick={() => handleDownloadNotesheet(transaction)}
+                    className="text-indigo-400 hover:text-indigo-300 mr-2"
+                  >
                     <FileDown size={18} />
                   </button>
                 </td>
@@ -376,8 +411,9 @@ const TransactionsTable = () => {
       {/* Pagination Controls */}
       <div className="flex justify-between items-center mt-4">
         <button
-          className={`px-4 py-2 text-white bg-blue-600 rounded ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+          className={`px-4 py-2 text-white bg-blue-600 rounded ${
+            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
         >
@@ -387,8 +423,9 @@ const TransactionsTable = () => {
           Page {currentPage} of {totalPages}
         </div>
         <button
-          className={`px-4 py-2 text-white bg-blue-600 rounded ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+          className={`px-4 py-2 text-white bg-blue-600 rounded ${
+            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
         >
@@ -408,8 +445,12 @@ const TransactionsTable = () => {
       </div>
 
       <div className="hidden">
-        {selectedTransaction && <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />}
-        {selectedTransaction && <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />}
+        {selectedTransaction && (
+          <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />
+        )}
+        {selectedTransaction && (
+          <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />
+        )}
       </div>
     </motion.div>
   );

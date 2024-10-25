@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createIncome  , deleteIncome , getAllIncome , getAllBill} from "../controllers/Income.js";
+import { createIncome  , deleteIncome , getAllBill} from "../controllers/Income.js";
 import { IsUser } from "../middleware/verifyToken.js";
 const IncomeRoutes = Router();
 
