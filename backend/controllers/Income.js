@@ -1,4 +1,5 @@
 import { Income } from '../models/Income.js';
+import { ExpenseModel } from '../models/expense.js';
 
 export const createIncome = async (req, res) => {
   try {
@@ -63,28 +64,28 @@ export const deleteIncome = async (req, res) => {
 };
 
 // get all Income
-export const getAllIncome = async (req, res) => {
-    try {
-      // Fetch all income records from the database
-      const incomes = await Income.find();
-  
-      // Check if incomes were found
-      if (!incomes || incomes.length === 0) {
-        return res.status(404).json({
-          message: "No incomes found",
-        });
-      }
-  
-      // Respond with the retrieved income data
-      res.status(200).json({
-        data: incomes,
-        message: "All incomes retrieved successfully",
-      });
-    } catch (error) {
-      console.log("Error fetching incomes: ", error.message);
-      res.status(500).json({
-        message: "Error fetching incomes",
-        error: error.message,
-      });
+export const getAllBill = async(req , res)=>{
+  try {
+    const {billType} = req.body;
+    let getBill;
+
+    if(billType === 'expense')
+    {
+      getBill = await ExpenseModel.find();
     }
-  };
+    else
+    {
+      getBill = await Income.find()
+    }
+
+    res.status(200).json({
+      message: 'bill fetched succesfuly',
+      bill : getBill
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting expense",
+      error: error.message,
+    });
+  }
+}

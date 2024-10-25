@@ -382,3 +382,30 @@ export const deleteExpense = async (req, res) => {
     });
   }
 };
+
+
+export const getAllBill = async(req , res)=>{
+  try {
+    const {billType} = req.body;
+    let getBill;
+
+    if(billType === 'expense')
+    {
+      getBill = await ExpenseModel.find();
+    }
+    else
+    {
+      getBill = await Income.find()
+    }
+
+    res.status(200).json({
+      message: 'bill fetched succesfuly',
+      bill : getBill
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting expense",
+      error: error.message,
+    });
+  }
+}
