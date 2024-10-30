@@ -60,12 +60,12 @@ const PendingTable = () => {
             withCredentials: true,
           }
         );
-
-        if (response.data) {
-          const filteredTransactions = response.data.Expenses.filter(transaction => transaction.status == "approved")
-          console.log("Filtered", filteredTransactions)
-          setFilteredTransactions(filteredTransactions);
-        }
+        
+        // if (response.data) {
+        //   const filteredTransactions = response.data.Expenses.filter(transaction => transaction.status == "approved")
+        //   console.log("Filtered", filteredTransactions)
+        // }
+        setFilteredTransactions(response.data.Expenses);
       } catch (error) {
         console.error("Error fetching expenses", error);
       }

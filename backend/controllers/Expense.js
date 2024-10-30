@@ -1,13 +1,22 @@
 import { ExpenseModel, CommentModel } from "../models/expense.js";
 import UserModel from "../models/user.js";
-import { Income } from '../models/Income.js';
+import { Income } from "../models/Income.js";
 
 let count = 0; // Note: This should be managed in a persistent manner, see explanation below
 
 export const createExpense = async (req, res) => {
   try {
     // Destructure the request body
-    const { bankName, subHead, purpose, amount, total, status, TxnId, expenseId } = req.body;
+    const {
+      bankName,
+      subHead,
+      purpose,
+      amount,
+      total,
+      status,
+      TxnId,
+      expenseId,
+    } = req.body;
 
     // Increment the count
     count++;
@@ -15,7 +24,7 @@ export const createExpense = async (req, res) => {
 
     // Get the current date and generate a voucher number
     const currentDate = new Date();
-    const date = currentDate.toLocaleDateString('en-CA');
+    const date = currentDate.toLocaleDateString("en-CA");
 
     const voucherNo = `${date}/${count}`;
     console.log("Generated Voucher No:", voucherNo);
@@ -30,7 +39,7 @@ export const createExpense = async (req, res) => {
         purpose,
         amount,
         total,
-        status: status || 'pending',
+        status: status || "pending",
         userId: req.user._id,
         voucherNo,
       });
@@ -50,7 +59,8 @@ export const createExpense = async (req, res) => {
       }
     } else {
       return res.status(400).json({
-        message: "Invalid request. Provide either details for a new expense or both TxnId and expenseId to update an existing one.",
+        message:
+          "Invalid request. Provide either details for a new expense or both TxnId and expenseId to update an existing one.",
       });
     }
 
@@ -59,7 +69,6 @@ export const createExpense = async (req, res) => {
       message: "Expense created successfully",
       expense,
     });
-
   } catch (error) {
     console.error("Error creating expense:", error.message);
     return res.status(500).json({
@@ -72,7 +81,7 @@ export const createExpense = async (req, res) => {
 export const createComment = async (req, res) => {
   try {
     const { expenseId, commentText } = req.body;
-    console.log(req.body)
+    console.log(req.body);
 
     const expense = await ExpenseModel.findById(expenseId);
     if (!expense) {
@@ -86,11 +95,11 @@ export const createComment = async (req, res) => {
       userId: user._id,
       userName: user.name,
       userRole: user.role,
-    })
-    
+    });
+
     expense.comments.push(newComment);
 
-    console.log(expense)
+    console.log(expense);
 
     await expense.save();
 
@@ -126,31 +135,39 @@ export const updateStatus = async (req, res) => {
 export const getExpense = async (req, res) => {
   try {
     const userId = req.user._id;
-    let getExpense
+    let getExpense;
     const user = await UserModel.findById(userId);
     const userRole = user.role;
     console.log(userRole);
 
     // setting conditions
-    if (userRole === 'accountant') {
-      getExpense = await ExpenseModel.find({ status: 'approved' }).populate('comments', 'userName userRole commentText createdAt');
-    }
-    else if (userRole == 'bursar') {
-      getExpense = await ExpenseModel.find({ status: 'pending' }).populate('comments', 'userName userRole commentText createdAt');
-    }
-    else if (userRole == 'principal') {
-      getExpense = await ExpenseModel.find({ status: 'verified' }).populate('comments', 'userName userRole commentText createdAt');
-    }
-    else if (userRole == 'admin') {
-      getExpense = await ExpenseModel.find().populate('comments', 'userName userRole commentText createdAt');
-    }
-    else {
+    if (userRole === "accountant") {
+      getExpense = await ExpenseModel.find({ status: "approved" }).populate(
+        "comments",
+        "userName userRole commentText createdAt"
+      );
+    } else if (userRole == "bursar") {
+      getExpense = await ExpenseModel.find({ status: "pending" }).populate(
+        "comments",
+        "userName userRole commentText createdAt"
+      );
+    } else if (userRole == "principal") {
+      getExpense = await ExpenseModel.find({ status: "verified" }).populate(
+        "comments",
+        "userName userRole commentText createdAt"
+      );
+    } else if (userRole == "admin") {
+      getExpense = await ExpenseModel.find().populate(
+        "comments",
+        "userName userRole commentText createdAt"
+      );
+    } else {
       return res.status(403).json({
         message: "you are unauthorized to access data",
       });
     }
-
-    console.log(getExpense)
+    getExpense = getExpense.reverse()
+    console.log(getExpense);
 
     res.status(200).json({
       message: "expense get succesfulley",
@@ -158,16 +175,15 @@ export const getExpense = async (req, res) => {
       role: userRole,
       Expenses: getExpense,
     });
-
   } catch (error) {
     console.log("error in getting Expense ", error.message);
   }
 };
 export const filterExpensesByDateRange = async (req, res) => {
   try {
-    const { startDate, endDate, subHead, status } = req.body;
-    console.log('Body startDate:', startDate); // Log the body parameter
-    console.log('Body endDate:', endDate);     // Log the body parameter
+    const { startDate, endDate, subHead, status, billType } = req.body;
+    console.log("Body startDate:", startDate); // Log the body parameter
+    console.log("Body endDate:", endDate); // Log the body parameter
 
     // Initialize the filter object
     const filter = {};
@@ -175,7 +191,9 @@ export const filterExpensesByDateRange = async (req, res) => {
     // Handle date filtering: only if both startDate and endDate are provided
     if (startDate || endDate) {
       if (!startDate || !endDate) {
-        return res.status(400).json({ message: 'Please provide both startDate and endDate in the format YYYY-MM-DD.' });
+        return res.status(400).json({
+          message: "Please provide both startDate and endDate in the format YYYY-MM-DD.",
+        });
       }
 
       const providedStartDate = new Date(startDate);
@@ -183,20 +201,20 @@ export const filterExpensesByDateRange = async (req, res) => {
 
       // Check if dates are valid
       if (isNaN(providedStartDate.getTime()) || isNaN(providedEndDate.getTime())) {
-        return res.status(400).json({ message: 'Invalid date format. Please use YYYY-MM-DD.' });
+        return res.status(400).json({ message: "Invalid date format. Please use YYYY-MM-DD." });
       }
 
       // Ensure the start date is before or equal to the end date
       if (providedStartDate > providedEndDate) {
-        return res.status(400).json({ message: 'startDate must be before or equal to endDate.' });
+        return res.status(400).json({ message: "startDate must be before or equal to endDate." });
       }
 
       // Set the start of the startDate and the end of the endDate
       const startOfDay = new Date(providedStartDate.setHours(0, 0, 0, 0));
       const endOfDay = new Date(providedEndDate.setHours(23, 59, 59, 999));
 
-      console.log('Start of Day:', startOfDay); // Log startOfDay
-      console.log('End of Day:', endOfDay);     // Log endOfDay
+      console.log("Start of Day:", startOfDay); // Log startOfDay
+      console.log("End of Day:", endOfDay); // Log endOfDay
 
       // Add the date range filter to the query
       filter.createdAt = { $gte: startOfDay, $lte: endOfDay };
@@ -213,69 +231,76 @@ export const filterExpensesByDateRange = async (req, res) => {
     }
 
     // Log the constructed filter object
-    console.log('Filter:', filter);
+    console.log("Filter:", filter);
 
     // Fetch expenses based on the dynamically constructed filter
-    const expenses = await ExpenseModel.find(filter);
+    let result; // Declare a variable to hold the result
+    if (billType === 'expense') {
+      result = await ExpenseModel.find(filter);
+    } else {
+      result = await Income.find(filter);
+    }
 
-    res.status(200).json(expenses);
+    // Send the response only once
+    res.status(200).json(result);
+
   } catch (error) {
-    console.error('Error fetching expenses by filters:', error);
-    res.status(500).json({ message: 'Server error. Could not fetch expenses.' });
+    console.error("Error fetching expenses by filters:", error);
+    res.status(500).json({ message: "Server error. Could not fetch expenses." });
   }
 };
+
 
 //api to get rejected api
 export const getAllRejectedExpenses = async (req, res) => {
   try {
     // Get all expenses with 'rejected' status
-    const rejectedExpenses = await ExpenseModel.find({ status: 'rejected' });
+    const rejectedExpenses = await ExpenseModel.find({ status: "rejected" });
 
     res.status(200).json({
       message: "Rejected expenses retrieved successfully",
-      rejectedExpenses: rejectedExpenses
+      rejectedExpenses: rejectedExpenses,
     });
   } catch (error) {
     console.log("Error retrieving rejected expenses: ", error.message);
     res.status(500).json({
       message: "Error retrieving rejected expenses",
-      error: error.message
+      error: error.message,
     });
   }
 };
 
-// api to update expense 
+// api to update expense
 export const updateExpense = async (req, res) => {
   try {
     const updateFields = req.body;
     const { id: expenseId } = req.params;
-    const userId = req.user._id
+    const userId = req.user._id;
 
     const user = await UserModel.findById(userId);
-    if (user.role !== 'accountant') {
+    if (user.role !== "accountant") {
       return res.status(403).json({
-        message: 'you are not authorized to edit expense'
-      })
-
+        message: "you are not authorized to edit expense",
+      });
     }
 
-    const updatedExpense = await ExpenseModel.findByIdAndUpdate(expenseId,
+    const updatedExpense = await ExpenseModel.findByIdAndUpdate(
+      expenseId,
       { $set: updateFields },
       { new: true, runValidators: true }
     );
     const Expense = await ExpenseModel.findById(expenseId);
 
-
-    console.log(' Expense', Expense)
+    console.log(" Expense", Expense);
     res.status(200).json({
       message: "Expense updated successfully",
-      expense: updatedExpense
+      expense: updatedExpense,
     });
   } catch (error) {
     console.log("Error updating expense: ", error.message);
     res.status(500).json({
       message: "Error updating expense",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -287,71 +312,80 @@ export const getTotalExpenseAmount = async (req, res) => {
       {
         $group: {
           _id: null, // We don't want to group by any specific field, so use null
-          totalAmount: { $sum: "$amount" } // Sum the 'amount' field for all documents
-        }
-      }
+          totalAmount: { $sum: "$amount" }, // Sum the 'amount' field for all documents
+        },
+      },
     ]);
 
-    const totalExpence = await ExpenseModel.countDocuments()
-    const totalIncome  = await Income.countDocuments()
-    const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
+    const totalExpence = await ExpenseModel.countDocuments();
+    const totalIncome = await Income.countDocuments();
+    const totalPendingExpenses = await ExpenseModel.countDocuments({
+      status: "pending",
+    });
     res.status(200).json({
       message: "Total amount calculated successfully",
       totalAmount: totalAmount,
       totalExpence: totalExpence,
-      totalIncome:totalIncome,
-      totalPendingExpenses: totalPendingExpenses
+      totalIncome: totalIncome,
+      totalPendingExpenses: totalPendingExpenses,
     });
   } catch (error) {
     console.log("Error calculating total amount: ", error.message);
     res.status(500).json({
       message: "Error calculating total amount",
-      error: error.message
+      error: error.message,
     });
   }
 };
 
+// Count total expenses with different statuses
+export const getTotalExpenseStatusCount = async (req, res) => {
+  try {
     // Count total expenses with different statuses
-    export const getTotalExpenseStatusCount = async (req, res) => {
-      try {
-        // Count total expenses with different statuses
-        const totalPendingExpenses = await ExpenseModel.countDocuments({ status: 'pending' });
-        const totalCompletedExpenses = await ExpenseModel.countDocuments({ status: 'completed' });
-        const totalApprovedExpenses = await ExpenseModel.countDocuments({ status: 'approved' });
-        const totalRejectedExpenses = await ExpenseModel.countDocuments({ status: 'rejected' });
-        const totalVerifiedExpenses = await ExpenseModel.countDocuments({ status: 'verified' });
-         
-        res.status(200).json({
-          message: "Total expenses status count calculated successfully",
-          totalPendingExpenses: totalPendingExpenses,
-          totalCompletedExpenses: totalCompletedExpenses,
-          totalApprovedExpenses: totalApprovedExpenses,
-          totalRejectedExpenses: totalRejectedExpenses,
-          totalVerifiedExpenses: totalVerifiedExpenses
-        });
-      } catch (error) {
-        console.log("Error calculating expense status count: ", error.message);
-        res.status(500).json({
-          message: "Error calculating expense status count",
-          error: error.message
-        });
-      }
-    };
-    
+    const totalPendingExpenses = await ExpenseModel.countDocuments({
+      status: "pending",
+    });
+    const totalCompletedExpenses = await ExpenseModel.countDocuments({
+      status: "completed",
+    });
+    const totalApprovedExpenses = await ExpenseModel.countDocuments({
+      status: "approved",
+    });
+    const totalRejectedExpenses = await ExpenseModel.countDocuments({
+      status: "rejected",
+    });
+    const totalVerifiedExpenses = await ExpenseModel.countDocuments({
+      status: "verified",
+    });
 
+    res.status(200).json({
+      message: "Total expenses status count calculated successfully",
+      totalPendingExpenses: totalPendingExpenses,
+      totalCompletedExpenses: totalCompletedExpenses,
+      totalApprovedExpenses: totalApprovedExpenses,
+      totalRejectedExpenses: totalRejectedExpenses,
+      totalVerifiedExpenses: totalVerifiedExpenses,
+    });
+  } catch (error) {
+    console.log("Error calculating expense status count: ", error.message);
+    res.status(500).json({
+      message: "Error calculating expense status count",
+      error: error.message,
+    });
+  }
+};
 
 export const deleteExpense = async (req, res) => {
   try {
     const { id: expenseId } = req.params;
-    const userId = req.user._id
+    const userId = req.user._id;
 
     const user = await UserModel.findById(userId);
-    console.log(`Deleting expense with ID: ${expenseId}`);  // Log the expense ID for debugging
-    if (user.role !== 'accountant') {
+    console.log(`Deleting expense with ID: ${expenseId}`); // Log the expense ID for debugging
+    if (user.role !== "accountant") {
       return res.status(403).json({
-        message: 'you are not authorized to edit expense'
-      })
-
+        message: "you are not authorized to edit expense",
+      });
     }
 
     // Find and delete the expense by its ID
@@ -373,9 +407,33 @@ export const deleteExpense = async (req, res) => {
       message: "Expense and related comments deleted successfully",
       deletedExpense: deletedExpense,
     });
-
   } catch (error) {
     console.log("Error deleting expense: ", error.message);
+    res.status(500).json({
+      message: "Error deleting expense",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllBill = async (req, res) => {
+  try {
+    const { billType } = req.body;
+    let getBill;
+
+    if (billType === "expense") {
+      getBill = await ExpenseModel.find();
+    } else {
+      getBill = await Income.find();
+    }
+ 
+    getBill = getBill.reverse();
+
+    res.status(200).json({
+      message: "bill fetched succesfuly",
+      bill: getBill
+    });
+  } catch (error) {
     res.status(500).json({
       message: "Error deleting expense",
       error: error.message,
