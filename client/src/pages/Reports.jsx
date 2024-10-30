@@ -1,5 +1,4 @@
 import Header from "../components/common/Header";
-import SalesOverviewChart from "../components/overview/SalesOverviewChart";
 import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
 import RevenueChart from "../components/analytics/RevenueChart";
 import AIPoweredInsights from "../components/analytics/AIPoweredInsights";
@@ -17,14 +16,16 @@ const OverviewPage = () => {
 				<OverviewCards />
 
 				{/* CHARTS */}
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-					<SalesOverviewChart />
-					<CategoryDistributionChart />
+				<div className='grid grid-cols-1 mt-4 mb-4'>
+				<CategoryDistributionChart />
+				</div>
+				<div className='grid grid-cols-1  gap-8'>
+
+				<RevenueChart />
+					
 
 				</div>
-				<div className='grid grid-cols-1 mt-4'>
-					<RevenueChart />
-				</div>
+
 				<AIPoweredInsights />
 			</main>
 
