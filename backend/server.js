@@ -15,7 +15,7 @@ const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN; // Used for development & produ
 
 const app = express();
 
-// MongoDB connection
+// MongoDB connectionn done
 DbCon();
 
 // Middleware setup
