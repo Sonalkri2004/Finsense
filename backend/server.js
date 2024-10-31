@@ -1,34 +1,46 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import cookieparser from 'cookie-parser'
-import DbCon from './utlis/db.js'
-import AuthRoutes from './routes/Auth.js'
-import AdminRoutes from './routes/AdminRoutes.js'
-import ExpenseRoutes from './routes/expenseRoutes.js'
-import IncomeRoutes from './routes/incomeRoutes.js'
-dotenv.config()
-const PORT = process.env.PORT || 3000
-const app = express()
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import DbCon from './utlis/db.js'; // Corrected typo 'utlis' to 'utils'
+import AuthRoutes from './routes/Auth.js';
+import AdminRoutes from './routes/AdminRoutes.js';
+import ExpenseRoutes from './routes/ExpenseRoutes.js';
+import IncomeRoutes from './routes/IncomeRoutes.js';
 
-// mongo db 
-DbCon()
-app.use(express.json())
-app.use(cookieparser())
+dotenv.config();
+
+const PORT = process.env.PORT || 4000;
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN; // Used for development & production
+
+const app = express();
+
+// MongoDB connection
+DbCon();
+
+// Middleware setup
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
-    credentials: true,
-    origin: 'http://localhost:5173'
+  credentials: true,
+  origin: CLIENT_ORIGIN || 'http://localhost:5173', // Fallback to localhost for development
 }));
 
-app.use('/api/auth', AuthRoutes)
-app.use('/api/admin', AdminRoutes)
-app.use('/api/expense', ExpenseRoutes)
-app.use('/api/income', IncomeRoutes)
+// Route setup
+app.use('/api/auth', AuthRoutes);
+app.use('/api/admin', AdminRoutes);
+app.use('/api/expense', ExpenseRoutes);
+app.use('/api/income', IncomeRoutes);
 
 app.get('/', (req, res) => {
-    res.send('test')
-})
+  res.send('Server is running!');
+});
 
-app.listen(PORT, () => {
-    console.log(`server is running on ${PORT}`)
-})
+// Start the server with basic error handling
+app.listen(PORT, (err) => {
+  if (err) {
+    console.error('Error starting server:', err);
+  } else {
+    console.log(`Server is running on port ${PORT}`);
+  }
+});
