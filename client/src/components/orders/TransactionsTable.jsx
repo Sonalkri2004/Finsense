@@ -118,29 +118,6 @@ const TransactionsTable = () => {
     }
   }, [showIncome, toggleValue]);// Ensure setFilteredTransactions is included if it's a prop
 
-  // useEffect(() => {
-  //   const fetchIncome = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:4000/api/income/getIncome`,
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       console.log("95", response.data);
-  //       if (response.data) {
-  //         setFilteredTransactions(response.data?.data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching income", error);
-  //     }
-  //   };
-
-  //   if (showIncome) {
-  //     fetchIncome();
-  //   }
-  // }, [showIncome]);
-
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
   const currentTransactions = filteredTransactions.slice(
@@ -202,7 +179,7 @@ const TransactionsTable = () => {
     >
       <div className="flex justify-between items-center mb-6 gap-2 w-full">
         <h2 className="text-xl font-semibold text-gray-100">
-          Transaction History
+          {toggleValue} History
         </h2>
         <div className="flex items-center">
           <label className="relative inline-block w-14 h-8">

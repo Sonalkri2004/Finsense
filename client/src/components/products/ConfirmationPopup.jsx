@@ -32,24 +32,32 @@ const confirmationModalStyles = {
 const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, confirmationAction, transactionId, commentForm }) => {
 
   const handleAction = async () => {
+    try {
+      const response1 = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
+        status: confirmationAction,
+        expenseId: transaction?._id || ''
+      }, { withCredentials: true });
 
-    const response1 = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
-      status: confirmationAction,
-      expenseId: transaction?._id || ''
-    }, { withCredentials: true })
+      const response2 = await axios.post('http://localhost:4000/api/expense/createExpense', { TxnId: transactionId, expenseId: transaction?._id }, { withCredentials: true });
 
-    const response2 = await axios.post('http://localhost:4000/api/expense/createExpense', { TxnId: transactionId, expenseId: transaction?._id }, { withCredentials: true });
+      if (!commentForm.commentText.trim()) return;
+      const response3 = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true });
 
-    if (!commentForm.commentText.trim()) return;
-    const response3 = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true })
-
-    if (response1.data && response2.data && response3.data) {
-      toast.success('Transaction status updated!!');
-    } else {
-      toast.error('Transaction status not updated!!')
+      if (response1.data && response2.data && response3.data) {
+        toast.success('Transaction status updated!!');
+      } else {
+        toast.error('Transaction status not updated!!');
+      }
+      // Call onConfirm to perform additional actions, if any
+      onConfirm();
+    } catch (error) {
+      console.error('Error updating transaction status:', error);
+      toast.error('An error occurred while updating the transaction status.');
+    } finally {
+      // Close the modal
+      onRequestClose();
     }
-    onConfirm();
-  }
+  };
 
   return (
     <Modal

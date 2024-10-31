@@ -26,7 +26,7 @@ export const createExpense = async (req, res) => {
     const currentDate = new Date();
     const date = currentDate.toLocaleDateString("en-CA");
 
-    const voucherNo = `${date}/${count}`;
+    const voucherNo = `SMC${date}/${count}`;
     console.log("Generated Voucher No:", voucherNo);
 
     let expense;
