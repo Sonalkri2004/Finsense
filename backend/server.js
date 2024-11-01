@@ -48,7 +48,7 @@ import IncomeRoutes from './routes/incomeRoutes.js';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.SERVER_ORIGIN||process.env.PORT || 4000;
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN; // Used for development & production
 
 const app = express();
@@ -61,7 +61,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
-  origin: CLIENT_ORIGIN || 'http://localhost:5173', // Fallback to localhost for development
+  origin: 'http://localhost:5173'||CLIENT_ORIGIN //|| 'http://localhost:5173', // Fallback to localhost for development
 }));
 
 // Route setup
