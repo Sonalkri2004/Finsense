@@ -57,6 +57,7 @@ const OverviewCards = () => {
         // Fetching the total expenses, income, and pending transactions data
         const totalExpenseResponse = await get("/api/expense/getTotal");
         const totalStatusResponse = await get("/api/expense/getTotalExpense");
+        console.log("totalExpenseResponse = " , totalExpenseResponse.data.totalIncome)
 
         // Check if both API responses are successful (status 200)
         if (
@@ -73,15 +74,21 @@ const OverviewCards = () => {
               ? totalData.totalAmount[0].totalAmount
               : 0;
 
+          // for income 
+          const totalIncomeValue =
+          totalData.totalIncome && totalData.totalIncome.length > 0
+            ? totalData.totalIncome[0].totalIncome
+            : 0;
+
           // Updating the overview data state with actual values from the API response
           setOverviewData([
             {
               ...overviewData[0],
-              value: `$${totalData.totalIncome || 0}`, // Set Monthly Income
+              value: `₹${totalIncomeValue}`, // Set Monthly Income
             },
             {
               ...overviewData[1],
-              value: `$${totalAmountValue}`, // Set Monthly Expense
+              value: `₹${totalAmountValue}`, // Set Monthly Expense
             },
             {
               ...overviewData[2],

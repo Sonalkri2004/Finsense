@@ -113,24 +113,27 @@ export const createComment = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 export const updateStatus = async (req, res) => {
   try {
-    const { status, expenseId } = req.body;
+    const { status } = req.body; // Get the `status` from request body
+    const { id } = req.params;   // Get the `id` from request parameters
 
+    // Update the status in the database
     const updatedStatus = await ExpenseModel.updateOne(
-      { _id: expenseId },
+      { _id: id },
       { $set: { status: status } }
     );
 
     res.status(200).json({
-      message: "status updated uccesfully",
+      message: "Status updated successfully",
       user: updatedStatus,
     });
   } catch (error) {
-    console.log("error in updateStatus ", error.message);
+    console.log("Error in updateStatus:", error.message);
+    res.status(500).json({ message: "Error updating status", error: error.message });
   }
 };
+
 
 export const getExpense = async (req, res) => {
   try {
@@ -273,25 +276,23 @@ export const getAllRejectedExpenses = async (req, res) => {
 // api to update expense
 export const updateExpense = async (req, res) => {
   try {
-    const updateFields = req.body;
+    const updateFields = req.body; // Get only the fields provided in the request body
     const { id: expenseId } = req.params;
     const userId = req.user._id;
 
+    // Authorization check
     const user = await UserModel.findById(userId);
     if (user.role !== "accountant") {
-      return res.status(403).json({
-        message: "you are not authorized to edit expense",
-      });
+      return res.status(403).json({ message: "You are not authorized to edit expense" });
     }
 
+    // Update only provided fields
     const updatedExpense = await ExpenseModel.findByIdAndUpdate(
       expenseId,
       { $set: updateFields },
       { new: true, runValidators: true }
     );
-    const Expense = await ExpenseModel.findById(expenseId);
 
-    console.log(" Expense", Expense);
     res.status(200).json({
       message: "Expense updated successfully",
       expense: updatedExpense,
@@ -305,20 +306,28 @@ export const updateExpense = async (req, res) => {
   }
 };
 
+
 export const getTotalExpenseAmount = async (req, res) => {
   try {
     // Aggregate total of all amounts
     const totalAmount = await ExpenseModel.aggregate([
       {
         $group: {
-          _id: null, // We don't want to group by any specific field, so use null
-          totalAmount: { $sum: "$amount" }, // Sum the 'amount' field for all documents
+          _id: null, 
+          totalAmount: { $sum: "$total" }, 
         },
       },
     ]);
 
+    const totalIncome = await Income.aggregate([
+      {
+        $group: {
+          _id: null, 
+          totalIncome: { $sum: "$total" }, 
+        },
+      },
+    ]);
     const totalExpence = await ExpenseModel.countDocuments();
-    const totalIncome = await Income.countDocuments();
     const totalPendingExpenses = await ExpenseModel.countDocuments({
       status: "pending",
     });
