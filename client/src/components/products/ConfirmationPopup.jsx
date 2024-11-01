@@ -29,32 +29,56 @@ const confirmationModalStyles = {
   },
 };
 
-const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm, transaction, confirmationAction, transactionId, commentForm }) => {
-
+const ConfirmationPopup = ({
+  isOpen,
+  onRequestClose,
+  onConfirm,
+  transaction,
+  confirmationAction,
+  transactionId,
+  commentForm,
+}) => {
   const handleAction = async () => {
     try {
-      const response1 = await axios.patch('http://localhost:4000/api/expense/updateStatus', {
-        status: confirmationAction,
-        expenseId: transaction?._id || ''
-      }, { withCredentials: true });
-
-      const response2 = await axios.post('http://localhost:4000/api/expense/createExpense', { TxnId: transactionId, expenseId: transaction?._id }, { withCredentials: true });
-
-      if (!commentForm.commentText.trim()) return;
-      const response3 = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true });
-
-      if (response1.data && response2.data && response3.data) {
-        toast.success('Transaction status updated!!');
-      } else {
-        toast.error('Transaction status not updated!!');
+      // Only make the status update call if confirmationAction exists
+      if (confirmationAction) {
+        const response1 = await axios.patch(
+          `http://localhost:4000/api/expense/updateStatus/${transaction?._id}`,
+          { status: confirmationAction },
+          { withCredentials: true }
+        );
+        if (!response1.data) throw new Error('Failed to update status');
       }
-      // Call onConfirm to perform additional actions, if any
-      onConfirm();
+
+      // Make the transaction ID update call if transactionId exists
+      if (transactionId) {
+        const response2 = await axios.post(
+          'http://localhost:4000/api/expense/createExpense',
+          { TxnId: transactionId, expenseId: transaction?._id },
+          { withCredentials: true }
+        );
+        if (!response2.data) throw new Error('Failed to update transaction ID');
+      }
+
+      // Only add a comment if there is text in commentForm.commentText
+      if (commentForm.commentText.trim()) {
+        const response3 = await axios.post(
+          'http://localhost:4000/api/expense/createComment',
+          commentForm,
+          { withCredentials: true }
+        );
+        if (!response3.data) throw new Error('Failed to add comment');
+      }
+
+      // Show success toast
+      toast.success('Transaction status updated successfully!');
+      // Call onConfirm for any additional actions
+      if (onConfirm) onConfirm();
     } catch (error) {
       console.error('Error updating transaction status:', error);
       toast.error('An error occurred while updating the transaction status.');
     } finally {
-      // Close the modal
+      // Close the modal regardless of success or error
       onRequestClose();
     }
   };

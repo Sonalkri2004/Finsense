@@ -5,7 +5,7 @@ const ExpenseRoutes = express.Router();
 
 ExpenseRoutes.post('/createExpense', IsUser, createExpense);
 ExpenseRoutes.post('/createComment', IsUser, createComment);
-ExpenseRoutes.patch('/updateStatus', IsUser, updateStatus);
+ExpenseRoutes.patch('/updateStatus/:id', IsUser, updateStatus);
 ExpenseRoutes.get('/getExpense', IsUser, getExpense);
 ExpenseRoutes.post('/filterDate', IsUser, filterExpensesByDateRange);
 ExpenseRoutes.post('/updateExpense/:id', IsUser, updateExpense);

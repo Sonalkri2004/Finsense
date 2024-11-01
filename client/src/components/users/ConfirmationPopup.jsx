@@ -28,18 +28,24 @@ const confirmationModalStyles = {
 };
 
 const ConfirmationPopup = ({ isOpen, onRequestClose, onConfirm }) => {
+  const handleConfirm = () => {
+    onConfirm(); // Perform the confirmation action
+    onRequestClose(); // Close the modal
+  };
+
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       style={confirmationModalStyles}
       contentLabel="Confirmation"
+      ariaHideApp={false}
       className="animate__animated animate__zoomIn"
     >
       <h2 className="text-white text-xl font-semibold mb-4">Are you sure?</h2>
       <div className="flex justify-center gap-4">
         <button
-          onClick={onConfirm}
+          onClick={handleConfirm}
           className="px-8 py-2 bg-green-600 hover:bg-green-500 text-white rounded-full transition duration-200"
         >
           Yes

@@ -33,12 +33,13 @@ const customModalStyles = {
   },
 };
 
-const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction }) => {
+const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction, }) => {
   const [comments, setComments] = useState([]);
   const [commentForm, setCommentForm] = useState({
     expenseId: '',
     commentText: '',
   })
+  console.log("commentForm = " , commentForm)
   const navigate = useNavigate();
   console.log(transaction)
 
@@ -68,11 +69,12 @@ const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction 
         amount,
         subHead,
         total,
+        comments,
         status: "pending",  // Ensure status is set to pending
       };
 
       // Send updated transaction to the server
-      const resp = await axios.patch(
+      const resp = await axios.post(
         `http://localhost:4000/api/expense/updateExpense/${transaction?._id}`,
         updatedTransaction,
         { withCredentials: true }
@@ -94,9 +96,11 @@ const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction 
   const handleAddComment = async () => {
     if (!commentForm.commentText.trim()) return;
     try {
+      console.log("commentForm1 = ", commentForm)
 
       const resp = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true });
       console.log(resp);
+
 
       if (resp.data) {
         setComments([...comments, { userRole: resp.data.comment.userRole, commentText: resp.data.comment.commentText }]);

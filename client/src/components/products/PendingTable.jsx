@@ -16,6 +16,7 @@ const PendingTable = () => {
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
   const [confirmationAction, setConfirmationAction] = useState(null);
   const [transactionId, setTransactionId] = useState('');
+  
   const [commentForm, setCommentForm] = useState({
     expenseId: '',
     commentText: '',
@@ -32,6 +33,10 @@ const PendingTable = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    setCommentForm({
+      expenseId: '', 
+      commentText: ''
+    }); 
     setSelectedTransaction(null);
   };
 
@@ -60,6 +65,7 @@ const PendingTable = () => {
             withCredentials: true,
           }
         );
+        console.log("get Expense = " , response )
         
         // if (response.data) {
         //   const filteredTransactions = response.data.Expenses.filter(transaction => transaction.status == "approved")
@@ -72,8 +78,9 @@ const PendingTable = () => {
     };
 
     fetchExpenses();
-  }, [modalIsOpen]);
 
+    
+  }, [modalIsOpen]);
   // Calculate current transactions for the current page
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;

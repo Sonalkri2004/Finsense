@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast"
 import convertISOToDate from "../../utils/formatDate";
 import { useSelector } from "react-redux"
 import { useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 
 const customModalStyles = {
   content: {
@@ -37,13 +39,35 @@ const customModalStyles = {
   },
 };
 
-const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmationPopup, transactionId, setTransactionId, setCommentForm, commentForm }) => {
+const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmationPopup,setCommentForm,commentForm, transactionId, setTransactionId}) => {
 
   const userDetails = useSelector(state => state.AuthSlice?.user);
+  const [comments, setComments] = useState([]);
 
+  console.log("comment form = ",commentForm)
   useEffect(() => {
-    setCommentForm({ ...commentForm, expenseId: transaction?._id })
+  
+    setCommentForm({...commentForm, expenseId: transaction?._id})
   }, [transaction])
+  console.log("transaction2 = " , transaction)
+  const handleAddComment = async () => {
+    if (!commentForm.commentText.trim()) return;
+    try {
+      console.log("commentForm1 = ", commentForm)
+
+      const resp = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true });
+      console.log("response11 = ",resp);
+
+
+
+      if (resp.data) {
+        setComments([...comments, { userRole: resp.data.comment.userRole, commentText: resp.data.comment.commentText }]);
+      }
+
+    } catch (error) {
+      console.error("Error adding comment", error);
+    }
+  };
 
   return (
     <Modal
@@ -59,6 +83,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
           <button
             onClick={onRequestClose}
             className="absolute top-4 right-4 text-white bg-gray-800 rounded-full p-2 hover:bg-gray-700 transition duration-200"
+
           >
             <X size={24} />
           </button>
@@ -93,15 +118,38 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
             </ul>
 
             <div className="mb-8">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={commentForm.commentText}
-                  onChange={(e) => setCommentForm({ ...commentForm, commentText: e.target.value })}
-                  className="flex-grow px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Write a comment..."
-                />
-              </div>
+            <div className="mb-8">
+          <h3 className="text-2xl font-semibold mb-4">Comments</h3>
+          <ul className="mb-4">
+            {comments?.length > 0 ? (
+              comments.map((comment, index) => (
+                <li key={index} className="p-3 bg-gray-900 rounded-md mb-2">
+                  <p className="text-base">
+                    <strong>{comment.userRole}:</strong> {comment.commentText}
+                  </p>
+                </li>
+              ))
+            ) : (
+              <p>No comments yet</p>
+            )}
+          </ul>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={commentForm.commentText}
+              onChange={(e) => setCommentForm({ ...commentForm, commentText: e.target.value })}
+              className="flex-grow px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Write a comment..."
+            />
+            <button
+              onClick={handleAddComment}
+              className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition duration-200"
+            >
+              Add Comment
+            </button>
+          </div>
+        </div>
               {
                 (userDetails.role == 'accountant' && transaction?.status == 'approved') && (
                   <div>
@@ -117,52 +165,46 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
                 )
               }
             </div>
-
             {
-              userDetails?.role != 'admin' && (
-                <div className="flex justify-center gap-6">
-
-                  {
-                    userDetails?.role == 'accountant' ?
-                      (
-                        <button
-                          onClick={() => openConfirmationPopup('completed')}
-                          className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
-                        >
-                          <Check size={20} />
-                          Complete Transaction
-                        </button>
-                      ) :
-                      userDetails?.role == 'bursar' ?
-                        (
-                          <button
-                            onClick={() => openConfirmationPopup('verified')}
-                            className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
-                          >
-                            <Check size={20} />
-                            Verify Transaction
-                          </button>
-                        ) :
-                        (
-                          <button
-                            onClick={() => openConfirmationPopup('approved')}
-                            className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
-                          >
-                            <Check size={20} />
-                            Approve Transaction
-                          </button>
-                        )
-                  }
-                  <button
-                    onClick={() => openConfirmationPopup('rejected')}
-                    className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
-                  >
-                    <X size={20} /> Reject Transaction
-                  </button>
-                </div>
-              )
-            }
-          </div>
+  userDetails?.role != 'admin' && (
+    <div className="flex justify-center gap-6">
+      {
+        userDetails?.role == 'accountant' ?
+        (
+          <button
+            onClick={() => openConfirmationPopup('completed')}
+            className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
+          >
+            <Check size={20} /> Complete Transaction
+          </button>
+        ) :
+        userDetails?.role == 'bursar' ?
+        (
+          <button
+            onClick={() => openConfirmationPopup('verified')}
+            className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
+          >
+            <Check size={20} /> Verify Transaction
+          </button>
+        ) :
+        (
+          <button
+            onClick={() => openConfirmationPopup('approved')}
+            className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
+          >
+            <Check size={20} /> Approve Transaction
+          </button>
+        )
+      }
+      <button
+        onClick={() => openConfirmationPopup('rejected')}
+        className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-full gap-2 shadow-lg hover:shadow-xl transition duration-200"
+      >
+        <X size={20} /> Reject Transaction
+      </button>
+    </div>
+  )
+}       </div>
         </div>
       )}
     </Modal>
