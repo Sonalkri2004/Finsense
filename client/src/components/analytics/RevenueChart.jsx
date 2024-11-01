@@ -15,32 +15,32 @@ const RevenueDualAxisChart = () => {
 
         if (response.status === 200) {
           const totalData = response.data;
-
+// console.log(totalData)
           // Prepare multiple data points for the chart to render a continuous line
           const preparedData = [
             {
               month: "January",
-              totalIncome: totalData.totalIncome * 0.9 || 0,
+              totalIncome: totalData.totalIncome[0]?.totalIncome * 0.9 || 0,
               totalExpense: totalData.totalAmount[0]?.totalAmount * 0.8 || 0,
             },
             {
               month: "February",
-              totalIncome: totalData.totalIncome * 1.1 || 0,
+              totalIncome: totalData.totalIncome[0]?.totalIncome * 1.1 || 0,
               totalExpense: totalData.totalAmount[0]?.totalAmount * 0.95 || 0,
             },
             {
               month: "March",
-              totalIncome: totalData.totalIncome * 1.2 || 0,
+              totalIncome: totalData.totalIncome[0]?.totalIncome * 1.2 || 0,
               totalExpense: totalData.totalAmount[0]?.totalAmount * 1.1 || 0,
             },
             {
               month: "April",
-              totalIncome: totalData.totalIncome * 1.05 || 0,
+              totalIncome: totalData.totalIncome[0]?.totalIncome * 1.05 || 0,
               totalExpense: totalData.totalAmount[0]?.totalAmount * 1.2 || 0,
             },
             {
               month: "May",
-              totalIncome: totalData.totalIncome * 1.3 || 0,
+              totalIncome: totalData.totalIncome[0]?.totalIncome * 1.3 || 0,
               totalExpense: totalData.totalAmount[0]?.totalAmount * 1.25 || 0,
             },
           ];
