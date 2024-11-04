@@ -6,8 +6,7 @@ import { Toaster } from "react-hot-toast";
 import ProtectedLayout from "./Layouts/ProtectedLayout";
 import MainLayout from "./Layouts/MainLayout";
 import AuthLayout from "./Layouts/AuthLayout";
-import Bursar from "./pages/Bursar";
-import Principal from "./pages/Principal";
+
 import OverviewPage from "./pages/Reports";
 import PendingPage from "./pages/PendingPage";
 import RejectedPage from "./pages/RejectedPage";
@@ -36,16 +35,11 @@ export default function App() {
           <Route path="forgotpass" element={<Forgotpass />} />
           <Route path="verifyEmail" element={<VerifyEmail />} />
           <Route path="updatePassword" element={<UpdatePassword />} />
-          <Route
-            path="resetPassword/:token"
-            element={<ResetPassword />}
-          />
+          <Route path="resetPassword/:token" element={<ResetPassword />} />
         </Route>
 
         <Route element={<ProtectedLayout />}>
           <Route element={<MainLayout />}>
-            <Route path="/bursar" element={<Bursar />} />
-            <Route path="/principal" element={<Principal />} />
             <Route path="/Report" element={<OverviewPage />} />
             <Route path="/pending" element={<PendingPage />} />
             <Route path="/rejected" element={<RejectedPage />} />
@@ -58,5 +52,5 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

@@ -62,7 +62,7 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
         <div className="grid grid-cols-3 mt-6 mb-0 gap-2 text-xs">
           <div className="text-center">
             Accountant
-            <div className="mt-4">Skillancer Pvt. Ltd.</div>
+            {/* <div className="mt-4">Skillancer Pvt. Ltd.</div> */}
           </div>
           <div className="text-center">
             Bursar

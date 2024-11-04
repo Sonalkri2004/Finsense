@@ -49,17 +49,18 @@ const TransactionsTable = () => {
   const handlePrintt = () => {
     if (noteSheetRef.current) {
       const options = {
-        margin: 10,
+        margin: [10, 10, 10, 10], // Add custom margins if needed
         filename: "NoteSheet.pdf",
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, useCORS: true, logging: true },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["css", "legacy"] }, // Enable CSS-based page breaks
       };
-
+  
       html2pdf().from(noteSheetRef.current).set(options).save();
     }
   };
-
+  
   const handleFilter = async () => {
     try {
       const filters = { ...filterDate };

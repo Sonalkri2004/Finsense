@@ -1,6 +1,7 @@
 import Header from "../components/common/Header";
 import OverviewCards from "../components/analytics/OverviewCards";
 import TransactionTable from "../components/orders/TransactionsTable";
+import NoteSheet from "../components/analytics/NoteSheet";
 
 const AnalyticsPage = () => {
 	return (
@@ -10,6 +11,7 @@ const AnalyticsPage = () => {
 			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
 				<OverviewCards />
 				<TransactionTable />
+				
 			</main>
 		</div>
 	);
