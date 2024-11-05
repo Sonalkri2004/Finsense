@@ -7,7 +7,7 @@ import convertISOToDate from "../../utils/formatDate";
 import RejectedModal from "./RejectedModal";
 import ConfirmationPopup from "./ConfirmationPopup";
 import { useNavigate } from "react-router-dom"
-
+import toast from "react-hot-toast";
 const RejectedTable = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,7 +56,8 @@ const RejectedTable = () => {
         console.log("OK", response.data);
         navigate(0);
       }
-
+         // Show success toast message
+         toast.success("Transation is Deleted!");
     } else if (confirmationAction === 'done') {
       handleSaveTransaction(selectedTransaction);
     }

@@ -20,14 +20,14 @@ const TransactionsTable = () => {
     startDate: "",
     endDate: "",
     subHead: "",
-    billType:toggleValue
+    billType: toggleValue,
   });
   const [selectedSubHead, setSelectedSubHead] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [showIncome, setShowIncome] = useState(false); // Toggle between Expense and Income
-  
+  const [selectAll, setSelectAll] = useState(false); // State for Select All checkbox
 
   const payVoucherRef = useRef();
   const noteSheetRef = useRef();
@@ -56,11 +56,11 @@ const TransactionsTable = () => {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
         pagebreak: { mode: ["css", "legacy"] }, // Enable CSS-based page breaks
       };
-  
+
       html2pdf().from(noteSheetRef.current).set(options).save();
     }
   };
-  
+
   const handleFilter = async () => {
     try {
       const filters = { ...filterDate };
@@ -102,7 +102,7 @@ const TransactionsTable = () => {
         );
         console.log("Response = ", response.data);
         console.log("comments = ", response.data.bill[0].comments);
-        
+
         // Ensure that the API response structure is correctly accessed
         if (response.data && response.data.bill) {
           setFilteredTransactions(response.data.bill); // Adjust if your API uses a different field name
@@ -117,7 +117,7 @@ const TransactionsTable = () => {
     if (!showIncome) {
       fetchExpenses();
     }
-  }, [showIncome, toggleValue]);// Ensure setFilteredTransactions is included if it's a prop
+  }, [showIncome, toggleValue]); // Ensure setFilteredTransactions is included if it's a prop
 
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
@@ -163,6 +163,16 @@ const TransactionsTable = () => {
     }
   };
 
+  // Handle Select All checkbox change
+  const handleSelectAllChange = () => {
+    if (selectAll) {
+      setSelectedTransactions([]);
+    } else {
+      setSelectedTransactions(currentTransactions);
+    }
+    setSelectAll(!selectAll);
+  };
+
   // Export selected transactions to Excel
   const handleDownloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(selectedTransactions);
@@ -173,264 +183,268 @@ const TransactionsTable = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-    >
-      <div className="flex justify-between items-center mb-6 gap-2 w-full">
-        <h2 className="text-xl font-semibold text-gray-100">
-          {toggleValue} History
-        </h2>
-        <div className="flex items-center">
-          <label className="relative inline-block w-14 h-8">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={toggleValue === "income"} // Check if toggleValue is 'income'
-              onChange={() =>
-                setToggleValue((prevValue) =>
-                  prevValue === "expense" ? "income" : "expense"
-                )
-              } // Toggle between 'expense' and 'income'
-            />
-            <div className="w-full h-full bg-gray-300 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600 transition-colors duration-300"></div>
-            <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full peer-checked:translate-x-6 transition-transform duration-300"></div>
-          </label>
-        </div>
+    className="bg-gray-800 bg-opacity-60 backdrop-blur-md shadow-2xl rounded-2xl p-8 border border-gray-700"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3 }}
+  >
+    <div className="flex justify-between items-center mb-6 gap-4 w-full">
+      <h2 className="text-2xl font-bold text-gray-200">
+        {toggleValue.charAt(0).toUpperCase() + toggleValue.slice(1)} History
+      </h2>
+      <div className="flex items-center">
+        <label className="relative inline-block w-16 h-8">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={toggleValue === "income"}
+            onChange={() =>
+              setToggleValue((prev) => (prev === "expense" ? "income" : "expense"))
+            }
+          />
+          <div className="w-full h-full bg-gray-400 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600 transition-all duration-300"></div>
+          <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full peer-checked:translate-x-8 transition-transform duration-300"></div>
+        </label>
+      </div>
+    </div>
+
+    {/* Filter Section */}
+    <div className="flex flex-wrap gap-4 justify-between items-center bg-gray-900 p-5 rounded-lg shadow-lg mb-6">
+      {/* Date Filter */}
+      <div className="flex flex-col gap-2 items-start w-full md:w-1/5">
+        <label htmlFor="startDate" className="text-sm font-medium text-gray-300">
+          From
+        </label>
+        <input
+          type="date"
+          name="startDate"
+          id="startDate"
+          className="w-full px-3 py-2 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setFilterDate({ ...filterDate, startDate: e.target.value })}
+        />
+      </div>
+      <div className="flex flex-col gap-2 items-start w-full md:w-1/5">
+        <label htmlFor="endDate" className="text-sm font-medium text-gray-300">
+          To
+        </label>
+        <input
+          type="date"
+          name="endDate"
+          id="endDate"
+          className="w-full px-3 py-2 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setFilterDate({ ...filterDate, endDate: e.target.value })}
+        />
       </div>
 
-      <div className="w-full flex gap-4 justify-between items-center">
-        <div className="flex gap-4">
-          {/* Date Filter */}
-          <label
-            htmlFor="filterDate"
-            className="flex flex-col gap-2 items-start"
-          >
-            <p>From</p>
-            <input
-              type="date"
-              name="filterDate"
-              id="filterDate"
-              className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) =>
-                setFilterDate({ ...filterDate, startDate: e.target.value })
-              }
-            />
-          </label>
+      {/* SubHead Dropdown */}
+      <div className="flex flex-col gap-2 items-start w-full md:w-1/5">
+        <label htmlFor="subHead" className="text-sm font-medium text-gray-300">
+          SubHead
+        </label>
+        <select
+          name="subHead"
+          id="subHead"
+          className="w-full px-3 py-2 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={selectedSubHead}
+          onChange={(e) => setSelectedSubHead(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="BCA">BCA</option>
+          <option value="BBA">BBA</option>
+          <option value="OMSP">OMSP</option>
+          <option value="Exam">Exam</option>
+          <option value="SW">SW</option>
+          <option value="GEN">GEN</option>
+          <option value="NSS">NSS</option>
+          <option value="NCC">NCC</option>
+        </select>
+      </div>
 
-          <label
-            htmlFor="filterDate"
-            className="flex flex-col gap-2 items-start"
-          >
-            <p>To</p>
-            <input
-              type="date"
-              name="filterDate"
-              id="filterDate"
-              className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) =>
-                setFilterDate({ ...filterDate, endDate: e.target.value })
-              }
-            />
-          </label>
+      {/* Status Dropdown */}
+      <div className="flex flex-col gap-2 items-start w-full md:w-1/5">
+        <label htmlFor="status" className="text-sm font-medium text-gray-300">
+          Status
+        </label>
+        <select
+          name="status"
+          id="status"
+          className="w-full px-3 py-2 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="pending">Pending</option>
+          <option value="verified">Verified</option>
+          <option value="approved">Approved</option>
+          <option value="completed">Completed</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
 
-          {/* SubHead Dropdown */}
-          <label htmlFor="subHead" className="flex flex-col gap-2 items-start">
-            <p>SubHead</p>
-            <select
-              name="subHead"
-              id="subHead"
-              className="bg-gray-700 text-white rounded-lg px-4 py-2"
-              value={selectedSubHead}
-              onChange={(e) => setSelectedSubHead(e.target.value)}
+      {/* Filter Button */}
+      <button
+        onClick={handleFilter}
+        className="mt-4 md:mt-0 px-5 py-2 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+      >
+        Filter
+      </button>
+    </div>
+
+    {/* Table */}
+    <div className="overflow-x-auto bg-gray-900 p-4 rounded-lg shadow-md">
+      <table className="min-w-full divide-y divide-gray-800">
+        <thead>
+          <tr>
+            <th className="px-6 py-3 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <p>Select All</p>
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAllChange}
+                className="mt-1"
+              />
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Voucher No.
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Date
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              SubHead
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Total
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Status
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Download Voucher
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Download Notesheet
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-800">
+          {currentTransactions.map((transaction) => (
+            <motion.tr
+              key={transaction?._id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="hover:bg-gray-800"
             >
-              <option value="">All</option>
-              <option value="BCA">BCA</option>
-              <option value="BBA">BBA</option>
-              <option value="OMSP">OMSP</option>
-              <option value="Exam">Exam</option>
-              <option value="SW">SW</option>
-              <option value="GEN">GEN</option>
-              <option value="NSS">NSS</option>
-              <option value="NCC">NCC</option>
-            </select>
-          </label>
+              <td className="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-200">
+                <input
+                  type="checkbox"
+                  checked={selectedTransactions.includes(transaction)}
+                  onChange={() => handleCheckboxChange(transaction)}
+                  className="form-checkbox rounded focus:ring-2 focus:ring-blue-500"
+                />
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+                {toggleValue === "expense"
+                  ? transaction?.voucherNo
+                  : transaction?._id.slice(0, 10)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                {convertISOToDate(transaction?.createdAt)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+                {transaction?.subHead}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+                ₹ {parseInt(transaction?.total).toFixed(2)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                <span
+                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    transaction.status === "verified"
+                      ? "bg-green-100 text-green-800"
+                      : transaction.status === "pending"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : transaction.status === "approved"
+                      ? "bg-blue-100 text-blue-800"
+                      : transaction.status === "completed"
+                      ? "bg-purple-100 text-purple-800"
+                      : transaction.status === "rejected"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {transaction?.status}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
+                <button
+                  onClick={() => handleDownloadVoucher(transaction)}
+                  className="text-indigo-400 hover:text-indigo-300"
+                >
+                  <DownloadCloud size={18} />
+                </button>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
+                <button
+                  onClick={() => handleDownloadNotesheet(transaction)}
+                  className="text-indigo-400 hover:text-indigo-300"
+                >
+                  <FileDown size={18} />
+                </button>
+              </td>
+            </motion.tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
 
-          {/* Status Dropdown */}
-          <label htmlFor="status" className="flex flex-col gap-2 items-start">
-            <p>Status</p>
-            <select
-              name="status"
-              id="status"
-              className="bg-gray-700 text-white rounded-lg px-4 py-2"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="pending">pending</option>
-              <option value="verified">Verified</option>
-              <option value="approved">Approved</option>
-              <option value="completed">Completed</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </label>
-        </div>
+    {/* Pagination Controls */}
+    <div className="flex justify-between items-center mt-4">
+      <button
+        className={`px-4 py-2 text-white bg-blue-600 rounded-lg ${
+          currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+        }`}
+        onClick={handlePreviousPage}
+        disabled={currentPage === 1}
+      >
+        Previous
+      </button>
+      <span className="text-gray-400">
+        Page {currentPage} of {totalPages}
+      </span>
+      <button
+        className={`px-4 py-2 text-white bg-blue-600 rounded-lg ${
+          currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+        }`}
+        onClick={handleNextPage}
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+    </div>
 
-        <button
-          onClick={handleFilter}
-          className="px-4 py-2 text-white bg-blue-600 rounded"
-        >
-          Filter
-        </button>
-      </div>
+    {/* Download Excel Button */}
+    <div className="flex justify-end mt-6">
+      <button
+        onClick={handleDownloadExcel}
+        className="px-6 py-2 bg-green-700 text-white font-bold rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+        disabled={selectedTransactions.length === 0}
+      >
+        <BookDown />
+      </button>
+    </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Select
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Txn ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                SubHead
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Total
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Status
-              </th>
-
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Download Voucher
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Download Notesheet
-              </th>
-            </tr>
-          </thead>
-
-          <tbody className="divide divide-gray-700">
-            {currentTransactions.map((transaction) => (
-              <motion.tr
-                key={transaction?._id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-100">
-                  <input
-                    type="checkbox"
-                    checked={selectedTransactions.includes(transaction)}
-                    onChange={() => handleCheckboxChange(transaction)}
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  {transaction?._id.slice(0, 10)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {convertISOToDate(transaction?.updatedAt)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  {transaction?.subHead}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  ₹ {parseInt(transaction?.total).toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      transaction.status === "verified"
-                        ? "bg-green-100 text-green-800"
-                        : transaction.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : transaction.status === "approved"
-                        ? "bg-blue-100 text-blue-800"
-                        : transaction.status === "completed"
-                        ? "bg-purple-100 text-purple-800"
-                        : transaction.status === "rejected"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-gray-100 text-gray-800" // Default case if status does not match
-                    }`}
-                  >
-                    {transaction?.status}
-                  </span>
-                </td>
-
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
-                  <button
-                    onClick={() => handleDownloadVoucher(transaction)}
-                    className="text-indigo-400 hover:text-indigo-300 mr-2"
-                  >
-                    <DownloadCloud size={18} />
-                  </button>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
-                  <button
-                    onClick={() => handleDownloadNotesheet(transaction)}
-                    className="text-indigo-400 hover:text-indigo-300 mr-2"
-                  >
-                    <FileDown size={18} />
-                  </button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination Controls */}
-      <div className="flex justify-between items-center mt-4">
-        <button
-          className={`px-4 py-2 text-white bg-blue-600 rounded ${
-            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <div className="text-gray-400">
-          Page {currentPage} of {totalPages}
-        </div>
-        <button
-          className={`px-4 py-2 text-white bg-blue-600 rounded ${
-            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Download Excel Button */}
-      <div className="flex justify-end mt-4">
-        <button
-          onClick={handleDownloadExcel}
-          className="px-6 py-2 text-white bg-green-700 rounded"
-          disabled={selectedTransactions.length === 0} // Disable if no transactions are selected
-        >
-          <BookDown />
-        </button>
-      </div>
-
-      <div className="hidden">
-        {selectedTransaction && (
-          <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />
-        )}
-        {selectedTransaction && (
-          <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />
-        )}
-      </div>
-    </motion.div>
+    {/* Hidden Elements for PDF Generation */}
+    <div className="hidden">
+      {selectedTransaction && (
+        <PayVoucher ref={payVoucherRef} transaction={selectedTransaction} />
+      )}
+      {selectedTransaction && (
+        <NoteSheet ref={noteSheetRef} transaction={selectedTransaction} />
+      )}
+    </div>
+  </motion.div>
   );
 };
 

@@ -63,6 +63,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
       if (resp.data) {
         setComments([...comments, { userRole: resp.data.comment.userRole, commentText: resp.data.comment.commentText }]);
       }
+      commentForm.commentText=('');
 
     } catch (error) {
       console.error("Error adding comment", error);

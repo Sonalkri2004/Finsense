@@ -80,15 +80,24 @@ export default function CreateIncome() {
             />
           </div>
           <div className="col-span-1">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Sub Head:</label>
-            <input
-              type="text"
+          <label className="block text-sm font-semibold text-gray-300 mb-2">Sub Head:</label>
+            <select
               name="subHead"
               value={formData.subHead}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 border bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
-            />
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+            >
+              <option value="">Select Sub Head</option>
+              <option value="BCA">BCA</option>
+              <option value="BBA">BBA</option>
+              <option value="OMSP">OMSP</option>
+              <option value="Exam">Exam</option>
+              <option value="SW">SW</option>
+              <option value="GEN">GEN</option>
+              <option value="NSS">NSS</option>
+              <option value="NCC">NCC</option>
+            </select>
           </div>
 
           <div className="col-span-1">

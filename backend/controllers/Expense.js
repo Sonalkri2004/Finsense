@@ -2,7 +2,7 @@ import { ExpenseModel, CommentModel } from "../models/expense.js";
 import UserModel from "../models/user.js";
 import { Income } from "../models/Income.js";
 
-let count = 0; // Note: This should be managed in a persistent manner, see explanation below
+let randomCount = 0; // Note: This should be managed in a persistent manner, see explanation below
 
 export const createExpense = async (req, res) => {
   try {
@@ -19,14 +19,17 @@ export const createExpense = async (req, res) => {
     } = req.body;
 
     // Increment the count
-    count++;
-    console.log("Current Count:", count);
+    randomCount = Math.floor(100 + Math.random() * 900);
+    console.log("Current Count:", randomCount);
 
-    // Get the current date and generate a voucher number
+    // Get the current date and format it as yyyy/mm/dd
     const currentDate = new Date();
-    const date = currentDate.toLocaleDateString("en-CA");
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Add leading zero
+    const day = String(currentDate.getDate()).padStart(2, "0"); // Add leading zero
+    const formattedDate = `${year}/${month}/${day}`;
 
-    const voucherNo = `SMC${date}/${count}`;
+    const voucherNo = `SMC/${formattedDate}/${randomCount}`;
     console.log("Generated Voucher No:", voucherNo);
 
     let expense;
@@ -116,7 +119,7 @@ export const createComment = async (req, res) => {
 export const updateStatus = async (req, res) => {
   try {
     const { status } = req.body; // Get the `status` from request body
-    const { id } = req.params;   // Get the `id` from request parameters
+    const { id } = req.params; // Get the `id` from request parameters
 
     // Update the status in the database
     const updatedStatus = await ExpenseModel.updateOne(
@@ -130,10 +133,11 @@ export const updateStatus = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in updateStatus:", error.message);
-    res.status(500).json({ message: "Error updating status", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating status", error: error.message });
   }
 };
-
 
 export const getExpense = async (req, res) => {
   try {
@@ -169,7 +173,7 @@ export const getExpense = async (req, res) => {
         message: "you are unauthorized to access data",
       });
     }
-    getExpense = getExpense.reverse()
+    getExpense = getExpense.reverse();
     console.log(getExpense);
 
     res.status(200).json({
@@ -195,7 +199,8 @@ export const filterExpensesByDateRange = async (req, res) => {
     if (startDate || endDate) {
       if (!startDate || !endDate) {
         return res.status(400).json({
-          message: "Please provide both startDate and endDate in the format YYYY-MM-DD.",
+          message:
+            "Please provide both startDate and endDate in the format YYYY-MM-DD.",
         });
       }
 
@@ -203,13 +208,20 @@ export const filterExpensesByDateRange = async (req, res) => {
       const providedEndDate = new Date(endDate);
 
       // Check if dates are valid
-      if (isNaN(providedStartDate.getTime()) || isNaN(providedEndDate.getTime())) {
-        return res.status(400).json({ message: "Invalid date format. Please use YYYY-MM-DD." });
+      if (
+        isNaN(providedStartDate.getTime()) ||
+        isNaN(providedEndDate.getTime())
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Invalid date format. Please use YYYY-MM-DD." });
       }
 
       // Ensure the start date is before or equal to the end date
       if (providedStartDate > providedEndDate) {
-        return res.status(400).json({ message: "startDate must be before or equal to endDate." });
+        return res
+          .status(400)
+          .json({ message: "startDate must be before or equal to endDate." });
       }
 
       // Set the start of the startDate and the end of the endDate
@@ -238,21 +250,21 @@ export const filterExpensesByDateRange = async (req, res) => {
 
     // Fetch expenses based on the dynamically constructed filter
     let result; // Declare a variable to hold the result
-    if (billType === 'expense') {
+    if (billType === "expense") {
       result = await ExpenseModel.find(filter);
     } else {
       result = await Income.find(filter);
     }
-
+    result = result.reverse();
     // Send the response only once
     res.status(200).json(result);
-
   } catch (error) {
     console.error("Error fetching expenses by filters:", error);
-    res.status(500).json({ message: "Server error. Could not fetch expenses." });
+    res
+      .status(500)
+      .json({ message: "Server error. Could not fetch expenses." });
   }
 };
-
 
 //api to get rejected api
 export const getAllRejectedExpenses = async (req, res) => {
@@ -283,7 +295,9 @@ export const updateExpense = async (req, res) => {
     // Authorization check
     const user = await UserModel.findById(userId);
     if (user.role !== "accountant") {
-      return res.status(403).json({ message: "You are not authorized to edit expense" });
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to edit expense" });
     }
 
     // Update only provided fields
@@ -306,15 +320,14 @@ export const updateExpense = async (req, res) => {
   }
 };
 
-
 export const getTotalExpenseAmount = async (req, res) => {
   try {
     // Aggregate total of all amounts
     const totalAmount = await ExpenseModel.aggregate([
       {
         $group: {
-          _id: null, 
-          totalAmount: { $sum: "$total" }, 
+          _id: null,
+          totalAmount: { $sum: "$total" },
         },
       },
     ]);
@@ -322,8 +335,8 @@ export const getTotalExpenseAmount = async (req, res) => {
     const totalIncome = await Income.aggregate([
       {
         $group: {
-          _id: null, 
-          totalIncome: { $sum: "$total" }, 
+          _id: null,
+          totalIncome: { $sum: "$total" },
         },
       },
     ]);
@@ -435,12 +448,12 @@ export const getAllBill = async (req, res) => {
     } else {
       getBill = await Income.find();
     }
- 
+
     getBill = getBill.reverse();
 
     res.status(200).json({
       message: "bill fetched succesfuly",
-      bill: getBill
+      bill: getBill,
     });
   } catch (error) {
     res.status(500).json({

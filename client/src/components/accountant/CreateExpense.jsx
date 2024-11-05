@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
 export default function CreateExpense() {
   const [formData, setFormData] = useState({
     bankName: "",
@@ -10,7 +11,7 @@ export default function CreateExpense() {
     total: "",
     status: "",
   });
-  const user = useSelector(state => state.AuthSlice?.user)
+  const user = useSelector((state) => state.AuthSlice?.user);
 
   const [responseMessage, setResponseMessage] = useState(null);
 
@@ -22,7 +23,6 @@ export default function CreateExpense() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     try {
       if (
@@ -37,11 +37,11 @@ export default function CreateExpense() {
           `http://localhost:4000/api/expense/createExpense`,
           formData,
           {
-            withCredentials: true
+            withCredentials: true,
           }
         );
 
-        console.log(response)
+        console.log(response);
 
         setResponseMessage(response.data.message);
       }
@@ -66,17 +66,29 @@ export default function CreateExpense() {
               className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
+
+          {/* SubHead Dropdown */}
           <div className="col-span-1">
             <label className="block text-sm font-semibold text-gray-300 mb-2">Sub Head:</label>
-            <input
-              type="text"
+            <select
               name="subHead"
               value={formData.subHead}
               onChange={handleChange}
               required
               className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
-            />
+            >
+              <option value="">Select Sub Head</option>
+              <option value="BCA">BCA</option>
+              <option value="BBA">BBA</option>
+              <option value="OMSP">OMSP</option>
+              <option value="Exam">Exam</option>
+              <option value="SW">SW</option>
+              <option value="GEN">GEN</option>
+              <option value="NSS">NSS</option>
+              <option value="NCC">NCC</option>
+            </select>
           </div>
+
           <div className="col-span-1">
             <label className="block text-sm font-semibold text-gray-300 mb-2">Purpose:</label>
             <input
@@ -110,17 +122,25 @@ export default function CreateExpense() {
               className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
+
+          {/* Status Dropdown */}
           <div className="col-span-1">
             <label className="block text-sm font-semibold text-gray-300 mb-2">Status:</label>
-            <input
-              type="text"
+            <select
               name="status"
               value={formData.status}
               onChange={handleChange}
               required
               className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
-            />
+            >
+              <option value="">Select Status</option>
+              <option value="pending">Pending</option>
+              <option value="verified">Verified</option>
+              <option value="approved">Approved</option>
+              <option value="completed">Completed</option>
+            </select>
           </div>
+
           <div className="col-span-2">
             <button
               type="submit"
