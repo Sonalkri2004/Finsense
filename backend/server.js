@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
-  origin:  'http://localhost:5173' || CLIENT_ORIGIN , // Fallback to localhost for development
+  origin:  CLIENT_ORIGIN , // Fallback to localhost for development
 }));
 
 // Route setup
