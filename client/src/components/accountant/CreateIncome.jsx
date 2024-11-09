@@ -36,7 +36,7 @@ export default function CreateIncome() {
         formData.total.trim() &&
         formData.TxnId.trim()
       ) {
-        const response = await axios.post(`http://localhost:4000/api/income/createIncome`, formData, {
+        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/income/createIncome`, formData, {
           withCredentials: true
         });
 

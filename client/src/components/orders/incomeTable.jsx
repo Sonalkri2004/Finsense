@@ -68,7 +68,7 @@ const IncomeTable = () => {
       console.log("filters",filters)
 
       const response = await axios.post(
-        `http://localhost:4000/api/expense/filterDate`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/expense/filterDate`,
         filters,
         {
           withCredentials: true,
@@ -87,7 +87,7 @@ const IncomeTable = () => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/income/getIncome`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/income/getIncome`,
           {
             withCredentials: true,
           }

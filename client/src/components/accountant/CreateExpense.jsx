@@ -34,7 +34,7 @@ export default function CreateExpense() {
         formData.status.trim()
       ) {
         const response = await axios.post(
-          `http://localhost:4000/api/expense/createExpense`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/createExpense`,
           formData,
           {
             withCredentials: true,

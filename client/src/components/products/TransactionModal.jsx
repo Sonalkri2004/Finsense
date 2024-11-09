@@ -55,7 +55,7 @@ const TransactionModal = ({ isOpen, onRequestClose, transaction, openConfirmatio
     try {
       console.log("commentForm1 = ", commentForm)
 
-      const resp = await axios.post('http://localhost:4000/api/expense/createComment', commentForm, { withCredentials: true });
+      const resp = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/expense/createComment`, commentForm, { withCredentials: true });
       console.log("response11 = ",resp);
 
 

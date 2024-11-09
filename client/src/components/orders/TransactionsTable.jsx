@@ -75,7 +75,7 @@ const TransactionsTable = () => {
       console.log("filters", filters);
 
       const response = await axios.post(
-        `http://localhost:4000/api/expense/filterDate`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/expense/filterDate`,
         filters,
         {
           withCredentials: true,
@@ -94,7 +94,7 @@ const TransactionsTable = () => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:4000/api/expense/getAllBill`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/getAllBill`,
           { billType: toggleValue },
           {
             withCredentials: true,

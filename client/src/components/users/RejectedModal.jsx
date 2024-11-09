@@ -82,7 +82,7 @@ const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction 
 
       // Update the transaction on the server
       const updateResp = await axios.post(
-        `http://localhost:4000/api/expense/updateExpense/${transaction._id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/expense/updateExpense/${transaction._id}`,
         updatedTransaction,
         { withCredentials: true }
       );
@@ -93,7 +93,7 @@ const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction 
         // If there is a comment, add it after the transaction update
         if (commentForm.commentText.trim()) {
           const commentResp = await axios.post(
-            'http://localhost:4000/api/expense/createComment',
+            `${import.meta.env.VITE_API_BASE_URL}/api/expense/createComment`,
             commentForm,
             { withCredentials: true }
           );

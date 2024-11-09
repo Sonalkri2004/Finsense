@@ -50,7 +50,7 @@ const RejectedTable = () => {
 
   const handleConfirmation = async () => {
     if (confirmationAction === 'delete') {
-      const response = await axios.delete(`http://localhost:4000/api/expense/deleteExpense/${selectedTransaction?._id}`, { withCredentials: true })
+      const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/expense/deleteExpense/${selectedTransaction?._id}`, { withCredentials: true })
 
       if (response.data) {
         console.log("OK", response.data);
@@ -77,7 +77,7 @@ const RejectedTable = () => {
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/expense/getRejected`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/getRejected`,
           {
             withCredentials: true,
           }

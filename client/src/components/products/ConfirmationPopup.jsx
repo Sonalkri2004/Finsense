@@ -43,7 +43,7 @@ const ConfirmationPopup = ({
       // Only make the status update call if confirmationAction exists
       if (confirmationAction) {
         const response1 = await axios.patch(
-          `http://localhost:4000/api/expense/updateStatus/${transaction?._id}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/updateStatus/${transaction?._id}`,
           { status: confirmationAction },
           { withCredentials: true }
         );
@@ -53,7 +53,7 @@ const ConfirmationPopup = ({
       // Make the transaction ID update call if transactionId exists
       if (transactionId) {
         const response2 = await axios.post(
-          'http://localhost:4000/api/expense/createExpense',
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/createExpense`,
           { TxnId: transactionId, expenseId: transaction?._id },
           { withCredentials: true }
         );
@@ -63,7 +63,7 @@ const ConfirmationPopup = ({
       // Only add a comment if there is text in commentForm.commentText
       if (commentForm.commentText.trim()) {
         const response3 = await axios.post(
-          'http://localhost:4000/api/expense/createComment',
+          `${import.meta.env.VITE_API_BASE_URL}/api/expense/createComment`,
           commentForm,
           { withCredentials: true }
         );
