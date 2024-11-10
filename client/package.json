@@ -1,8 +1,27 @@
 {
-  "name": "client",
+  "name": "finsense-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Explore the Secure  Transactions  with FinSense. Seamlessly manage transactions, track expenses, and gain insights—securely, anytime, anywhere.",
+  "author": "Durgesh Prasad <durgeshhh.in@gmail.com> (https://durgeshprasad.co)",
+  "contributors": [
+    {
+      "name": "Sonal Kumari",
+      "email": "sonalkumari000555@gmail.com",
+      "url": "https://sonalkumari.vercel.app"
+    },
+    {
+      "name": "Abhishek Sharma",
+      "email": "abhisheksharma620703@gmail.com"
+    },
+    {
+      "name": "Sankalp Pimpalkar",
+      "email": "pimpalkarsankalp7@gmail.com",
+      "url": "https://sankalp-pimpalkar-ahqz.vercel.app"
+    }
+  ],
+  "license": "AGPL-3.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
