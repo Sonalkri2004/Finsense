@@ -1,7 +1,25 @@
 {
-  "name": "rolebase",
+  "name": "finsense-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Explore the Secure  Transactions  with FinSense. Seamlessly manage transactions, track expenses, and gain insights—securely, anytime, anywhere.",
+  "author": "Durgesh Prasad <durgeshhh.in@gmail.com> (https://durgeshprasad.co)",
+  "contributors": [
+    {
+      "name": "Sonal Kumari",
+      "email": "sonalkumari000555@gmail.com",
+      "url": "https://sonalkumari.vercel.app"
+    },
+    {
+      "name": "Abhishek Sharma",
+      "email": "abhisheksharma620703@gmail.com"
+    },
+    {
+      "name": "Sankalp Pimpalkar",
+      "email": "pimpalkarsankalp7@gmail.com",
+      "url": "https://sankalp-pimpalkar-ahqz.vercel.app"
+    }
+  ],
+  "license": "AGPL-3.0",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -9,8 +27,6 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
