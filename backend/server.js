@@ -20,6 +20,7 @@ const app = express();
 DbCon();
 
 // Middleware setup
+app.use(express.static('dist'))
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
