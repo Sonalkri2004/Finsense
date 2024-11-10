@@ -57,10 +57,12 @@ export default function Login() {
         Login
       </button>
       <p className="text-center text-sm text-gray-400 mt-6 animate__animated animate__fadeInUp">
-        Not registered? <Link to={"/register"} className="text-blue-400 hover:underline">Register here</Link>
+      Not registered? <span className="text-blue-400">Contact Admin</span>
+        {/* Not registered? <Link to={"/register"} className="text-blue-400 hover:underline">Register here</Link> */}
       </p>
       <p className="text-center text-sm text-gray-400 mt-6 animate__animated animate__fadeInUp">
-        Not remembered <Link to={"/forgotpass"} className="text-blue-400 hover:underline">Forgot Password?</Link>
+      Forgot password? <span className="text-blue-400">Contact Admin</span>
+        {/* Not remembered <Link to={"/forgotpass"} className="text-blue-400 hover:underline">Forgot Password?</Link> */}
       </p>
     </form>
   </div>
