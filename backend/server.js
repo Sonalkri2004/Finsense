@@ -1,8 +1,8 @@
-
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 import DbCon from './utlis/db.js'; 
 import AuthRoutes from './routes/Auth.js';
 import AdminRoutes from './routes/AdminRoutes.js';
@@ -16,29 +16,32 @@ const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN; // Used for development & produ
 
 const app = express();
 
-// MongoDB connectionn doneyy
+// MongoDB connection setup
 DbCon();
 
 // Middleware setup
-app.use(express.static('dist'))
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
-  origin:  CLIENT_ORIGIN , // Fallback to localhost for development
+  origin: CLIENT_ORIGIN,
 }));
 
-// Route setup
+// Serve static files from the frontend's dist folder
+app.use(express.static(path.join(path.resolve(), 'dist')));
+
+// API routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/expense', ExpenseRoutes);
 app.use('/api/income', IncomeRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Server is running!');
+// Catch-all route to handle client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(path.resolve(), 'dist', 'index.html'));
 });
 
-// Start the server with basic error handling
+// Start the server
 app.listen(PORT, (err) => {
   if (err) {
     console.error('Error starting server:', err);
