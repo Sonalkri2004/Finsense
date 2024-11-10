@@ -40,7 +40,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/api/auth/logout', {}, { withCredentials: true });
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {}, { withCredentials: true });
 
       if (response.data) {
         dispatch(Logout())
