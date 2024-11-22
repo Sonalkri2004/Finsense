@@ -69,7 +69,7 @@ export default function CreateIncome() {
         <h1 className="text-4xl font-extrabold text-white mb-8 text-center">Create Income Transaction</h1>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Bank Name:</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Name of Account:</label>
             <input
               type="text"
               name="bankName"

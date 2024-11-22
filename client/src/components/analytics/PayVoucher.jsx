@@ -19,7 +19,7 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
               <span className="ml-1">{transaction?.voucherNo || '____'}</span>
             </div>
             <div className="flex">
-              <span className="font-semibold">A/C No.:</span>
+              <span className="font-semibold">Name of Account:</span>
               <span className="ml-1">{transaction?.bankName || '______________'}</span>
             </div>
             <div className="flex">
@@ -48,7 +48,7 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
           </table>
 
           <div className="flex justify-between items-center mb-3 text-xs">
-            <span className="font-semibold">G. Total</span>
+            <span className="font-semibold">Grand Total</span>
           
           </div>
 

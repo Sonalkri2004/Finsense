@@ -156,7 +156,7 @@ const RejectedModal = ({ isOpen, onRequestClose, transaction, updateTransaction 
 
           {/* Bank Name */}
           <div className="mb-6 p-6 rounded-lg bg-gray-900 shadow-lg">
-            <label htmlFor="bankName" className="block mb-2 text-gray-300">Bank Name</label>
+            <label htmlFor="bankName" className="block mb-2 text-gray-300">Name of Account:</label>
             <input
               type="text"
               id="bankName"
