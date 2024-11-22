@@ -106,7 +106,7 @@ const TransactionModal = ({
             Transaction Details
           </h2>
           <div className="mb-4 sm:mb-6 p-4 sm:p-6 rounded-lg bg-gray-900 shadow-lg">
-          <p className="text-sm sm:text-base mb-2 sm:mb-3">
+            <p className="text-sm sm:text-base mb-2 sm:mb-3">
               <strong>Transaction ID:</strong> {transaction._id}
             </p>
             <p className="text-sm sm:text-base mb-2 sm:mb-3">
@@ -124,7 +124,9 @@ const TransactionModal = ({
           </div>
 
           <div className="mb-8">
-          <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">Comments</h3>
+            <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">
+              Comments
+            </h3>
             <ul>
               {transaction?.comments.length > 0 ? (
                 transaction?.comments.map((comment) => (
@@ -145,7 +147,9 @@ const TransactionModal = ({
             </ul>
             <div className="mb-8">
               <div className="mb-8">
-              <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">Comments</h3>
+                <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">
+                  Comments
+                </h3>
                 <ul className="mb-4">
                   {comments?.length > 0 ? (
                     comments.map((comment, index) => (
@@ -202,7 +206,7 @@ const TransactionModal = ({
                 )}
             </div>
             {userDetails?.role != "admin" && (
-             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
                 {userDetails?.role == "accountant" ? (
                   <button
                     onClick={() => openConfirmationPopup("completed")}
