@@ -4,7 +4,10 @@ import convertISOToDate from "../../utils/formatDate";
 const NoteSheet = React.forwardRef(({ transaction }, ref) => {
   NoteSheet.displayName = "NoteSheet";
   return (
-    <div ref={ref} className="flex bg-white text-black flex-col max-h-[270vh] page-break">
+    <div
+      ref={ref}
+      className="flex bg-white text-black flex-col max-h-[270vh] page-break"
+    >
       <div className="w-full max-w-2xl mx-auto p-4 h-full flex flex-col justify-between">
         <div className="text-center text-sm font-bold mb-10 uppercase">
           <div>Sunderwati Mahila Mahavidyalaya, Bhagalpur</div>
@@ -25,8 +28,8 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
             </div>
           </div>
 
-          <div className="mb-4 text-xs">
-            <div className="font-semibold">(Bursar/Principal)</div>
+          <div className="mb-4 text-xs flex flex-col">
+            <div className="font-semibold ">(Bursar/Principal)</div>
             <p className="mt-2">
               As per the order of the Principal,{" "}
               {transaction?.subHead || "____"} has
@@ -39,9 +42,12 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
               The said bill is being submitted for your consideration and
               approval of the payment.
             </p>
+            <div className="text-end pt-8 pr-32 font-bold">
+              <div>Accountant</div>
+            </div>
           </div>
-         
-          <div className="mb-4 text-xs">
+
+          <div className="mb-4 text-xs flex flex-col">
             <div className="font-semibold">(Principal/Accountant)</div>
             <p className="mt-2">
               {transaction?.subHead || "____"} has done the{" "}
@@ -52,8 +58,31 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
               {transaction?.bankName || "____"} may be allowed/may not be
               allowed.
             </p>
+            <div className="text-end pt-8 pr-32 font-bold">
+              <div>Bursar</div>
+            </div>
           </div>
-        <div>
+          <div className="mb-4 text-xs flex flex-col">
+            <div className="font-semibold">(Principal/Accountant)</div>
+            <p className="mt-2">
+              {transaction?.subHead || "____"} has done the{" "}
+              {transaction?.purpose || "____"} as ordered. After the completion
+              of the said work, the bill amounting to ₹{" "}
+              {parseInt(transaction?.amount).toFixed(2) || "____"} was
+              submitted. The above expenditure from the{" "}
+              {transaction?.bankName || "____"} may be allowed/may not be
+              allowed.
+            </p>
+            <div className="text-end pt-8 pr-32 font-bold">
+              <div>Principal</div>
+            </div>
+            <div className="flex">
+              <span className="font-semibold">Cheque No.:</span>
+              <span className="ml-1">{transaction?.TxnId || "____"}</span>
+            </div>
+          </div>
+          
+          <div>
             <h2 className="mt-10 mb-4">Comments</h2>
             <p className="text-xs mb-20">
               {transaction?.comments?.length > 0
@@ -68,26 +97,13 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
                         </p>
                       </div>
 
-                      <p> {comment.commentText || "____"}
-                      </p>
+                      <p> {comment.commentText || "____"}</p>
                       <br />
                     </span>
                   ))
                 : "____"}
             </p>
-            <div>
-              <div className="grid grid-cols-3 mt-10 gap-2 text-xs">
-                <div className="text-center">
-                  <div>Bursar</div>
-                </div>
-                <div className="text-center">
-                  <div>Accountant</div>
-                </div>
-                <div className="text-center">
-                  <div>Principal</div>
-                </div>
-              </div>
-            </div>
+           
           </div>
         </div>
       </div>
