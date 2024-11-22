@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-
 export default function CreateIncome() {
   const [formData, setFormData] = useState({
     bankName: "",
@@ -13,7 +12,7 @@ export default function CreateIncome() {
     total: "",
     TxnId: "",
   });
-  const user = useSelector(state => state.AuthSlice?.user);
+  const user = useSelector((state) => state.AuthSlice?.user);
   const navigate = useNavigate();
 
   const [responseMessage, setResponseMessage] = useState(null);
@@ -27,7 +26,6 @@ export default function CreateIncome() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     try {
       if (
         formData.bankName.trim() &&
@@ -36,9 +34,13 @@ export default function CreateIncome() {
         formData.total.trim() &&
         formData.TxnId.trim()
       ) {
-        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/income/createIncome`, formData, {
-          withCredentials: true
-        });
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/api/income/createIncome`,
+          formData,
+          {
+            withCredentials: true,
+          }
+        );
 
         if (response.data) {
           setResponseMessage(response.data.message);
@@ -50,43 +52,51 @@ export default function CreateIncome() {
             amount: "",
             total: "",
             subHead: "",
-          })
+          });
 
-          navigate('/report');
+          navigate("/report");
         }
-
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setResponseMessage(error.response?.data?.message || "Error occurred"); // Show error message
-      toast.error("Income creation failed")
+      toast.error("Income creation failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 animate__animated animate__fadeIn">
-      <div className="w-full max-w-4xl p-10 bg-[#1A1B1F] rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out animate__animated animate__bounceIn">
-        <h1 className="text-4xl font-extrabold text-white mb-8 text-center">Create Income Transaction</h1>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 sm:p-6 md:p-8 animate__animated animate__fadeIn">
+      <div className="w-full max-w-4xl p-6 sm:p-8 bg-[#1A1B1F] rounded-lg shadow-lg transform transition duration-300 ease-in-out">
+        <h1 className="text-xl sm:text-3xl font-extrabold text-white mb-4 sm:mb-6 text-center">
+          Create Income Transaction
+        </h1>
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2"
+        >
           <div className="col-span-1">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Name of Account:</label>
+            <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
+              Name of Account:
+            </label>
             <input
               type="text"
               name="bankName"
               value={formData.bankName}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 border bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
-          <label className="block text-sm font-semibold text-gray-300 mb-2">Sub Head:</label>
+            <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
+              Sub Head:
+            </label>
             <select
               name="subHead"
               value={formData.subHead}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             >
               <option value="">Select Sub Head</option>
               <option value="BCA">BCA</option>
@@ -99,51 +109,59 @@ export default function CreateIncome() {
               <option value="NCC">NCC</option>
             </select>
           </div>
-
           <div className="col-span-1">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Amount:</label>
+            <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
+              Amount:
+            </label>
             <input
               type="number"
               name="amount"
               value={formData.amount}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 border bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div className="col-span-1">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Total:</label>
+            <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
+              Total:
+            </label>
             <input
               type="number"
               name="total"
               value={formData.total}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 border bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
-
-          <div className="col-span-2">
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Transaction ID:</label>
+          <div className="col-span-1 sm:col-span-2">
+            <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
+              Transaction ID:
+            </label>
             <input
               type="text"
               name="TxnId"
               value={formData.TxnId}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 text-gray-200 border bg-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-1 sm:col-span-2">
             <button
               type="submit"
-              className="w-full py-4 mt-6 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out animate__animated animate__pulse"
+              className="w-full py-4 mt-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
             >
               Create Income
             </button>
           </div>
         </form>
-        {responseMessage && <p className="text-center text-lg text-white mt-6 animate__animated animate__fadeInUp">{responseMessage}</p>}
+        {responseMessage && (
+          <p className="text-center text-base sm:text-lg text-white mt-6">
+            {responseMessage}
+          </p>
+        )}
       </div>
     </div>
   );
