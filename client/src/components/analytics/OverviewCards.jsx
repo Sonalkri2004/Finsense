@@ -111,29 +111,32 @@ const OverviewCards = () => {
   }, []); // Empty dependency array ensures this effect runs only once when the component mounts
 
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-      {overviewData.map((item, index) => (
-        <motion.div
-          key={item.name}
-          className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-medium text-gray-400">{item.name}</h3>
-              <p className="mt-1 text-xl font-semibold text-gray-100">
-                {item.value}
-              </p>
-            </div>
+<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+  {overviewData.map((item, index) => (
+    <motion.div
+      key={item.name}
+      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <div className="flex sm:items-center justify-between">
+        <div>
+          <h3 className="text-xs md:text-sm font-medium text-gray-400">{item.name}</h3>
+          <p className="mt-1 text-xs md:text-xl font-semibold text-gray-100">
+            {item.value}
+          </p>
+        </div>
 
-            {/* Display the icon */}
-            {item.icon}
-          </div>
-        </motion.div>
-      ))}
-    </div>
+        {/* Display the icon */}
+        <div className="mt-3 w-12 h-10 ">{item.icon}</div>
+      </div>
+    </motion.div>
+  ))}
+</div>
+
+
+    
   );
 };
 
