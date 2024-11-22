@@ -1,6 +1,6 @@
 import Header from "../components/common/Header";
 
-import PendingTable from "../components/products/PendingTable";
+import PendingTable from "../components/pending/PendingTable";
 import OverviewCards from "../components/analytics/OverviewCards";
 
 const ProductsPage = () => {

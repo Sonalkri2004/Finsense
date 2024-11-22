@@ -1,8 +1,8 @@
 import Header from "../components/common/Header";
 import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
 import RevenueChart from "../components/analytics/RevenueChart";
-import AIPoweredInsights from "../components/analytics/AIPoweredInsights";
 import OverviewCards from "../components/analytics/OverviewCards";
+import TRANSACTION_FLOW from "../components/analytics/TransactionFlow";
 
 
 const OverviewPage = () => {
@@ -26,7 +26,7 @@ const OverviewPage = () => {
 
 				</div>
 
-				<AIPoweredInsights />
+				<TRANSACTION_FLOW />
 			</main>
 
 

@@ -8,7 +8,7 @@ const OverviewCards = () => {
   // Initial state for overview data with placeholder values
   const [overviewData, setOverviewData] = useState([
     {
-      name: "Monthly Income",
+      name: "Total Income",
       value: "Loading...",
       change: 0,
       icon: (
@@ -18,7 +18,7 @@ const OverviewCards = () => {
       ),
     },
     {
-      name: "Monthly Expense",
+      name: "Total Expense",
       value: "Loading...",
       change: 0,
       icon: (

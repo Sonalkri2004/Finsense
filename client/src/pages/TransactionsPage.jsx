@@ -1,7 +1,6 @@
 import Header from "../components/common/Header";
 import OverviewCards from "../components/analytics/OverviewCards";
-import TransactionTable from "../components/orders/TransactionsTable";
-import NoteSheet from "../components/analytics/NoteSheet";
+import TransactionTable from "../components/transactions/TransactionsTable";
 
 const AnalyticsPage = () => {
 	return (

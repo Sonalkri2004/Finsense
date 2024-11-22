@@ -1,5 +1,5 @@
 import Header from "../components/common/Header";
-import RejectedTable from "../components/users/RejectedTable";
+import RejectedTable from "../components/rejected/RejectedTable";
 import OverviewCards from "../components/analytics/OverviewCards";
 
 const UsersPage = () => {
