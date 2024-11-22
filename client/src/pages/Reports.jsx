@@ -1,5 +1,5 @@
 import Header from "../components/common/Header";
-import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
+import CategoryDistributionChart from "../components/analytics/CategoryDistributionChart";
 import RevenueChart from "../components/analytics/RevenueChart";
 import OverviewCards from "../components/analytics/OverviewCards";
 import TRANSACTION_FLOW from "../components/analytics/TransactionFlow";

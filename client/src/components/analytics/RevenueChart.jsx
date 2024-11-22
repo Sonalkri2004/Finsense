@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import { get } from "../../services/ApiEndpoint.js"; // Import your custom GET method
 
 const RevenueDualAxisChart = () => {
@@ -15,7 +24,7 @@ const RevenueDualAxisChart = () => {
 
         if (response.status === 200) {
           const totalData = response.data;
-// console.log(totalData)
+          // console.log(totalData)
           // Prepare multiple data points for the chart to render a continuous line
           const preparedData = [
             {
@@ -57,31 +66,69 @@ const RevenueDualAxisChart = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700 mb-8"
+      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-4 md:p-6 border border-gray-700 mb-6 md:mb-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-6">Income vs Expense Overview</h2>
+      <h2 className="text-sm md:text-xl font-semibold text-gray-100 mb-4 md:mb-6 text-center">
+        Income vs Expense Overview
+      </h2>
 
-      <div style={{ width: "100%", height: 400 }}>
+      <div className="w-full text-xs md:text-xs h-64 sm:h-80 md:h-[400px]">
         <ResponsiveContainer>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis dataKey="month" stroke="#9CA3AF" />
             {/* Y Axis for Total Income */}
-            <YAxis yAxisId="left" stroke="#9CA3AF" label={{ value: 'Total Income', angle: -90, position: 'insideLeft' }} />
+            <YAxis
+              yAxisId="left"
+              stroke="#9CA3AF"
+              label={{
+                value: "Total Income",
+                angle: -90,
+                position: "insideLeft",
+                style: { fontSize: "10px" },
+              }}
+            />
             {/* Y Axis for Total Expense */}
-            <YAxis yAxisId="right" orientation="right" stroke="#9CA3AF" label={{ value: 'Total Expense', angle: 90, position: 'insideRight' }} />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              stroke="#9CA3AF"
+              label={{
+                value: "Total Expense",
+                angle: 90,
+                position: "insideRight",
+                style: { fontSize: "10px" },
+              }}
+            />
             <Tooltip
-              contentStyle={{ backgroundColor: "rgba(31, 41, 55, 0.8)", borderColor: "#4B5563" }}
+              contentStyle={{
+                backgroundColor: "rgba(31, 41, 55, 0.8)",
+                borderColor: "#4B5563",
+              }}
               itemStyle={{ color: "#E5E7EB" }}
             />
             <Legend />
             {/* Line for Total Income */}
-            <Line yAxisId="left" type="monotone" dataKey="totalIncome" name="Total Income" stroke="#8B5CF6" strokeWidth={3} />
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="totalIncome"
+              name="Total Income"
+              stroke="#8B5CF6"
+              strokeWidth={3}
+            />
             {/* Line for Total Expense */}
-            <Line yAxisId="right" type="monotone" dataKey="totalExpense" name="Total Expense" stroke="#F87171" strokeWidth={3} />
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="totalExpense"
+              name="Total Expense"
+              stroke="#F87171"
+              strokeWidth={3}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
