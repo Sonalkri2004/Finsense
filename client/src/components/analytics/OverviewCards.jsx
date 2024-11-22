@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios"; // Import axios for API calls
 import { motion } from "framer-motion"; // Import motion for animation effects
 import { IndianRupee, ArrowLeftRight, Clock } from "lucide-react"; // Import icons
-import { deleteUser, get, post, put } from '../../services/ApiEndpoint.js'; // Import custom API methods
+import { deleteUser, get, post, put } from "../../services/ApiEndpoint.js"; // Import custom API methods
 
 const OverviewCards = () => {
   // Initial state for overview data with placeholder values
@@ -57,7 +57,10 @@ const OverviewCards = () => {
         // Fetching the total expenses, income, and pending transactions data
         const totalExpenseResponse = await get("/api/expense/getTotal");
         const totalStatusResponse = await get("/api/expense/getTotalExpense");
-        console.log("totalExpenseResponse = " , totalExpenseResponse.data.totalIncome)
+        console.log(
+          "totalExpenseResponse = ",
+          totalExpenseResponse.data.totalIncome
+        );
 
         // Check if both API responses are successful (status 200)
         if (
@@ -74,11 +77,11 @@ const OverviewCards = () => {
               ? totalData.totalAmount[0].totalAmount
               : 0;
 
-          // for income 
+          // for income
           const totalIncomeValue =
-          totalData.totalIncome && totalData.totalIncome.length > 0
-            ? totalData.totalIncome[0].totalIncome
-            : 0;
+            totalData.totalIncome && totalData.totalIncome.length > 0
+              ? totalData.totalIncome[0].totalIncome
+              : 0;
 
           // Updating the overview data state with actual values from the API response
           setOverviewData([
@@ -111,32 +114,31 @@ const OverviewCards = () => {
   }, []); // Empty dependency array ensures this effect runs only once when the component mounts
 
   return (
-<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-  {overviewData.map((item, index) => (
-    <motion.div
-      key={item.name}
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-    >
-      <div className="flex sm:items-center justify-between">
-        <div>
-          <h3 className="text-xs md:text-sm font-medium text-gray-400">{item.name}</h3>
-          <p className="mt-1 text-xs md:text-xl font-semibold text-gray-100">
-            {item.value}
-          </p>
-        </div>
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      {overviewData.map((item, index) => (
+        <motion.div
+          key={item.name}
+          className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+        >
+          <div className="flex sm:items-center justify-between">
+            <div>
+              <h3 className="text-xs md:text-sm font-medium text-gray-400">
+                {item.name}
+              </h3>
+              <p className="mt-1 text-xs md:text-xl font-semibold text-gray-100">
+                {item.value}
+              </p>
+            </div>
 
-        {/* Display the icon */}
-        <div className="mt-3 w-12 h-10 ">{item.icon}</div>
-      </div>
-    </motion.div>
-  ))}
-</div>
-
-
-    
+            {/* Display the icon */}
+            <div className="mt-3 w-12 h-10 ">{item.icon}</div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
   );
 };
 
