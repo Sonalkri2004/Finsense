@@ -1,88 +1,99 @@
 import mongoose from "mongoose";
 
 // Comment Schema (as before)
-const commentSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema(
+  {
     commentText: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     userRole: {
-        type: String,
-        required: true,
-        enum: ['admin', 'user', 'accountant', 'bursar', 'principal'] // Match with user roles
+      type: String,
+      required: true,
+      enum: ["admin", "user", "accountant", "bursar", "principal"], // Match with user roles
     },
     userName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users', // Reference the User model
-        required: true
-    }
-}, { timestamps: true });
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", // Reference the User model
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 // Expense Schema with additional status field and comments
-const expenseSchema = new mongoose.Schema({
+const expenseSchema = new mongoose.Schema(
+  {
     bankName: {
-        type: String,
-        required: true,
-        default: 'Corpus Fund'
+      type: String,
+      required: true,
+      default: "Corpus Fund",
+    },
+    head: {
+      type: String,
+      required: true,
     },
     subHead: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     purpose: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     TxnId: {
-        type: String,
-        required: false,
-        default: null
+      type: String,
+      required: false,
+      default: null,
     },
     amount: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     total: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     // New Status field with ENUM values
     status: {
-        type: String,
-        enum: ['pending', 'verified', 'approved', 'completed', 'rejected'],
-        default: 'pending' // Default value is pending
+      type: String,
+      enum: ["pending", "verified", "approved", "completed", "rejected"],
+      default: "pending", // Default value is pending
     },
     verifiedDate: {
-        type: Date,
-        default: null
+      type: Date,
+      default: null,
     },
     approvedDate: {
-        type: Date,
-        default: null
+      type: Date,
+      default: null,
     },
     completedDate: {
-        type: Date,
-        default: null
+      type: Date,
+      default: null,
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users', // Reference the User model
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", // Reference the User model
+      required: true,
     },
-    voucherNo:{
-        type:String,
-        required:true
+    voucherNo: {
+      type: String,
+      required: true,
     },
-    comments: [{
-        type: commentSchema
-    }]
-}, { timestamps: true });
+    comments: [
+      {
+        type: commentSchema,
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 // Models
-export const ExpenseModel = mongoose.model('expenses', expenseSchema);
-export const CommentModel = mongoose.model('comment', commentSchema);
-
+export const ExpenseModel = mongoose.model("expenses", expenseSchema);
+export const CommentModel = mongoose.model("comment", commentSchema);

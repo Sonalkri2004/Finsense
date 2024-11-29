@@ -10,6 +10,7 @@ export default function CreateExpense() {
     amount: "",
     total: "",
     status: "",
+    head: "", // Added head field
   });
   const user = useSelector((state) => state.AuthSlice?.user);
 
@@ -31,7 +32,8 @@ export default function CreateExpense() {
         formData.purpose.trim() &&
         formData.amount.trim() &&
         formData.total.trim() &&
-        formData.status.trim()
+        formData.status.trim() &&
+        formData.head.trim() // Include validation for head
       ) {
         const response = await axios.post(
           `${import.meta.env.VITE_API_BASE_URL}/api/expense/createExpense`,
@@ -97,6 +99,21 @@ export default function CreateExpense() {
               <option value="NSS">NSS</option>
               <option value="NCC">NCC</option>
             </select>
+          </div>
+
+          {/* Head */}
+          <div className="col-span-1">
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
+              Head:
+            </label>
+            <input
+              type="text"
+              name="head"
+              value={formData.head}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+            />
           </div>
 
           {/* Purpose */}

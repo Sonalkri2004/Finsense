@@ -1,19 +1,20 @@
-import { Income } from '../models/Income.js';
-import { ExpenseModel } from '../models/expense.js';
+import { Income } from "../models/Income.js";
+import { ExpenseModel } from "../models/expense.js";
 
 export const createIncome = async (req, res) => {
   try {
     // Destructure the request body
-    const { bankName, subHead, status, amount, total, TxnId } = req.body;
+    const { bankName, head, subHead, status, amount, total, TxnId } = req.body;
 
     // Create a new Income instance with the destructured values
     const income = new Income({
       bankName,
+      head,
       subHead,
-      status: status || 'completed',
+      status: status || "completed",
       amount,
       total,
-      TxnId
+      TxnId,
     });
 
     // Save the new income document
@@ -22,7 +23,7 @@ export const createIncome = async (req, res) => {
     // Respond with success
     res.status(201).json({
       data: income,
-      message: "Income created!!"
+      message: "Income created!!",
     });
   } catch (error) {
     console.log("Error in creating income transaction: ", error.message);
@@ -64,28 +65,25 @@ export const deleteIncome = async (req, res) => {
 };
 
 // get all Income
-export const getAllBill = async(req , res)=>{
+export const getAllBill = async (req, res) => {
   try {
-    const {billType} = req.body;
+    const { billType } = req.body;
     let getBill;
 
-    if(billType === 'expense')
-    {
+    if (billType === "expense") {
       getBill = await ExpenseModel.find();
-    }
-    else
-    {
-      getBill = await Income.find()
+    } else {
+      getBill = await Income.find();
     }
 
     res.status(200).json({
-      message: 'bill fetched succesfuly',
-      bill : getBill
-    })
+      message: "bill fetched succesfuly",
+      bill: getBill,
+    });
   } catch (error) {
     res.status(500).json({
       message: "Error deleting expense",
       error: error.message,
     });
   }
-}
+};

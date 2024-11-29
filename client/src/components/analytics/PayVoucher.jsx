@@ -29,6 +29,12 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
             <div className="flex">
               <span className="font-semibold">Head:</span>
               <span className="ml-1">
+                {transaction?.head || "______________"}
+              </span>
+            </div>
+            <div className="flex">
+              <span className="font-semibold">SubHead:</span>
+              <span className="ml-1">
                 {transaction?.subHead || "______________"}
               </span>
             </div>
@@ -89,9 +95,10 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
             <div className="mt-4">S.M. College, Bhagalpur</div>
           </div>
         </div>
-        <p className="text-center text-xs mt-4">This is a system generated voucher.</p>
+        <p className="text-center text-xs mt-4">
+          This is a system generated voucher.
+        </p>
       </div>
-     
     </div>
   );
 });

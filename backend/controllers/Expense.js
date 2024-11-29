@@ -9,6 +9,7 @@ export const createExpense = async (req, res) => {
     // Destructure the request body
     const {
       bankName,
+      head,
       subHead,
       purpose,
       amount,
@@ -38,6 +39,7 @@ export const createExpense = async (req, res) => {
     if (!TxnId?.trim()) {
       expense = new ExpenseModel({
         bankName,
+        head,
         subHead,
         purpose,
         amount,
