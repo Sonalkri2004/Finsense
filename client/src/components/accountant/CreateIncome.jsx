@@ -11,6 +11,7 @@ export default function CreateIncome() {
     amount: "",
     total: "",
     TxnId: "",
+    head: "", // Added head field
   });
   const user = useSelector((state) => state.AuthSlice?.user);
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ export default function CreateIncome() {
         formData.subHead.trim() &&
         formData.amount.trim() &&
         formData.total.trim() &&
-        formData.TxnId.trim()
+        formData.TxnId.trim() &&
+        formData.head.trim() // Include validation for head
       ) {
         const response = await axios.post(
           `${import.meta.env.VITE_API_BASE_URL}/api/income/createIncome`,
@@ -52,6 +54,7 @@ export default function CreateIncome() {
             amount: "",
             total: "",
             subHead: "",
+            head: "", // Added head field
           });
 
           navigate("/report");
@@ -108,6 +111,20 @@ export default function CreateIncome() {
               <option value="NSS">NSS</option>
               <option value="NCC">NCC</option>
             </select>
+          </div>
+          {/* Head */}
+          <div className="col-span-1">
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
+              Head:
+            </label>
+            <input
+              type="text"
+              name="head"
+              value={formData.head}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+            />
           </div>
           <div className="col-span-1">
             <label className="block text-sm sm:text-base font-semibold text-gray-300 mb-2">
