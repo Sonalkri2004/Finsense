@@ -1,6 +1,8 @@
 import React from "react";
 import convertISOToDate from "../../utils/formatDate";
-
+import accountant_Signature from "../../assets/signatures/Accountant.png";
+import bursar_Signature from "../../assets/signatures/Bursar.png";
+import principal_Signature from "../../assets/signatures/Principal.png";
 const NoteSheet = React.forwardRef(({ transaction }, ref) => {
   NoteSheet.displayName = "NoteSheet";
   return (
@@ -29,7 +31,7 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
           </div>
 
           <div className="mb-4 text-xs flex flex-col">
-            <div className="font-semibold ">(Bursar/Principal)</div>
+            <div className="font-semibold ">(Accountant)</div>
             <p className="mt-2">
               As per the order of the Principal,{" "}
               {transaction?.subHead || "____"} has
@@ -42,46 +44,70 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
               The said bill is being submitted for your consideration and
               approval of the payment.
             </p>
-            <div className="text-end pt-8 pr-32 font-bold">
-              <div>Accountant</div>
+            <div className="text-end flex justify-end pt-8 pr-32 font-bold">
+              <div>
+                {" "}
+                <img
+                  className="ml-10"
+                  height={120}
+                  width={120}
+                  src={accountant_Signature}
+                  alt="accountant signature"
+                />
+                Accountant
+              </div>
             </div>
           </div>
 
           <div className="mb-4 text-xs flex flex-col">
-            <div className="font-semibold">(Principal/Accountant)</div>
+            <div className="font-semibold">(Bursar)</div>
             <p className="mt-2">
               {transaction?.subHead || "____"} has done the{" "}
               {transaction?.purpose || "____"} as ordered. After the completion
               of the said work, the bill amounting to ₹{" "}
               {parseInt(transaction?.amount).toFixed(2) || "____"} was
               submitted. The above expenditure from the{" "}
-              {transaction?.bankName || "____"} may be allowed/may not be
-              allowed.
+              {transaction?.bankName || "____"} is verified.
             </p>
-            <div className="text-end pt-8 pr-32 font-bold">
-              <div>Bursar</div>
+            <div className="text-end flex justify-end pt-8 pr-32 font-bold">
+              <div>
+                <img
+                  height={120}
+                  width={120}
+                  src={bursar_Signature}
+                  alt="bursar signature"
+                />
+                Bursar
+              </div>
             </div>
           </div>
           <div className="mb-4 text-xs flex flex-col">
-            <div className="font-semibold">(Principal/Accountant)</div>
+            <div className="font-semibold">(Principal)</div>
             <p className="mt-2">
               {transaction?.subHead || "____"} has done the{" "}
               {transaction?.purpose || "____"} as ordered. After the completion
               of the said work, the bill amounting to ₹{" "}
               {parseInt(transaction?.amount).toFixed(2) || "____"} was
               submitted. The above expenditure from the{" "}
-              {transaction?.bankName || "____"} may be allowed/may not be
-              allowed.
+              {transaction?.bankName || "____"} is approved.
             </p>
-            <div className="text-end pt-8 pr-32 font-bold">
-              <div>Principal</div>
+            <div className="text-end flex justify-end  pt-8 pr-32 font-bold">
+              <div>
+                <img
+                  height={120}
+                  width={120}
+                  src={principal_Signature}
+                  alt="principal signature"
+                />
+                Principal
+              </div>
             </div>
             <div className="flex">
               <span className="font-semibold">Cheque No.:</span>
               <span className="ml-1">{transaction?.TxnId || "____"}</span>
             </div>
           </div>
-          
+
           <div>
             <h2 className="mt-10 mb-4">Comments</h2>
             <p className="text-xs mb-20">
@@ -103,7 +129,6 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
                   ))
                 : "____"}
             </p>
-           
           </div>
         </div>
       </div>

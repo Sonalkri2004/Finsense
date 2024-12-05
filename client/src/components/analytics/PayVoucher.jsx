@@ -1,5 +1,8 @@
 import React from "react";
 import convertISOToDate from "../../utils/formatDate";
+import accountant_Signature from "../../assets/signatures/Accountant.png";
+import bursar_Signature from "../../assets/signatures/Bursar.png";
+import principal_Signature from "../../assets/signatures/Principal.png";
 
 const PayVoucher = React.forwardRef(({ transaction }, ref) => {
   PayVoucher.displayName = "PayVoucher";
@@ -40,7 +43,7 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
             </div>
           </div>
 
-          <table className="w-full h-[60vh]  border border-black mb-4 text-xs">
+          <table className="w-full h-[40vh]  border border-black mb-4 text-xs">
             <thead>
               <tr className="border-b border-black">
                 <th className="border-r  border-black p-2">Date</th>
@@ -85,12 +88,34 @@ const PayVoucher = React.forwardRef(({ transaction }, ref) => {
         </div>
 
         <div className="grid grid-cols-3 mt-6 mb-0 gap-2 text-xs">
-          <div className="text-center">
+          <div className="items-center">
+            <img
+              height={120}
+              width={120}
+              src={accountant_Signature}
+              alt="accountant signature"
+            />
             Accountant
             {/* <div className="mt-4">Skillancer Pvt. Ltd.</div> */}
           </div>
-          <div className="text-center">Bursar</div>
           <div className="text-center">
+            <img
+              className="ml-10"
+              height={120}
+              width={120}
+              src={bursar_Signature}
+              alt="bursar signature"
+            />
+            Bursar
+          </div>
+          <div className="text-end">
+            <img
+              className="ml-20"
+              height={120}
+              width={120}
+              src={principal_Signature}
+              alt="principal signature"
+            />
             Principal
             <div className="mt-4">S.M. College, Bhagalpur</div>
           </div>
