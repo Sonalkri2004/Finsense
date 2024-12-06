@@ -1,4 +1,4 @@
-# ⭐FinSense-Aibfr⭐
+# 🔸FinSense-Aibfr🔸
 
 - Explore the Secure Transactions with FinSense
 - Seamlessly manage transactions, track expenses, and gain insights—securely, anytime, anywhere.
@@ -8,13 +8,13 @@
 
 ![RBAC_Finance_DFD_Square](https://github.com/user-attachments/assets/f51dd2e3-7f53-4e6e-ae86-f791585b4024)
 
-# 📌About the Project
+# 🔺About the Project
 FinSense is a secure and efficient financial management system that leverages Role-Based Access Control (RBAC) to manage user roles, permissions, and transactions in a structured workflow. The project integrates modern design principles, responsive layouts, and comprehensive transaction tracking.
 
-# 📌 Live Demo
+# 🔺 Live Demo
 - https://finance-backend-oeqh.onrender.com <br>
 
-# 📌Key Roles and Their Functionalities
+# 🔺Key Roles and Their Functionalities
 ## Roles in the System
 
 ### 1.User
@@ -59,7 +59,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
 - Approve or reject verified transactions.
 - View and download transaction details.
 
-# 📌Workflow of the Application
+# 🔺Workflow of the Application
 ## 1. Role Assignment (Admin Role)
  - Admin logs in and assigns roles to newly created users (default is User).
  - Admin can manage users (add, edit, delete) and their permissions dynamically.
@@ -81,7 +81,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
  - The Accountant finalizes approved transactions, marking them as Completed.
  - Rejected transactions return to the Accountant for recreation or further edits.
    
-# 📌Key Features
+# 🔺Key Features
 ## Role-Based Access Control (RBAC)
  - Dynamic role assignment and permission management.
  - Role-specific dashboards for Admin, Accountant, Bursar, and Principal.
@@ -94,7 +94,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
  - All roles (Accountant, Bursar, Principal) can download transaction details in PDF format, such as pay vouchers and note sheets, at any stage.
  - Data Visualization: Interactive graphs and charts to track spending and savings patterns.
 
-# 📌What technologies were used? 
+# 🔺What technologies were used? 
  ## Frontend:
   - React: For building a dynamic and efficient user interface.
   - React DOM: To render React components in the DOM.
@@ -128,7 +128,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
 
 This is a [Vite.js](https://vitejs.dev) project bootstrapped with [`$create vite@latest`](https://vitejs.dev/guide/) which is a React.js tool for building Web Applications.
 
-# 📌Getting Started
+# 🔺Getting Started
 
 First, Fork this repo:
 Head over to the backend directory to run the server.
