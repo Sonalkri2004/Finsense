@@ -103,53 +103,67 @@ const TransactionModal = ({
           </button>
 
           <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">
-            Transaction Details
+            Transaction Notesheet
           </h2>
-          <div className="mb-4 sm:mb-6 p-4 sm:p-6 rounded-lg bg-gray-900 shadow-lg">
-            <p className="text-sm sm:text-base mb-2 sm:mb-3">
-              <strong>Transaction ID:</strong> {transaction._id}
-            </p>
-            <p className="text-sm sm:text-base mb-2 sm:mb-3">
-              <strong>Date:</strong> {convertISOToDate(transaction.updatedAt)}
-            </p>
-            <p className="text-sm sm:text-base mb-2 sm:mb-3">
-              <strong>SubHead:</strong> {transaction.subHead}
-            </p>
-            <p className="text-sm sm:text-base mb-2 sm:mb-3">
-              <strong>Total:</strong> ₹ {parseInt(transaction.total).toFixed(2)}
-            </p>
-            <p className="text-sm sm:text-base mb-2 sm:mb-3">
-              <strong>Status:</strong> {transaction.status}
-            </p>
+
+          <div className="mb-2 sm:mb-6 p-2 sm:p-4 rounded-lg bg-gray-900 shadow-lg">
+            {/* Notesheet data */}
+            <div className="grid grid-cols-2 gap-4 mb-4 text-xs">
+              <div className="flex">
+                <span className="font-semibold ml-2">Date:</span>
+                <span className="ml-1">
+                  {convertISOToDate(transaction?.updatedAt) || "____"}
+                </span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold ml-2">Voucher No.:</span>
+                <span className="ml-1">{transaction?.voucherNo || "____"}</span>
+              </div>
+
+              <div className="flex">
+                <span className="font-semibold ml-2">SubHead:</span>
+                <span className="ml-1">{transaction.subHead || "____"}</span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold ml-2">Status:</span>
+                <span className="ml-1">{transaction.status || "____"}</span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold ml-2">Purpose:</span>
+                <span className="ml-1">{transaction.purpose || "____"}</span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold ml-2">Total:</span>
+                <span className="ml-1">{transaction.total || "____"}</span>
+              </div>
+            </div>
           </div>
 
           <div className="mb-8">
-            <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">
-              Comments
+            <h3 className="text-lg sm:text-lg font-semibold mb-3 sm:mb-4">
+              Narrations
             </h3>
             <ul>
               {transaction?.comments.length > 0 ? (
                 transaction?.comments.map((comment) => (
                   <li key={comment?._id} className="p-3 bg-gray-900 rounded-md">
-                    <p className="text-base">
+                    <p className="text-sm">
                       <strong>
                         {String(comment.userRole).charAt(0).toUpperCase() +
                           String(comment.userRole).slice(1)}
                         :
                       </strong>
-                      {comment?.commentText || ""}
+                      {convertISOToDate(comment?.createdAt) || ""}
+                      <br></br> {comment?.commentText || ""}
                     </p>
                   </li>
                 ))
               ) : (
-                <p>No comments yet</p>
+                <p className="mt-2">No Narrations available..</p>
               )}
             </ul>
             <div className="mb-8">
               <div className="mb-8">
-                <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4">
-                  Comments
-                </h3>
                 <ul className="mb-4">
                   {comments?.length > 0 ? (
                     comments.map((comment, index) => (
@@ -157,14 +171,20 @@ const TransactionModal = ({
                         key={index}
                         className="p-3 bg-gray-900 rounded-md mb-2"
                       >
-                        <p className="text-base">
-                          <strong>{comment.userRole}:</strong>{" "}
+                        <p className="text-sm">
+                          <strong>
+                            {" "}
+                            {String(comment.userRole).charAt(0).toUpperCase() +
+                              String(comment.userRole).slice(1)}
+                            :
+                          </strong>{" "}
+                          <br></br>
                           {comment.commentText}
                         </p>
                       </li>
                     ))
                   ) : (
-                    <p>No comments yet</p>
+                    <p className="mt-2"></p>
                   )}
                 </ul>
 
@@ -179,13 +199,13 @@ const TransactionModal = ({
                       })
                     }
                     className="flex-grow w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Write a comment..."
+                    placeholder="Write Your Narrations here..."
                   />
                   <button
                     onClick={handleAddComment}
                     className="px-4 py-2 w-full mt-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition duration-200"
                   >
-                    Add Comment
+                    Add Narration
                   </button>
                 </div>
               </div>

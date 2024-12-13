@@ -145,7 +145,7 @@ const RejectedTable = () => {
           <thead>
             <tr>
               <th className="px-4 md:px-6 py-2 md:py-3 text-left font-medium text-gray-400 uppercase tracking-wider">
-                Txn ID
+                Voucher No.
               </th>
               <th className="px-4 md:px-6 py-2 md:py-3 text-left font-medium text-gray-400 uppercase tracking-wider">
                 Date
@@ -177,7 +177,7 @@ const RejectedTable = () => {
                 transition={{ duration: 0.3 }}
               >
                 <td className="px-4 md:px-6 py-2 md:py-4 text-gray-100 font-medium">
-                  {transaction?._id.slice(0, 10)}
+                  {transaction?.voucherNo}
                 </td>
                 <td className="px-4 md:px-6 py-2 md:py-4 text-gray-300">
                   {convertISOToDate(transaction?.updatedAt)}
