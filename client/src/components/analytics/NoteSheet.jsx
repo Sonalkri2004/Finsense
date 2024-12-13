@@ -3,8 +3,25 @@ import convertISOToDate from "../../utils/formatDate";
 import accountant_Signature from "../../assets/signatures/Accountant.png";
 import bursar_Signature from "../../assets/signatures/Bursar.png";
 import principal_Signature from "../../assets/signatures/Principal.png";
+
 const NoteSheet = React.forwardRef(({ transaction }, ref) => {
   NoteSheet.displayName = "NoteSheet";
+
+  const renderComments = (role) => {
+    return (
+      transaction?.comments
+        ?.filter((comment) => comment.userRole === role)
+        .map((comment, index) => (
+          <div key={index} className="mb-2">
+            <p>{comment.commentText || "____"}</p>
+            <p className="text-xs mt-1">
+              {convertISOToDate(comment?.updatedAt) || "____"}
+            </p>
+          </div>
+        )) || <p>____</p>
+    );
+  };
+
   return (
     <div
       ref={ref}
@@ -17,36 +34,30 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
         </div>
 
         <div className="flex-grow my-4">
-          <div className="grid grid-cols-2 gap-64 mb-4 text-xs">
+          <div className="grid grid-cols-2 gap-4 mb-4 text-xs">
             <div className="flex">
               <span className="font-semibold">Voucher No.:</span>
               <span className="ml-1">{transaction?.voucherNo || "____"}</span>
             </div>
             <div className="flex">
-              <span className="font-semibold">Date:</span>
+              <span className="font-semibold ml-28">Date:</span>
               <span className="ml-1">
                 {convertISOToDate(transaction?.updatedAt) || "____"}
               </span>
             </div>
+            <div className="flex">
+              <span className="font-semibold">Cheque No.:</span>
+              <span className="ml-1">{transaction?.TxnId || "____"}</span>
+            </div>
           </div>
 
           <div className="mb-4 text-xs flex flex-col">
-            <div className="font-semibold ">(Accountant)</div>
-            <p className="mt-2">
-              As per the order of the Principal,{" "}
-              {transaction?.subHead || "____"} has
-              supplied/constructed/renovated the{" "}
-              {transaction?.purpose || "____"}. After completing the work,{" "}
-              {transaction?.subHead || "____"} has submitted the bill for an
-              amount of ₹ {parseInt(transaction?.amount).toFixed(2) || "____"}.
-              Payment of ₹ {parseInt(transaction?.amount).toFixed(2) || "____"}{" "}
-              from the {transaction?.bankName || "____"} is needed to be done.
-              The said bill is being submitted for your consideration and
-              approval of the payment.
-            </p>
+            <div className="font-semibold">(Accountant)</div>
+            <div className="mt-2 text-[0.63rem]">
+              {renderComments("accountant")}
+            </div>
             <div className="text-end flex justify-end pt-8 pr-32 font-bold">
               <div>
-                {" "}
                 <img
                   className="ml-10"
                   height={120}
@@ -61,14 +72,9 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
 
           <div className="mb-4 text-xs flex flex-col">
             <div className="font-semibold">(Bursar)</div>
-            <p className="mt-2">
-              {transaction?.subHead || "____"} has done the{" "}
-              {transaction?.purpose || "____"} as ordered. After the completion
-              of the said work, the bill amounting to ₹{" "}
-              {parseInt(transaction?.amount).toFixed(2) || "____"} was
-              submitted. The above expenditure from the{" "}
-              {transaction?.bankName || "____"} is verified.
-            </p>
+            <div className="mt-2 text-[0.63rem]">
+              {renderComments("bursar")}
+            </div>
             <div className="text-end flex justify-end pt-8 pr-32 font-bold">
               <div>
                 <img
@@ -81,17 +87,13 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
               </div>
             </div>
           </div>
+
           <div className="mb-4 text-xs flex flex-col">
             <div className="font-semibold">(Principal)</div>
-            <p className="mt-2">
-              {transaction?.subHead || "____"} has done the{" "}
-              {transaction?.purpose || "____"} as ordered. After the completion
-              of the said work, the bill amounting to ₹{" "}
-              {parseInt(transaction?.amount).toFixed(2) || "____"} was
-              submitted. The above expenditure from the{" "}
-              {transaction?.bankName || "____"} is approved.
-            </p>
-            <div className="text-end flex justify-end  pt-8 pr-32 font-bold">
+            <div className="mt-2 text-[0.63rem]">
+              {renderComments("principal")}
+            </div>
+            <div className="text-end flex justify-end pt-8 pr-32 font-bold">
               <div>
                 <img
                   height={120}
@@ -102,35 +104,31 @@ const NoteSheet = React.forwardRef(({ transaction }, ref) => {
                 Principal
               </div>
             </div>
-            <div className="flex">
-              <span className="font-semibold">Cheque No.:</span>
-              <span className="ml-1">{transaction?.TxnId || "____"}</span>
-            </div>
-          </div>
-
-          <div>
-            <h2 className="mt-10 mb-4">Comments</h2>
-            <p className="text-xs mb-20">
-              {transaction?.comments?.length > 0
-                ? transaction.comments.map((comment, index) => (
-                    <span key={index}>
-                      <div className="grid grid-cols-2 gap-80 mb-3 text-xs">
-                        <h2 className="font-bold uppercase">
-                          {comment.userRole || "Role"}:
-                        </h2>
-                        <p className="">
-                          {convertISOToDate(comment?.updatedAt) || "Date"}
-                        </p>
-                      </div>
-
-                      <p> {comment.commentText || "____"}</p>
-                      <br />
-                    </span>
-                  ))
-                : "____"}
-            </p>
           </div>
         </div>
+
+        {/* <div>
+          <h2 className="mt-10 mb-4">Comments</h2>
+          <p className="text-xs mb-20">
+            {transaction?.comments?.length > 0
+              ? transaction.comments.map((comment, index) => (
+                  <span key={index}>
+                    <div className="grid grid-cols-2 gap-80 mb-3 text-xs">
+                      <h2 className="font-bold uppercase">
+                        {comment.userRole || "Role"}:
+                      </h2>
+                      <p className="">
+                        {convertISOToDate(comment?.updatedAt) || "Date"}
+                      </p>
+                    </div>
+
+                    <p> {comment.commentText || "____"}</p>
+                    <br />
+                  </span>
+                ))
+              : "____"}
+          </p>
+        </div> */}
       </div>
     </div>
   );
