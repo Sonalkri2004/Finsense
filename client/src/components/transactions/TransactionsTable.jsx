@@ -334,14 +334,19 @@ const TransactionsTable = () => {
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Download Voucher
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Download Notesheet
-              </th>
+              {toggleValue === "expense" && (
+                <>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    Download Voucher
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    Download Notesheet
+                  </th>
+                </>
+              )}
             </tr>
           </thead>
+
           <tbody className="divide-y divide-gray-800">
             {currentTransactions.map((transaction) => (
               <motion.tr
@@ -392,10 +397,15 @@ const TransactionsTable = () => {
                     {transaction?.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300 ">
                   <button
                     onClick={() => handleDownloadVoucher(transaction)}
-                    className="text-indigo-400 hover:text-indigo-300"
+                    className={`text-indigo-400 hover:text-indigo-300 ${
+                      transaction.status === "completed" &&
+                      toggleValue === "expense"
+                        ? "block"
+                        : "hidden"
+                    }`}
                   >
                     <DownloadCloud size={18} />
                   </button>
@@ -403,7 +413,12 @@ const TransactionsTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">
                   <button
                     onClick={() => handleDownloadNotesheet(transaction)}
-                    className="text-indigo-400 hover:text-indigo-300"
+                    className={`text-indigo-400 hover:text-indigo-300 ${
+                      transaction.status === "completed" &&
+                      toggleValue === "expense"
+                        ? "block"
+                        : "hidden"
+                    }`}
                   >
                     <FileDown size={18} />
                   </button>
