@@ -160,7 +160,7 @@ const RejectedModal = ({
 
           {/* Modal Header */}
           <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
-            Transaction Details
+            Update Transaction Notesheet
           </h2>
 
           {/* Form Section */}
