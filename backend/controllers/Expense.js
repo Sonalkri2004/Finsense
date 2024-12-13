@@ -17,10 +17,11 @@ export const createExpense = async (req, res) => {
       status,
       TxnId,
       expenseId,
+      commentText, // New field for optional comment
     } = req.body;
 
     // Increment the count
-    randomCount = Math.floor(100 + Math.random() * 900);
+    const randomCount = Math.floor(100 + Math.random() * 900);
     console.log("Current Count:", randomCount);
 
     // Get the current date and format it as yyyy/mm/dd
@@ -35,8 +36,8 @@ export const createExpense = async (req, res) => {
 
     let expense;
 
-    // If no TxnId is provided, create a new expense
     if (!TxnId?.trim()) {
+      // Create a new expense
       expense = new ExpenseModel({
         bankName,
         head,
@@ -48,6 +49,17 @@ export const createExpense = async (req, res) => {
         userId: req.user._id,
         voucherNo,
       });
+
+      // If a commentText is provided, add a comment to the expense
+      if (commentText?.trim()) {
+        const newComment = {
+          commentText,
+          userId: req.user._id,
+          userName: req.user.name,
+          userRole: req.user.role,
+        };
+        expense.comments.push(newComment);
+      }
 
       await expense.save();
     } else if (expenseId) {

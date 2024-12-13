@@ -169,7 +169,7 @@ const TransactionModal = ({
                 </ul>
 
                 <div className="flex flex-col items-center gap-2">
-                  <input
+                  <textarea
                     type="text"
                     value={commentForm.commentText}
                     onChange={(e) =>

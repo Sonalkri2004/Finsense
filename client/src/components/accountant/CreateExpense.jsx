@@ -11,6 +11,7 @@ export default function CreateExpense() {
     total: "",
     status: "",
     head: "", // Added head field
+    commentText: "", // Added commentText field
   });
   const user = useSelector((state) => state.AuthSlice?.user);
 
@@ -179,6 +180,20 @@ export default function CreateExpense() {
               <option value="approved">Approved</option>
               <option value="completed">Completed</option>
             </select>
+          </div>
+
+          {/* Comments Input */}
+          <div className="col-span-2">
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
+              Narration:
+            </label>
+            <textarea
+              name="commentText"
+              value={formData.commentText}
+              onChange={handleChange}
+              placeholder="Write a narration.."
+              className="w-full px-4 py-3 text-gray-200 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 transition duration-300 ease-in-out"
+            />
           </div>
 
           {/* Submit Button */}

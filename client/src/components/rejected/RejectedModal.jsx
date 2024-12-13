@@ -274,7 +274,7 @@ const RejectedModal = ({
             </ul>
 
             <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              <input
+              <textarea
                 type="text"
                 value={commentForm.commentText}
                 onChange={(e) =>
