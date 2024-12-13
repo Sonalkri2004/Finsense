@@ -258,7 +258,9 @@ const RejectedModal = ({
 
           {/* Comments Section */}
           <div className="mt-8">
-            <h3 className="text-lg sm:text-2xl font-semibold mb-4">Comments</h3>
+            <h3 className="text-lg sm:text-2xl font-semibold mb-4">
+              Narrations
+            </h3>
             <ul className="space-y-2 max-h-40 sm:max-h-56 overflow-y-auto">
               {comments.length > 0 ? (
                 comments.map((comment, index) => (
@@ -269,7 +271,9 @@ const RejectedModal = ({
                   </li>
                 ))
               ) : (
-                <p className="text-sm sm:text-base">No comments yet</p>
+                <p className="text-sm sm:text-base">
+                  No Narrations available..
+                </p>
               )}
             </ul>
 
@@ -284,7 +288,7 @@ const RejectedModal = ({
                   })
                 }
                 className="flex-grow px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Write a comment..."
+                placeholder="Write Your Narrations here..."
               />
             </div>
           </div>
