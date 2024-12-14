@@ -1,7 +1,7 @@
 {
   "name": "finsense-client",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "description": "Explore the Secure  Transactions  with FinSense. Seamlessly manage transactions, track expenses, and gain insights—securely, anytime, anywhere.",
   "author": "Durgesh Prasad <durgeshhh.in@gmail.com> (https://durgeshprasad.co)",

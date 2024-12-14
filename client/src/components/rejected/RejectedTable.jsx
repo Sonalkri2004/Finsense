@@ -151,7 +151,7 @@ const RejectedTable = () => {
                 Date
               </th>
               <th className="px-4 md:px-6 py-2 md:py-3 text-left font-medium text-gray-400 uppercase tracking-wider">
-                SubHead
+                Head
               </th>
               <th className="px-4 md:px-6 py-2 md:py-3 text-left font-medium text-gray-400 uppercase tracking-wider">
                 Total
@@ -183,7 +183,7 @@ const RejectedTable = () => {
                   {convertISOToDate(transaction?.updatedAt)}
                 </td>
                 <td className="px-4 md:px-6 py-2 md:py-4 text-gray-100 font-medium">
-                  {transaction?.subHead}
+                  {transaction?.head}
                 </td>
                 <td className="px-4 md:px-6 py-2 md:py-4 text-gray-100 font-medium">
                   ₹ {parseInt(transaction?.total).toFixed(2)}

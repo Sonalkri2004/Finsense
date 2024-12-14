@@ -55,6 +55,7 @@ const RejectedModal = ({
   const [bankName, setBankName] = useState("");
   const [purpose, setPurpose] = useState("");
   const [amount, setAmount] = useState("");
+  const [head, setHead] = useState("");
   const [subHead, setSubHead] = useState("");
   const [total, setTotal] = useState("");
 
@@ -63,6 +64,7 @@ const RejectedModal = ({
       setBankName(transaction.bankName || "");
       setPurpose(transaction.purpose || "");
       setAmount(transaction.amount || "");
+      setHead(transaction.head || "");
       setSubHead(transaction.subHead || "");
       setTotal(transaction.total || "");
       setComments(transaction.comments || []);
@@ -77,6 +79,7 @@ const RejectedModal = ({
         bankName,
         purpose,
         amount,
+        head,
         subHead,
         total,
         comments,
@@ -201,21 +204,21 @@ const RejectedModal = ({
               />
             </div>
 
-            {/* Amount */}
+            {/* Head */}
             <div>
               <label
-                htmlFor="amount"
+                htmlFor="head"
                 className="block text-sm sm:text-base mb-2 text-gray-300"
               >
-                Amount:
+                Head:
               </label>
               <input
-                type="number"
-                id="amount"
-                value={amount}
-                onChange={handleInputChange(setAmount)}
+                type="text"
+                id="head"
+                value={head}
+                onChange={handleInputChange(setHead)}
                 className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Amount"
+                placeholder="Head"
               />
             </div>
 
@@ -236,7 +239,23 @@ const RejectedModal = ({
                 placeholder="SubHead"
               />
             </div>
-
+            {/* Amount */}
+            <div>
+              <label
+                htmlFor="amount"
+                className="block text-sm sm:text-base mb-2 text-gray-300"
+              >
+                Amount:
+              </label>
+              <input
+                type="number"
+                id="amount"
+                value={amount}
+                onChange={handleInputChange(setAmount)}
+                className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Amount"
+              />
+            </div>
             {/* Total */}
             <div>
               <label

@@ -202,7 +202,7 @@ export const getExpense = async (req, res) => {
 };
 export const filterExpensesByDateRange = async (req, res) => {
   try {
-    const { startDate, endDate, subHead, status, billType } = req.body;
+    const { startDate, endDate, head, status, billType } = req.body;
     console.log("Body startDate:", startDate); // Log the body parameter
     console.log("Body endDate:", endDate); // Log the body parameter
 
@@ -249,9 +249,9 @@ export const filterExpensesByDateRange = async (req, res) => {
       filter.createdAt = { $gte: startOfDay, $lte: endOfDay };
     }
 
-    // Handle subHead filtering if provided
-    if (subHead?.trim()) {
-      filter.subHead = subHead;
+    // Handle Head filtering if provided
+    if (head?.trim()) {
+      filter.head = head;
     }
 
     // Handle status filtering if provided

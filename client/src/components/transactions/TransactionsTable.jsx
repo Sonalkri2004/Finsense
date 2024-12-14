@@ -19,10 +19,10 @@ const TransactionsTable = () => {
   const [filterDate, setFilterDate] = useState({
     startDate: "",
     endDate: "",
-    subHead: "",
+    head: "",
     billType: toggleValue,
   });
-  const [selectedSubHead, setSelectedSubHead] = useState("");
+  const [selectedhead, setSelectedhead] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -65,8 +65,8 @@ const TransactionsTable = () => {
     try {
       const filters = { ...filterDate };
 
-      if (selectedSubHead) {
-        filters.subHead = String(selectedSubHead);
+      if (selectedhead) {
+        filters.head = String(selectedhead);
       }
       if (selectedStatus) {
         filters.status = selectedStatus;
@@ -248,20 +248,17 @@ const TransactionsTable = () => {
           />
         </div>
 
-        {/* SubHead Dropdown */}
+        {/* head Dropdown */}
         <div className="flex flex-col gap-2 items-start w-full md:w-1/5">
-          <label
-            htmlFor="subHead"
-            className="text-sm font-medium text-gray-300"
-          >
-            SubHead
+          <label htmlFor="head" className="text-sm font-medium text-gray-300">
+            Head
           </label>
           <select
-            name="subHead"
-            id="subHead"
+            name="head"
+            id="head"
             className="w-full px-3 py-2 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={selectedSubHead}
-            onChange={(e) => setSelectedSubHead(e.target.value)}
+            value={selectedhead}
+            onChange={(e) => setSelectedhead(e.target.value)}
           >
             <option value="">All</option>
             <option value="BCA">BCA</option>
@@ -326,7 +323,7 @@ const TransactionsTable = () => {
                 Date
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                SubHead
+                Head
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Total
@@ -373,7 +370,7 @@ const TransactionsTable = () => {
                   {convertISOToDate(transaction?.createdAt)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
-                  {transaction?.subHead}
+                  {transaction?.head}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
                   ₹ {parseInt(transaction?.total).toFixed(2)}

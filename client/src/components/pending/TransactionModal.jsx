@@ -119,22 +119,26 @@ const TransactionModal = ({
                 <span className="font-semibold ml-2">Voucher No.:</span>
                 <span className="ml-1">{transaction?.voucherNo || "____"}</span>
               </div>
-
               <div className="flex">
-                <span className="font-semibold ml-2">SubHead:</span>
-                <span className="ml-1">{transaction.subHead || "____"}</span>
+                <span className="font-semibold ml-2">Head:</span>
+                <span className="ml-1">{transaction?.head || "____"}</span>
               </div>
               <div className="flex">
-                <span className="font-semibold ml-2">Status:</span>
-                <span className="ml-1">{transaction.status || "____"}</span>
+                <span className="font-semibold ml-2">SubHead:</span>
+                <span className="ml-1">{transaction?.subHead || "____"}</span>
               </div>
               <div className="flex">
                 <span className="font-semibold ml-2">Purpose:</span>
-                <span className="ml-1">{transaction.purpose || "____"}</span>
+                <span className="ml-1">{transaction?.purpose || "____"}</span>
               </div>
               <div className="flex">
+                <span className="font-semibold ml-2">Status:</span>
+                <span className="ml-1">{transaction?.status || "____"}</span>
+              </div>
+
+              <div className="flex">
                 <span className="font-semibold ml-2">Total:</span>
-                <span className="ml-1">{transaction.total || "____"}</span>
+                <span className="ml-1">{transaction?.total || "____"}</span>
               </div>
             </div>
           </div>
@@ -149,8 +153,8 @@ const TransactionModal = ({
                   <li key={comment?._id} className="p-3 bg-gray-900 rounded-md">
                     <p className="text-sm">
                       <strong>
-                        {String(comment.userRole).charAt(0).toUpperCase() +
-                          String(comment.userRole).slice(1)}
+                        {String(comment?.userRole).charAt(0).toUpperCase() +
+                          String(comment?.userRole).slice(1)}
                         :
                       </strong>
                       {convertISOToDate(comment?.createdAt) || ""}
@@ -174,12 +178,12 @@ const TransactionModal = ({
                         <p className="text-sm">
                           <strong>
                             {" "}
-                            {String(comment.userRole).charAt(0).toUpperCase() +
-                              String(comment.userRole).slice(1)}
+                            {String(comment?.userRole).charAt(0).toUpperCase() +
+                              String(comment?.userRole).slice(1)}
                             :
                           </strong>{" "}
                           <br></br>
-                          {comment.commentText}
+                          {comment?.commentText}
                         </p>
                       </li>
                     ))
