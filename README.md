@@ -99,7 +99,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
   - React: For building a dynamic and efficient user interface.
   - React DOM: To render React components in the DOM.
   - React Router DOM: For managing client-side routing seamlessly.
-  - Styling:
+  - ## Styling:
     - Animate.css: For adding smooth CSS animations.
     - Tailwind CSS: Utility-first CSS framework for modern and responsive styling.
     - Framer Motion: For smooth and attractive animations.
@@ -118,6 +118,7 @@ FinSense is a secure and efficient financial management system that leverages Ro
   - jsPDF: To create and customize PDF files.
   - XLSX: For handling spreadsheet data and exports.
 ## Utilities:
+  - MVC: (Model-View-Controller) Architecture is used for Backend.
   - Axios: For making HTTP requests to the backend.
   - dotenv: For managing environment variables securely.
   - env: A lightweight module to parse .env files.
