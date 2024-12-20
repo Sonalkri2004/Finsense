@@ -110,7 +110,11 @@ const TransactionModal = ({
             {/* Notesheet data */}
             <div className="grid grid-cols-2 gap-4 mb-4 text-xs">
               <div className="flex">
-                <span className="font-semibold ml-2">Date:</span>
+                <span className="font-semibold ml-2">Account Name:</span>
+                <span className="ml-1">{transaction?.bankName || "____"}</span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold ml-16">Date:</span>
                 <span className="ml-1">
                   {convertISOToDate(transaction?.updatedAt) || "____"}
                 </span>
@@ -120,24 +124,24 @@ const TransactionModal = ({
                 <span className="ml-1">{transaction?.voucherNo || "____"}</span>
               </div>
               <div className="flex">
+                <span className="font-semibold ml-16">Status:</span>
+                <span className="ml-1">{transaction?.status || "____"}</span>
+              </div>
+              <div className="flex">
                 <span className="font-semibold ml-2">Head:</span>
                 <span className="ml-1">{transaction?.head || "____"}</span>
               </div>
               <div className="flex">
-                <span className="font-semibold ml-2">SubHead:</span>
+                <span className="font-semibold ml-16">SubHead:</span>
                 <span className="ml-1">{transaction?.subHead || "____"}</span>
               </div>
               <div className="flex">
                 <span className="font-semibold ml-2">Purpose:</span>
                 <span className="ml-1">{transaction?.purpose || "____"}</span>
               </div>
-              <div className="flex">
-                <span className="font-semibold ml-2">Status:</span>
-                <span className="ml-1">{transaction?.status || "____"}</span>
-              </div>
 
               <div className="flex">
-                <span className="font-semibold ml-2">Total:</span>
+                <span className="font-semibold ml-16">Total:</span>
                 <span className="ml-1">{transaction?.total || "____"}</span>
               </div>
             </div>
