@@ -1,7 +1,7 @@
 # 🔸FinSense-Aibfr🔸
 
 - Explore the Secure Transactions with FinSense
-- Seamlessly manage transactions, track expenses, and gain insights—securely, anytime, anywhere.
+- Seamlessly manage transactions, track expenses, and gain insights—securely, anytime & anywhere.
 <p align="center">
  <img src="https://github.com/user-attachments/assets/08a3319d-b756-4efa-bf74-5bf52fa7a55c" width="500" height="150">
 </p>
